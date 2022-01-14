@@ -1,6 +1,7 @@
 import 'package:carmanual/core/app_router.dart';
 import 'package:carmanual/core/app_theme.dart';
 import 'package:carmanual/core/database.dart';
+import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/core/services.dart';
 import 'package:carmanual/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/ui/screens/error_page.dart';
@@ -76,14 +77,20 @@ class _AppState extends State<App> {
           }
 
           if (snapshot.connectionState != ConnectionState.done) {
-            return LoadingStartPage();
+            return Directionality(
+              textDirection: TextDirection.ltr,
+              child: LoadingStartPage(),
+            );
           }
 
+          final env = EnvironmentConfig.ENV == Env.PROD.name
+              ? ""
+              : "(${EnvironmentConfig.ENV}) ";
           return Services.init(
             carInfoDataSource: widget.carInfoDataSource,
             child: AppProviders(
               child: MaterialApp(
-                title: 'Car manual',
+                title: env + EnvironmentConfig.APP_NAME,
                 theme: appTheme,
                 onGenerateRoute: AppRouter.generateRoute,
                 navigatorObservers: [AppRouter.routeObserver],

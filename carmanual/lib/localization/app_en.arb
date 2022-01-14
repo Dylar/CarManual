@@ -1,0 +1,6 @@
+{
+  "homoPageTitle": "Homo page!",
+  "@homoPageTitle": {
+    "description": "Home page title"
+  }
+}

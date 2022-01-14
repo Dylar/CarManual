@@ -2,9 +2,9 @@ import 'package:carmanual/datasource/CarInfoDataSource.dart';
 import 'package:flutter/material.dart';
 
 class Services extends InheritedWidget {
-  final CarInfoDataSource? notesDataSource;
+  final CarInfoDataSource? carInfoDataSource;
 
-  const Services({this.notesDataSource, Key? key, required Widget child})
+  const Services({this.carInfoDataSource, Key? key, required Widget child})
       : super(key: key, child: child);
 
   factory Services.init({
@@ -13,7 +13,7 @@ class Services extends InheritedWidget {
     required Widget child,
   }) {
     return Services(
-      notesDataSource: carInfoDataSource,
+      carInfoDataSource: carInfoDataSource,
       key: key,
       child: child,
     );

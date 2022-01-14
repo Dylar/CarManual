@@ -1,8 +1,8 @@
 import 'package:carmanual/core/app_router.dart';
 import 'package:carmanual/core/app_theme.dart';
-import 'package:carmanual/database/database.dart';
+import 'package:carmanual/core/database.dart';
+import 'package:carmanual/core/services.dart';
 import 'package:carmanual/datasource/CarInfoDataSource.dart';
-import 'package:carmanual/services/services.dart';
 import 'package:carmanual/ui/screens/error_page.dart';
 import 'package:carmanual/ui/screens/loading_page.dart';
 import 'package:carmanual/viewmodels/car_info_vm.dart';
@@ -23,7 +23,7 @@ class AppProviders extends StatelessWidget {
     return MultiProvider(
       providers: [
         HomeViewModelProvider(),
-        CarInfoViewModelProvider(services.notesDataSource),
+        CarInfoViewModelProvider(services.carInfoDataSource),
       ],
       child: child,
     );

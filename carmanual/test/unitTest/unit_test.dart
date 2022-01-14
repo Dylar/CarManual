@@ -5,7 +5,7 @@
 // gestures. You can also use WidgetTester to find child ui.widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
-import 'package:carmanual/database/database.dart';
+import 'package:carmanual/core/database.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

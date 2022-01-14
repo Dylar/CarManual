@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:carmanual/database/database.dart';
+import 'package:carmanual/core/database.dart';
 import 'package:carmanual/models/car_info.dart';
 
 class CarInfoDataSource {

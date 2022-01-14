@@ -4,7 +4,7 @@ import 'package:carmanual/database/database.dart';
 import 'package:carmanual/models/car_info.dart';
 
 class CarInfoDataSource {
-  CarInfoDataSource(this.database) : assert(database != null);
+  CarInfoDataSource(this.database);
 
   final AppDatabase database;
 
@@ -14,7 +14,7 @@ class CarInfoDataSource {
     streamController.close();
   }
 
-  Stream<List<CarInfo>> watchNotes() async* {
+  Stream<List<CarInfo>> watchCarInfo() async* {
     streamController.add(await database.getCarInfos());
     yield* streamController.stream;
   }

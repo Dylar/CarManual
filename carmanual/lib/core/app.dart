@@ -5,8 +5,8 @@ import 'package:carmanual/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/services/services.dart';
 import 'package:carmanual/ui/screens/error_page.dart';
 import 'package:carmanual/ui/screens/loading_page.dart';
+import 'package:carmanual/viewmodels/car_info_vm.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
-import 'package:carmanual/viewmodels/notes_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -34,9 +34,7 @@ class App extends StatefulWidget {
   const App({
     required this.database,
     required this.carInfoDataSource,
-  })  : assert(database != null),
-        assert(carInfoDataSource != null),
-        super();
+  }) : super();
 
   factory App.load({
     AppDatabase? database,

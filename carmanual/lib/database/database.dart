@@ -30,7 +30,7 @@ class AppDatabase {
     carInfoDB.add(carInfo);
   }
 
-  List<CarInfo> getCarInfos() {
-    return carInfoDB;
+  Future<List<CarInfo>> getCarInfos() {
+    return Future(() => carInfoDB);
   }
 }

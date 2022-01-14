@@ -63,9 +63,11 @@ const TextTheme accentTextColors = TextTheme(
 final ThemeData appTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: BaseColors.primary,
+  // ignore: deprecated_member_use
   accentColor: BaseColors.accent,
   fontFamily: 'RobotoCondensed',
   primaryTextTheme: textSizes.merge(primaryTextColors),
+  // ignore: deprecated_member_use
   accentTextTheme: textSizes.merge(accentTextColors),
   textTheme: textSizes.merge(textColors),
   canvasColor: Colors.white,

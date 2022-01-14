@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 
 class ScrollListView<T> extends StatelessWidget {
   ScrollListView({
@@ -16,16 +15,16 @@ class ScrollListView<T> extends StatelessWidget {
   final Widget? footerWidget, emptyWidget;
   final Widget Function(int index, T item) buildItemWidget;
 
-  Widget get _loadingIndicator =>
-      const Center(child: CircularProgressIndicator());
+  // Widget get _loadingIndicator =>
+  //     const Center(child: CircularProgressIndicator());
 
   int get itemCount => items.length + (footerWidget == null ? 0 : 1);
 
   @override
   Widget build(BuildContext context) {
-    if (items == null) {
-      return _loadingIndicator;
-    }
+    // if (items == null) {
+    //   return _loadingIndicator;
+    // }
 
     if (items.isEmpty) {
       return emptyWidget ?? Container();

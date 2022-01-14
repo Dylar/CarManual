@@ -13,13 +13,13 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 class AppProviders extends StatelessWidget {
-  const AppProviders({@required this.child});
+  const AppProviders({required this.child});
 
   final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    final services = Services.of(context);
+    final services = Services.of(context)!;
     return MultiProvider(
       providers: [
         HomeViewModelProvider(),
@@ -32,15 +32,15 @@ class AppProviders extends StatelessWidget {
 
 class App extends StatefulWidget {
   const App({
-    @required this.database,
-    @required this.carInfoDataSource,
+    required this.database,
+    required this.carInfoDataSource,
   })  : assert(database != null),
         assert(carInfoDataSource != null),
         super();
 
   factory App.load({
-    AppDatabase database,
-    CarInfoDataSource notesDataSource,
+    AppDatabase? database,
+    CarInfoDataSource? notesDataSource,
   }) {
     final db = database ?? AppDatabase();
     return App(
@@ -57,7 +57,7 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  Future<void> loadDb;
+  Future<void>? loadDb;
 
   @override
   void initState() {

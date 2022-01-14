@@ -4,16 +4,16 @@ import 'package:carmanual/viewmodels/home_vm.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
-  HomePage({Key key, this.title}) : super(key: key);
+  HomePage({Key? key, this.title}) : super(key: key);
 
   static const String routeName = "/";
 
-  final String title;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title)),
+      appBar: AppBar(title: Text(title!)),
       body: CounterPage(),
       floatingActionButton: HomeFloatingButton(),
     );

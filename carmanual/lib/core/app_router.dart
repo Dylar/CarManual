@@ -6,22 +6,20 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 abstract class AppRoute<T> extends Route<T> {
   String get appName;
 
-  String get viewName;
+  String? get viewName;
 }
 
 class RouteWrapper<T> extends MaterialPageRoute<T> implements AppRoute<T> {
   RouteWrapper({
-    @required WidgetBuilder builder,
-    @required RouteSettings settings,
-  })  : assert(builder != null),
-        assert(settings != null),
-        super(builder: builder, settings: settings);
+    required WidgetBuilder builder,
+    required RouteSettings settings,
+  }) : super(builder: builder, settings: settings);
 
   @override
   String get appName => 'CarManual';
 
   @override
-  String get viewName => settings.name;
+  String? get viewName => settings.name;
 }
 
 class AppRouter {
@@ -30,7 +28,7 @@ class AppRouter {
 
   static AppRoute<dynamic> generateRoute(RouteSettings settings) {
     final navArgs = settings.arguments;
-    WidgetBuilder builder;
+    late WidgetBuilder builder;
     switch (settings.name) {
       case HomePage.routeName:
         builder = _navigateToHome;
@@ -54,11 +52,11 @@ class AppRouter {
 
 Widget _navigateToHome(BuildContext context) {
   return HomePage(
-    title: AppLocalizations.of(context).homoPageTitle,
+    title: AppLocalizations.of(context)!.homoPageTitle,
   );
 }
 
-Widget _navigateToVideo(BuildContext context, Object navArgs) {
+Widget _navigateToVideo(BuildContext context, Object? navArgs) {
 // final url =
 //     'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4';
   final url =

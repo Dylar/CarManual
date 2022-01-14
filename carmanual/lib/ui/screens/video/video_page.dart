@@ -8,21 +8,21 @@ class VideoPage extends StatefulWidget {
 
   static const String routeName = "/VideoPage";
 
-  final String title;
-  final String url;
-  final double aspectRatio;
+  final String? title;
+  final String? url;
+  final double? aspectRatio;
 
   @override
   State<VideoPage> createState() => _VideoPageState();
 }
 
 class _VideoPageState extends State<VideoPage> {
-  ChewieController controller;
+  ChewieController? controller;
 
   @override
   void initState() {
     super.initState();
-    final videoPlayerController = VideoPlayerController.network(widget.url);
+    final videoPlayerController = VideoPlayerController.network(widget.url!);
     controller = ChewieController(
       videoPlayerController: videoPlayerController..initialize(),
       // aspectRatio: widget.aspectRatio,
@@ -46,7 +46,7 @@ class _VideoPageState extends State<VideoPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(title: Text(widget.title!)),
       body: Column(
         children: [
           Flexible(
@@ -56,7 +56,7 @@ class _VideoPageState extends State<VideoPage> {
                 onVideoEnd: () {
                   print("Video end");
                   setState(() {
-                    controller.seekTo(VIDEO_START);
+                    controller!.seekTo(VIDEO_START);
                   });
                 }),
           ),

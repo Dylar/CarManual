@@ -9,8 +9,8 @@ class FakeNotesDataSource extends Mock implements CarInfoDataSource {}
 
 class TestUtils {
   static App loadTestApp({
-    AppDatabase database,
-    CarInfoDataSource notesDataSource,
+    AppDatabase? database,
+    CarInfoDataSource? notesDataSource,
   }) {
     final db = database ?? AppDatabase();
     return App.load(

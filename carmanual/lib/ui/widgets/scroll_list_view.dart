@@ -3,17 +3,17 @@ import 'package:flutter/material.dart';
 
 class ScrollListView<T> extends StatelessWidget {
   ScrollListView({
-    @required this.items,
-    @required this.buildItemWidget,
+    required this.items,
+    required this.buildItemWidget,
     this.footerWidget,
     this.emptyWidget,
-    ScrollController scrollController,
+    ScrollController? scrollController,
   }) : scrollController = scrollController ?? ScrollController();
 
   final ScrollController scrollController;
 
   final List<T> items;
-  final Widget footerWidget, emptyWidget;
+  final Widget? footerWidget, emptyWidget;
   final Widget Function(int index, T item) buildItemWidget;
 
   Widget get _loadingIndicator =>
@@ -42,7 +42,7 @@ class ScrollListView<T> extends StatelessWidget {
             itemCount: itemCount,
             itemBuilder: (BuildContext context, int position) {
               if (footerWidget != null && position == items.length) {
-                return footerWidget;
+                return footerWidget!;
               } else {
                 return buildItemWidget(position, items[position]);
               }

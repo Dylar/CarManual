@@ -1,4 +1,5 @@
 import 'package:carmanual/ui/screens/home/home_page.dart';
+import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -36,6 +37,9 @@ class AppRouter {
       case VideoPage.routeName:
         builder = (context) => _navigateToVideo(context, navArgs);
         break;
+      case QrScanPage.routeName:
+        builder = _navigateToQrScan;
+        break;
     }
 
     return _wrapRoute(settings, builder);
@@ -50,11 +54,8 @@ class AppRouter {
 
 //------------------Navigate to page------------------//
 
-Widget _navigateToHome(BuildContext context) {
-  return HomePage(
-    title: AppLocalizations.of(context)!.homoPageTitle,
-  );
-}
+Widget _navigateToHome(BuildContext context) =>
+    HomePage(title: AppLocalizations.of(context)!.homoPageTitle);
 
 Widget _navigateToVideo(BuildContext context, Object? navArgs) {
 // final url =
@@ -69,3 +70,6 @@ Widget _navigateToVideo(BuildContext context, Object? navArgs) {
     aspectRatio: width / height / 3, //16 / 9
   );
 }
+
+Widget _navigateToQrScan(BuildContext context) =>
+    QrScanPage(title: "qrScanTitle");

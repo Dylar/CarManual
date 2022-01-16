@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:carmanual/core/app_navigation.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
@@ -16,6 +17,7 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(title: Text(title!)),
       body: CounterPage(),
       floatingActionButton: HomeFloatingButton(),
+      bottomNavigationBar: AppNavigation(routeName),
     );
   }
 }

@@ -1,6 +1,7 @@
+import 'package:carmanual/core/app_navigation.dart';
+import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPage extends StatefulWidget {
@@ -64,6 +65,7 @@ class _VideoPageState extends State<VideoPage> {
           Placeholder(fallbackHeight: 200),
         ],
       ),
+      bottomNavigationBar: AppNavigation(VideoPage.routeName),
     );
   }
 }

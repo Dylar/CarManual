@@ -1,19 +1,26 @@
+import 'package:carmanual/core/database.dart';
 import 'package:carmanual/datasource/CarInfoDataSource.dart';
+import 'package:carmanual/service/car_info_service.dart';
 import 'package:flutter/material.dart';
 
 class Services extends InheritedWidget {
-  final CarInfoDataSource? carInfoDataSource;
+  final GlobalKey<NavigatorState> navigatorKey;
+  final CarInfoService carInfoService;
 
-  const Services({this.carInfoDataSource, Key? key, required Widget child})
+  const Services(this.navigatorKey, this.carInfoService,
+      {Key? key, required Widget child})
       : super(key: key, child: child);
 
   factory Services.init({
-    CarInfoDataSource? carInfoDataSource,
+    AppDatabase? db,
+    CarInfoService? carInfoService,
     Key? key,
     required Widget child,
+    required GlobalKey<NavigatorState> navigatorKey,
   }) {
     return Services(
-      carInfoDataSource: carInfoDataSource,
+      navigatorKey,
+      carInfoService ?? CarInfoService(CarInfoDS(AppDatabase())),
       key: key,
       child: child,
     );

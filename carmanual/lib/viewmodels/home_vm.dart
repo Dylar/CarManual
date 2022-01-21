@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
+import 'package:carmanual/core/navigation/app_view.dart';
 import 'package:provider/provider.dart';
 
 class HomeViewModelProvider extends ChangeNotifierProvider<HomeViewModel> {
   HomeViewModelProvider() : super(create: (_) => HomeVM());
 }
 
-abstract class HomeViewModel extends ChangeNotifier {
+abstract class HomeViewModel extends ViewModel {
   int get count;
 
   void incrementCounter();
@@ -14,8 +14,6 @@ abstract class HomeViewModel extends ChangeNotifier {
 }
 
 class HomeVM extends HomeViewModel {
-  // final _streamController = StreamController<List<Note>>();
-
   int _counter = 0;
 
   @override
@@ -26,9 +24,4 @@ class HomeVM extends HomeViewModel {
     _counter++;
     notifyListeners();
   }
-
-  // @override
-  // void dispose() {
-  //   // _streamController.close();
-  // }
 }

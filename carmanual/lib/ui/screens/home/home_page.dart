@@ -1,23 +1,54 @@
-import 'package:carmanual/core/app_navigation.dart';
+import 'package:carmanual/core/navigation/app_navigation.dart';
+import 'package:carmanual/core/navigation/app_route_spec.dart';
+import 'package:carmanual/core/navigation/app_view.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
-  HomePage({Key? key, this.title}) : super(key: key);
+class HomePage extends View<HomeViewModel> {
+  HomePage(
+    HomeViewModel viewModel, {
+    Key? key,
+    this.title,
+  }) : super.model(viewModel);
 
-  static const String routeName = "/";
+  static const String routeName = "/home";
+
+  static AppRouteSpec routeToRoot() => AppRouteSpec(
+        name: routeName,
+        action: AppRouteAction.popUntilRoot,
+      );
+
+  static AppRouteSpec popAndRoute() => AppRouteSpec(
+        name: routeName,
+        action: AppRouteAction.popUntil,
+      );
+
+  static AppRouteSpec replaceWith() => AppRouteSpec(
+        name: routeName,
+        action: AppRouteAction.replaceWith,
+      );
 
   final String? title;
 
   @override
+  State<HomePage> createState() => _HomePageState(viewModel);
+}
+
+class _HomePageState extends ViewState<HomePage, HomeViewModel> {
+  _HomePageState(HomeViewModel viewModel) : super(viewModel);
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(title!)),
+      appBar: AppBar(title: Text(widget.title!)),
       body: CounterPage(),
       floatingActionButton: HomeFloatingButton(),
-      bottomNavigationBar: AppNavigation(routeName),
+      bottomNavigationBar: AppNavigation(
+        HomePage.routeName,
+        viewModel.navigateTo,
+      ),
     );
   }
 }

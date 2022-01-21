@@ -11,4 +11,6 @@ class EnvironmentConfig {
     'ENV',
     defaultValue: "DEV",
   );
+
+  static bool get isDev => ENV == Env.DEV.name;
 }

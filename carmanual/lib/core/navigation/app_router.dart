@@ -1,8 +1,15 @@
 import 'package:carmanual/ui/screens/home/home_page.dart';
+import 'package:carmanual/ui/screens/intro/intro_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
+import 'package:carmanual/viewmodels/home_vm.dart';
+import 'package:carmanual/viewmodels/qr_vm.dart';
+import 'package:carmanual/viewmodels/video_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+
+import '../services.dart';
 
 abstract class AppRoute<T> extends Route<T> {
   String get appName;
@@ -21,26 +28,47 @@ class RouteWrapper<T> extends MaterialPageRoute<T> implements AppRoute<T> {
 
   @override
   String? get viewName => settings.name;
+
+  @override //TODO
+  Duration get transitionDuration => Duration.zero;
+
+  @override
+  Widget buildTransitions(BuildContext context, Animation<double> animation,
+      Animation<double> secondaryAnimation, Widget child) {
+    return child;
+  }
 }
 
 class AppRouter {
   static final RouteObserver<ModalRoute> routeObserver =
       RouteObserver<ModalRoute>();
 
+  static List<Route<dynamic>> generateInitRoute(String initialRoute) {
+    return [_wrapRoute(RouteSettings(name: initialRoute), _navigateToIntro)];
+  }
+
   static AppRoute<dynamic> generateRoute(RouteSettings settings) {
-    final navArgs = settings.arguments;
+    final arguments = settings.arguments as Map<String, dynamic>? ?? {};
+
     late WidgetBuilder builder;
     switch (settings.name) {
+      case IntroPage.routeName:
+        builder = _navigateToIntro;
+        break;
       case HomePage.routeName:
         builder = _navigateToHome;
         break;
       case VideoPage.routeName:
-        builder = (context) => _navigateToVideo(context, navArgs);
+        builder = (context) => _navigateToVideo(context, arguments);
         break;
       case QrScanPage.routeName:
         builder = _navigateToQrScan;
         break;
+      default:
+        throw Exception('Route ${settings.name} not implemented');
     }
+
+    print("Logging: ${settings.name}");
 
     return _wrapRoute(settings, builder);
   }
@@ -54,22 +82,32 @@ class AppRouter {
 
 //------------------Navigate to page------------------//
 
-Widget _navigateToHome(BuildContext context) =>
-    HomePage(title: AppLocalizations.of(context)!.homoPageTitle);
+Widget _navigateToIntro(BuildContext context) {
+  return IntroPage(Services.of(context)!.carInfoService);
+}
 
-Widget _navigateToVideo(BuildContext context, Object? navArgs) {
+Widget _navigateToHome(BuildContext context) {
+  final vm = Provider.of<HomeViewModel>(context);
+  return HomePage(vm, title: AppLocalizations.of(context)!.homoPageTitle);
+}
+
+Widget _navigateToVideo(BuildContext context, Map<String, dynamic> arguments) {
 // final url =
 //     'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4';
-  final url =
+  final url = arguments["url"] ??
       'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4';
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
+  final vm = Provider.of<VideoViewModel>(context);
   return VideoPage(
+    vm,
     title: "videoPageTitle",
     url: url,
     aspectRatio: width / height / 3, //16 / 9
   );
 }
 
-Widget _navigateToQrScan(BuildContext context) =>
-    QrScanPage(title: "qrScanTitle");
+Widget _navigateToQrScan(BuildContext context) {
+  final vm = Provider.of<QrViewModel>(context);
+  return QrScanPage(vm, title: "qrScanTitle");
+}

@@ -1,31 +1,57 @@
-import 'package:carmanual/core/app_navigation.dart';
+import 'package:carmanual/core/navigation/app_navigation.dart';
+import 'package:carmanual/core/navigation/app_route_spec.dart';
+import 'package:carmanual/core/navigation/app_view.dart';
+import 'package:carmanual/ui/screens/error_page.dart';
+import 'package:carmanual/ui/widgets/loading_overlay.dart';
 import 'package:carmanual/ui/widgets/video_widget.dart';
+import 'package:carmanual/viewmodels/video_vm.dart';
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoPage extends StatefulWidget {
-  const VideoPage({this.title, this.url, this.aspectRatio});
+class VideoPage extends View<VideoViewModel> {
+  const VideoPage(
+    VideoViewModel viewModel, {
+    this.title,
+    this.url,
+    this.aspectRatio,
+  }) : super.model(viewModel);
 
   static const String routeName = "/VideoPage";
+
+  static AppRouteSpec popAndPush({String? url}) => AppRouteSpec(
+        name: routeName,
+        action: AppRouteAction.popAndPushTo,
+        arguments: {"url": url},
+      );
+
+  static AppRouteSpec pushIt({String? url}) => AppRouteSpec(
+        name: routeName,
+        action: AppRouteAction.pushTo,
+        arguments: {"url": url},
+      );
 
   final String? title;
   final String? url;
   final double? aspectRatio;
 
   @override
-  State<VideoPage> createState() => _VideoPageState();
+  State<VideoPage> createState() => _VideoPageState(viewModel);
 }
 
-class _VideoPageState extends State<VideoPage> {
-  ChewieController? controller;
+class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
+  _VideoPageState(VideoViewModel viewModel) : super(viewModel);
+
+  late ChewieController controller;
+  late Future<void> initVideo;
 
   @override
   void initState() {
     super.initState();
     final videoPlayerController = VideoPlayerController.network(widget.url!);
+    initVideo = videoPlayerController.initialize();
     controller = ChewieController(
-      videoPlayerController: videoPlayerController..initialize(),
+      videoPlayerController: videoPlayerController,
       // aspectRatio: widget.aspectRatio,
       fullScreenByDefault: false,
       autoInitialize: true,
@@ -51,21 +77,34 @@ class _VideoPageState extends State<VideoPage> {
       body: Column(
         children: [
           Flexible(
-            child: VideoWidget(
-                controller: controller,
-                onVideoStart: () => print("Video start"),
-                onVideoEnd: () {
-                  print("Video end");
-                  setState(() {
-                    controller!.seekTo(VIDEO_START);
-                  });
+            child: FutureBuilder<void>(
+                future: initVideo,
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return ErrorPage(snapshot.error.toString());
+                  }
+                  if (snapshot.connectionState != ConnectionState.done) {
+                    return LoadingOverlay();
+                  }
+                  return VideoWidget(
+                      controller: controller,
+                      onVideoStart: () => print("Video start"),
+                      onVideoEnd: () {
+                        print("Video end");
+                        setState(() {
+                          controller.seekTo(VIDEO_START);
+                        });
+                      });
                 }),
           ),
           Spacer(),
           Placeholder(fallbackHeight: 200),
         ],
       ),
-      bottomNavigationBar: AppNavigation(VideoPage.routeName),
+      bottomNavigationBar: AppNavigation(
+        VideoPage.routeName,
+        viewModel.navigateTo,
+      ),
     );
   }
 }

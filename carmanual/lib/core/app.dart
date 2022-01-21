@@ -9,6 +9,7 @@ import 'package:carmanual/ui/screens/error_page.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
 import 'package:carmanual/ui/screens/loading_page.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
+import 'package:carmanual/viewmodels/intro_vm.dart';
 import 'package:carmanual/viewmodels/qr_vm.dart';
 import 'package:carmanual/viewmodels/video_vm.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ class AppProviders extends StatelessWidget {
     final services = Services.of(context)!;
     return MultiProvider(
       providers: [
+        IntroViewModelProvider(services.carInfoService),
         HomeViewModelProvider(),
         QrViewModelProvider(services.carInfoService),
         VideoViewModelProvider(),

@@ -4,6 +4,7 @@ import 'package:carmanual/ui/screens/intro/intro_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
+import 'package:carmanual/viewmodels/intro_vm.dart';
 import 'package:carmanual/viewmodels/qr_vm.dart';
 import 'package:carmanual/viewmodels/video_vm.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +85,8 @@ class AppRouter {
 //------------------Navigate to page------------------//
 
 Widget _navigateToIntro(BuildContext context) {
-  return IntroPage(Services.of(context)!.carInfoService);
+  final vm = Provider.of<IntroViewModel>(context);
+  return IntroPage.model(Services.of(context)!.carInfoService, vm);
 }
 
 Widget _navigateToHome(BuildContext context) {

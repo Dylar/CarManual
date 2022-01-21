@@ -1,51 +1,27 @@
-import 'dart:async';
-
 import 'package:carmanual/core/environment_config.dart';
-import 'package:carmanual/core/navigation/navi.dart';
-import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/service/car_info_service.dart';
-import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/widgets/debug/debug_skip_button.dart';
 import 'package:carmanual/ui/widgets/qr_camera_view.dart';
-import 'package:flutter/foundation.dart';
+import 'package:carmanual/viewmodels/intro_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
-class IntroPage extends StatefulWidget {
+class IntroPage extends View<IntroViewModel> {
   static const String routeName = "/introPage";
-
-  IntroPage(this.service, {Key? key});
 
   final CarInfoService service;
 
+  IntroPage.model(this.service, IntroViewModel viewModel)
+      : super.model(viewModel);
+
   @override
-  State<IntroPage> createState() => _QrScanPageState();
+  State<IntroPage> createState() => _IntroScanPageState(viewModel);
 }
 
-class _QrScanPageState extends State<IntroPage> {
-  late StreamSubscription<List<CarInfo>> sub;
-
-  bool navi = false;
-
-  QrScanState state = QrScanState.WAITING;
-
-  @override
-  void initState() {
-    super.initState();
-    sub = widget.service.carInfoDataSource.watchCarInfo().listen((carInfos) {
-      if (!carInfos.isEmpty && !navi) {
-        navi = true;
-        Navigate.to(context, HomePage.replaceWith())
-            .then((value) => navi = false);
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    sub.cancel();
-  }
+class _IntroScanPageState extends ViewState<IntroPage, IntroViewModel> {
+  _IntroScanPageState(IntroViewModel viewModel) : super(viewModel);
 
   @override
   Widget build(BuildContext context) {
@@ -57,41 +33,25 @@ class _QrScanPageState extends State<IntroPage> {
   }
 
   Widget _buildBody(BuildContext context, AppLocalizations l10n) {
+    final viewModel = context.read<IntroViewModel>();
     return Column(
       children: <Widget>[
         Expanded(
           flex: 1,
           child: Center(
-              child: Text(state == QrScanState.WAITING
+              child: Text(viewModel.qrState == QrScanState.WAITING
                   ? l10n.introPageMessage
                   : "Scan neu")),
         ),
         Expanded(
           flex: 7,
-          child: QRCameraView((barcode) => onScan(barcode.code ?? "")),
+          child: QRCameraView(
+            (barcode) => viewModel.onScan(barcode.code ?? ""),
+          ),
         ),
-        if (EnvironmentConfig.isDev) SkipDebugButton(onScan),
+        if (EnvironmentConfig.isDev)
+          SkipDebugButton(context.read<IntroViewModel>().onScan),
       ],
     );
-  }
-
-  void onScan(String scan) {
-    print("Logging: scan: ${scan}");
-    widget.service.onNewScan(scan).then((state) {
-      print("Logging: state: ${state.first}");
-      switch (state.first!) {
-        case QrScanState.NEW:
-          Navigate.to(context, HomePage.replaceWith());
-          break;
-        case QrScanState.OLD:
-        case QrScanState.DAFUQ:
-        case QrScanState.WAITING:
-          setState(() {
-            this.state = state.first!;
-          });
-          break;
-      }
-    });
-    ;
   }
 }

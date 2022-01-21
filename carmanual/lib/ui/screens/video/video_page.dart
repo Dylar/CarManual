@@ -1,6 +1,6 @@
 import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_route_spec.dart';
-import 'package:carmanual/core/navigation/app_view.dart';
+import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/ui/screens/error_page.dart';
 import 'package:carmanual/ui/widgets/loading_overlay.dart';
 import 'package:carmanual/ui/widgets/video_widget.dart';

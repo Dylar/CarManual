@@ -1,4 +1,4 @@
-import 'package:carmanual/core/navigation/app_view.dart';
+import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class VideoViewModelProvider extends ChangeNotifierProvider<VideoViewModel> {

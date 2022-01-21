@@ -69,19 +69,20 @@ class _AppNavigationState extends State<AppNavigation> {
     }
     AppRouteSpec routeSpec;
     final routeName = routeNames[index];
-    final isHome = routeName == HomePage.routeName;
+    final isHome = routeNames.indexOf(HomePage.routeName) == _pageIndex;
     switch (routeName) {
       case HomePage.routeName:
-        routeSpec = isHome ? HomePage.popAndRoute() : HomePage.popAndRoute();
+        routeSpec = HomePage.popAndRoute();
         break;
       case VideoPage.routeName:
-        routeSpec = VideoPage.pushIt();
+        routeSpec = isHome ? VideoPage.pushIt() : VideoPage.popAndPush();
         break;
       // case CarIndexPage.routeName:
       //   routeSpec = CarIndexPage.createRouteSpec();
       //   break;
       case QrScanPage.routeName:
-        routeSpec = QrScanPage.pushIt();
+        routeSpec =
+            routeSpec = isHome ? QrScanPage.pushIt() : QrScanPage.popAndPush();
         break;
       default:
         throw Exception("No route found");

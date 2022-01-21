@@ -18,6 +18,11 @@ class QrScanPage extends View<QrViewModel> {
         action: AppRouteAction.pushTo,
       );
 
+  static AppRouteSpec popAndPush() => AppRouteSpec(
+        name: routeName,
+        action: AppRouteAction.popAndPushTo,
+      );
+
   final String? title;
 
   @override

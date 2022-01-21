@@ -123,7 +123,6 @@ abstract class ViewModel extends ChangeNotifier {
     super.dispose();
     print("closing aha");
     _routeController.close();
-    _routeController = StreamController();
   }
 
   /// Called when the top route has been popped off, and the current route
@@ -141,6 +140,6 @@ abstract class ViewModel extends ChangeNotifier {
   void routingDidPushNext() {}
 
   void navigateTo(AppRouteSpec routeSpec) {
-    value = routeSpec;
+    _routeController.sink.add(routeSpec);
   }
 }

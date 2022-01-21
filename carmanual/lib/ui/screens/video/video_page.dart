@@ -71,6 +71,13 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
   }
 
   @override
+  void dispose() {
+    controller.videoPlayerController.dispose();
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title!)),
@@ -88,9 +95,9 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
                   }
                   return VideoWidget(
                       controller: controller,
-                      onVideoStart: () => print("Video start"),
+                      onVideoStart: () => print("Logging: Video start"),
                       onVideoEnd: () {
-                        print("Video end");
+                        print("Logging: Video end");
                         setState(() {
                           controller.seekTo(VIDEO_START);
                         });

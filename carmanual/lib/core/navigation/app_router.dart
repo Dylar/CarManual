@@ -1,3 +1,4 @@
+import 'package:carmanual/core/constants/debug.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
@@ -92,10 +93,7 @@ Widget _navigateToHome(BuildContext context) {
 }
 
 Widget _navigateToVideo(BuildContext context, Map<String, dynamic> arguments) {
-// final url =
-//     'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4';
-  final url = arguments["url"] ??
-      'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4';
+  final url = arguments[VideoPage.ARG_URL] ?? DEBUG_VID_URL;
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
   final vm = Provider.of<VideoViewModel>(context);

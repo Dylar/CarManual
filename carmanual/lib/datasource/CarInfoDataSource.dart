@@ -7,7 +7,10 @@ abstract class CarInfoDataSource {
   void dispose();
 
   Stream<List<CarInfo>> watchCarInfo();
+
   Future<void> addCarInfo(CarInfo info);
+
+  Future<List<CarInfo>> getAllCars();
 }
 
 class CarInfoDS implements CarInfoDataSource {
@@ -22,14 +25,19 @@ class CarInfoDS implements CarInfoDataSource {
   }
 
   @override
-  Stream<List<CarInfo>> watchCarInfo() async* {
-    streamController.add(await database.getCarInfos());
-    yield* streamController.stream;
-  }
-
-  @override
   Future<void> addCarInfo(CarInfo note) async {
     database.upsertCarInfo(note);
     streamController.sink.add(await database.getCarInfos());
+  }
+
+  @override
+  Future<List<CarInfo>> getAllCars() async {
+    return database.carInfoDB;
+  }
+
+  @override
+  Stream<List<CarInfo>> watchCarInfo() async* {
+    streamController.add(await database.getCarInfos());
+    yield* streamController.stream;
   }
 }

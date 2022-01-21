@@ -23,11 +23,11 @@ class AppProviders extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final services = Services.of(context)!;
+    final services = Services.of(context)!;
     return MultiProvider(
       providers: [
         HomeViewModelProvider(),
-        QrViewModelProvider(),
+        QrViewModelProvider(services.carInfoService),
         VideoViewModelProvider(),
       ],
       child: child,

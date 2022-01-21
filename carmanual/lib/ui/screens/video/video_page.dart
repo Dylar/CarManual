@@ -10,6 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPage extends View<VideoViewModel> {
+  static const String routeName = "/VideoPage";
+  static const ARG_URL = "url";
+
   const VideoPage(
     VideoViewModel viewModel, {
     this.title,
@@ -17,18 +20,16 @@ class VideoPage extends View<VideoViewModel> {
     this.aspectRatio,
   }) : super.model(viewModel);
 
-  static const String routeName = "/VideoPage";
-
   static AppRouteSpec popAndPush({String? url}) => AppRouteSpec(
         name: routeName,
         action: AppRouteAction.popAndPushTo,
-        arguments: {"url": url},
+        arguments: {ARG_URL: url},
       );
 
   static AppRouteSpec pushIt({String? url}) => AppRouteSpec(
         name: routeName,
         action: AppRouteAction.pushTo,
-        arguments: {"url": url},
+        arguments: {ARG_URL: url},
       );
 
   final String? title;

@@ -1,6 +1,7 @@
 import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_route_spec.dart';
 import 'package:carmanual/core/navigation/app_view.dart';
+import 'package:carmanual/service/car_info_service.dart';
 import 'package:carmanual/ui/widgets/qr_camera_view.dart';
 import 'package:carmanual/viewmodels/qr_vm.dart';
 import 'package:flutter/foundation.dart';
@@ -45,7 +46,6 @@ class _QrScanPageState extends ViewState<QrScanPage, QrViewModel> {
   }
 
   Widget _buildBody(BuildContext context) {
-    final barcode = context.watch<QrViewModel>().barcode;
     return Column(
       children: <Widget>[
         Expanded(
@@ -54,15 +54,33 @@ class _QrScanPageState extends ViewState<QrScanPage, QrViewModel> {
         ),
         Expanded(
           flex: 1,
-          child: Center(
-            child: (barcode != null)
-                ? Text(
-                    'Barcode Type: ${describeEnum(barcode.format)}   Data: ${barcode.code}',
-                  )
-                : Text('Scan a code'),
-          ),
+          child: buildScanInfo(),
         )
       ],
     );
+  }
+
+  Widget buildScanInfo() {
+    final state = context.watch<QrViewModel>().qrState;
+    final carInfo = context.watch<QrViewModel>().carInfo;
+    final barcode = context.watch<QrViewModel>().barcode;
+    String text;
+    switch (state) {
+      case QrScanState.NEW:
+        text = "Yeah neues Auto";
+        break;
+      case QrScanState.OLD:
+        text = 'Das Auto ${carInfo!.name} hast du schon';
+        break;
+      case QrScanState.DAFUQ:
+        text = barcode == null
+            ? "Unbekannter Fehler"
+            : 'Barcode Type: ${describeEnum(barcode.format)}\nData: ${barcode.code}';
+        break;
+      case QrScanState.WAITING:
+        text = 'Bitte einen QR Code scannen';
+        break;
+    }
+    return Center(child: Text(text));
   }
 }

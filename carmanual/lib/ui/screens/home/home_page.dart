@@ -20,9 +20,9 @@ class HomePage extends View<HomeViewModel> {
         action: AppRouteAction.popUntilRoot,
       );
 
-  static AppRouteSpec popAndRoute() => AppRouteSpec(
+  static AppRouteSpec popAndPush() => AppRouteSpec(
         name: routeName,
-        action: AppRouteAction.popUntil,
+        action: AppRouteAction.popAndPushTo,
       );
 
   static AppRouteSpec replaceWith() => AppRouteSpec(

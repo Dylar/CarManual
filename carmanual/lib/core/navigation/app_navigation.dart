@@ -72,10 +72,10 @@ class _AppNavigationState extends State<AppNavigation> {
     final isHome = routeNames.indexOf(HomePage.routeName) == _pageIndex;
     switch (routeName) {
       case HomePage.routeName:
-        routeSpec = HomePage.popAndRoute();
+        routeSpec = HomePage.popAndPush();
         break;
       case VideoPage.routeName:
-        routeSpec = isHome ? VideoPage.pushIt() : VideoPage.popAndPush();
+        routeSpec = isHome ? VideoPage.pushIt() : VideoPage.popAndPush(url: "");
         break;
       // case CarIndexPage.routeName:
       //   routeSpec = CarIndexPage.createRouteSpec();

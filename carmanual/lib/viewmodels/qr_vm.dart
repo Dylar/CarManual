@@ -1,7 +1,7 @@
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/models/car_info.dart';
 import 'package:carmanual/service/car_info_service.dart';
-import 'package:carmanual/ui/screens/video/video_page.dart';
+import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -18,8 +18,6 @@ abstract class QrViewModel extends ViewModel {
   CarInfo? get carInfo;
 
   void onScan(Barcode barcode);
-
-  void dispose();
 }
 
 class _QrVMState {
@@ -55,14 +53,15 @@ class QrVM extends QrViewModel {
       _state.carInfo = state.second;
       switch (_state.qrState) {
         case QrScanState.NEW:
-          navigateTo(VideoPage.popAndPush(url: data));
+          navigateTo(CarOverviewPage.popAndPush());
           break;
         case QrScanState.OLD:
         case QrScanState.DAFUQ:
         case QrScanState.WAITING:
-          notifyListeners();
           break;
       }
+
+      notifyListeners();
     });
   }
 }

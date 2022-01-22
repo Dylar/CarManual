@@ -1,4 +1,3 @@
-import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_route_spec.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/ui/screens/error_page.dart';
@@ -108,10 +107,6 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
           Spacer(),
           Placeholder(fallbackHeight: 200),
         ],
-      ),
-      bottomNavigationBar: AppNavigation(
-        VideoPage.routeName,
-        viewModel.navigateTo,
       ),
     );
   }

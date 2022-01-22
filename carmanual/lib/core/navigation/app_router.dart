@@ -1,8 +1,10 @@
 import 'package:carmanual/core/constants/debug.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
+import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
+import 'package:carmanual/viewmodels/car_overview_vm.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
 import 'package:carmanual/viewmodels/intro_vm.dart';
 import 'package:carmanual/viewmodels/qr_vm.dart';
@@ -10,8 +12,6 @@ import 'package:carmanual/viewmodels/video_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-
-import '../services.dart';
 
 abstract class AppRoute<T> extends Route<T> {
   String get appName;
@@ -60,6 +60,9 @@ class AppRouter {
       case HomePage.routeName:
         builder = _navigateToHome;
         break;
+      case CarOverviewPage.routeName:
+        builder = _navigateToCarInfoIndex;
+        break;
       case VideoPage.routeName:
         builder = (context) => _navigateToVideo(context, arguments);
         break;
@@ -86,12 +89,17 @@ class AppRouter {
 
 Widget _navigateToIntro(BuildContext context) {
   final vm = Provider.of<IntroViewModel>(context);
-  return IntroPage.model(Services.of(context)!.carInfoService, vm);
+  return IntroPage.model(vm);
 }
 
 Widget _navigateToHome(BuildContext context) {
   final vm = Provider.of<HomeViewModel>(context);
   return HomePage(vm, title: AppLocalizations.of(context)!.homoPageTitle);
+}
+
+Widget _navigateToCarInfoIndex(BuildContext context) {
+  final vm = Provider.of<CarOverViewModel>(context);
+  return CarOverviewPage.model(vm);
 }
 
 Widget _navigateToVideo(BuildContext context, Map<String, dynamic> arguments) {

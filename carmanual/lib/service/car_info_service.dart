@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:carmanual/core/helper/tuple.dart';
 import 'package:carmanual/datasource/CarInfoDataSource.dart';
-import 'package:carmanual/helper/tuple.dart';
 import 'package:carmanual/models/car_info.dart';
 
 enum QrScanState { NEW, OLD, DAFUQ, WAITING }

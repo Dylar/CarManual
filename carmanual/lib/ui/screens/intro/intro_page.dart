@@ -11,10 +11,7 @@ import 'package:provider/provider.dart';
 class IntroPage extends View<IntroViewModel> {
   static const String routeName = "/introPage";
 
-  final CarInfoService service;
-
-  IntroPage.model(this.service, IntroViewModel viewModel)
-      : super.model(viewModel);
+  IntroPage.model(IntroViewModel viewModel) : super.model(viewModel);
 
   @override
   State<IntroPage> createState() => _IntroScanPageState(viewModel);

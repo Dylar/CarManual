@@ -9,8 +9,6 @@ abstract class HomeViewModel extends ViewModel {
   int get count;
 
   void incrementCounter();
-
-  void dispose();
 }
 
 class HomeVM extends HomeViewModel {

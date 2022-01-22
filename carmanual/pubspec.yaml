@@ -39,6 +39,7 @@ dependencies:
   # clean code
   linter: ^1.18.0
   provider: ^5.0.0
+  rxdart: ^0.27.3
 
   # app dependency
   chewie: ^1.2.2

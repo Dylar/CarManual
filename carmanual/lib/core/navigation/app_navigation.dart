@@ -1,12 +1,12 @@
 import 'package:carmanual/core/navigation/app_route_spec.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
+import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
-import 'package:carmanual/ui/screens/video/video_page.dart';
 import 'package:flutter/material.dart';
 
 const routeNames = [
   HomePage.routeName,
-  VideoPage.routeName,
+  CarOverviewPage.routeName,
   QrScanPage.routeName,
   "Settings",
 ];
@@ -16,6 +16,7 @@ class AppNavigation extends StatefulWidget {
 
   final String routeName;
 
+  //TODO entfern das
   final void Function(AppRouteSpec routeSpec) onNavigation;
 
   @override
@@ -48,6 +49,9 @@ class _AppNavigationState extends State<AppNavigation> {
   void initState() {
     super.initState();
     _pageIndex = routeNames.indexOf(widget.routeName);
+    if (_pageIndex == -1) {
+      throw Exception("Route not in list");
+    }
   }
 
   @override
@@ -74,12 +78,10 @@ class _AppNavigationState extends State<AppNavigation> {
       case HomePage.routeName:
         routeSpec = HomePage.popAndPush();
         break;
-      case VideoPage.routeName:
-        routeSpec = isHome ? VideoPage.pushIt() : VideoPage.popAndPush(url: "");
+      case CarOverviewPage.routeName:
+        routeSpec =
+            isHome ? CarOverviewPage.pushIt() : CarOverviewPage.popAndPush();
         break;
-      // case CarIndexPage.routeName:
-      //   routeSpec = CarIndexPage.createRouteSpec();
-      //   break;
       case QrScanPage.routeName:
         routeSpec =
             routeSpec = isHome ? QrScanPage.pushIt() : QrScanPage.popAndPush();

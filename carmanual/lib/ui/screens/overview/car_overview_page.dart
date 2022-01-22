@@ -1,0 +1,70 @@
+import 'package:carmanual/core/navigation/app_navigation.dart';
+import 'package:carmanual/core/navigation/app_route_spec.dart';
+import 'package:carmanual/core/navigation/app_viewmodel.dart';
+import 'package:carmanual/core/navigation/navi.dart';
+import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/ui/screens/video/video_page.dart';
+import 'package:carmanual/ui/widgets/car_info_list_item.dart';
+import 'package:carmanual/ui/widgets/scroll_list_view.dart';
+import 'package:carmanual/viewmodels/car_overview_vm.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
+
+import '../error_page.dart';
+
+class CarOverviewPage extends View<CarOverViewModel> {
+  static const String routeName = "/carOverviewPage";
+
+  static AppRouteSpec popAndPush() => AppRouteSpec(
+        name: routeName,
+        action: AppRouteAction.popAndPushTo,
+      );
+
+  static AppRouteSpec pushIt() => AppRouteSpec(
+        name: routeName,
+        action: AppRouteAction.pushTo,
+      );
+
+  CarOverviewPage.model(CarOverViewModel viewModel) : super.model(viewModel);
+
+  @override
+  State<CarOverviewPage> createState() => _CarOverviewPageState(viewModel);
+}
+
+class _CarOverviewPageState
+    extends ViewState<CarOverviewPage, CarOverViewModel> {
+  _CarOverviewPageState(CarOverViewModel viewModel) : super(viewModel);
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    return Scaffold(
+      appBar: AppBar(title: Text(l10n.introPageTitle)),
+      body: _buildBody(context, l10n),
+      bottomNavigationBar: AppNavigation(
+        CarOverviewPage.routeName,
+        viewModel.navigateTo,
+      ),
+    );
+  }
+
+  Widget _buildBody(BuildContext context, AppLocalizations l10n) {
+    final viewModel = context.read<CarOverViewModel>();
+    return StreamBuilder<List<CarInfo>>(
+        stream: viewModel.watchCars(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return ErrorPage(snapshot.error.toString());
+          }
+
+          return ScrollListView<CarInfo>(
+              items: snapshot.data, buildItemWidget: buildItemWidget);
+        });
+  }
+
+  Widget buildItemWidget(int index, CarInfo item) => GestureDetector(
+        child: CarInfoListItem(item),
+        onTap: () => Navigate.to(context, VideoPage.pushIt(url: item.url)),
+      );
+}

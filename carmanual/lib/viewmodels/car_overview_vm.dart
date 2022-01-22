@@ -5,42 +5,33 @@ import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class IntroViewModelProvider extends ChangeNotifierProvider<IntroViewModel> {
-  IntroViewModelProvider(CarInfoService carInfoService)
-      : super(create: (_) => IntroVM(carInfoService));
+class CarOverViewModelProvider
+    extends ChangeNotifierProvider<CarOverViewModel> {
+  CarOverViewModelProvider(CarInfoService carInfoService)
+      : super(create: (_) => CarOverVM(carInfoService));
 }
 
-abstract class IntroViewModel extends ViewModel {
-  QrScanState get qrState;
-
-  Barcode? get barcode;
-
-  CarInfo? get carInfo;
-
-  void onScan(String scan);
+abstract class CarOverViewModel extends ViewModel {
+  Stream<List<CarInfo>> watchCars();
 }
 
-class _IntroVMState {
+class _CarOverVMState {
   QrScanState qrState = QrScanState.WAITING;
   Barcode? barcode;
   CarInfo? carInfo;
 }
 
-class IntroVM extends IntroViewModel {
+class CarOverVM extends CarOverViewModel {
   CarInfoService carInfoService;
 
-  IntroVM(this.carInfoService);
+  CarOverVM(this.carInfoService);
 
-  final _IntroVMState _state = _IntroVMState();
-
-  @override
-  QrScanState get qrState => _state.qrState;
+  final _CarOverVMState _state = _CarOverVMState();
 
   @override
-  Barcode? get barcode => _state.barcode;
-
-  @override
-  CarInfo? get carInfo => _state.carInfo;
+  Stream<List<CarInfo>> watchCars() {
+    return carInfoService.carInfoDataSource.watchCarInfo().asBroadcastStream();
+  }
 
   @override
   void onScan(String scan) {
@@ -50,15 +41,15 @@ class IntroVM extends IntroViewModel {
       _state.carInfo = state.second;
       print("Logging: state: ${state.first}");
       switch (state.first!) {
-        case QrScanState.OLD:
         case QrScanState.NEW:
           navigateTo(HomePage.replaceWith());
           break;
+        case QrScanState.OLD:
         case QrScanState.DAFUQ:
         case QrScanState.WAITING:
+          notifyListeners();
           break;
       }
-      notifyListeners();
     });
   }
 }

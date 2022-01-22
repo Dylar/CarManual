@@ -5,9 +5,9 @@ import 'package:carmanual/core/navigation/app_router.dart';
 import 'package:carmanual/core/services.dart';
 import 'package:carmanual/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/service/car_info_service.dart';
-import 'package:carmanual/ui/screens/error_page.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
 import 'package:carmanual/ui/screens/loading_page.dart';
+import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/viewmodels/car_overview_vm.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
 import 'package:carmanual/viewmodels/intro_vm.dart';
@@ -83,7 +83,7 @@ class _AppState extends State<App> {
         future: loadDb,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return fixView(ErrorPage(snapshot.error.toString()));
+            return fixView(ErrorInfoWidget(snapshot.error.toString()));
           }
 
           if (snapshot.connectionState != ConnectionState.done) {

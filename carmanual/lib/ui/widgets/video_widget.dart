@@ -42,7 +42,8 @@ class _VideoWidgetState extends State<VideoWidget> {
       widget.onVideoStart!();
     }
 
-    if (playerValue.position == playerValue.duration) {
+    if (playerValue.position.inMicroseconds >=
+        playerValue.duration.inMicroseconds) {
       widget.onVideoEnd!();
     }
   }

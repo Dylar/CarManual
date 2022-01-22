@@ -3,15 +3,14 @@ import 'package:carmanual/core/navigation/app_route_spec.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/ui/screens/overview/car_info_list_item.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
-import 'package:carmanual/ui/widgets/car_info_list_item.dart';
+import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/ui/widgets/scroll_list_view.dart';
 import 'package:carmanual/viewmodels/car_overview_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
-
-import '../error_page.dart';
 
 class CarOverviewPage extends View<CarOverViewModel> {
   static const String routeName = "/carOverviewPage";
@@ -55,7 +54,7 @@ class _CarOverviewPageState
         stream: viewModel.watchCars(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return ErrorPage(snapshot.error.toString());
+            return ErrorInfoWidget(snapshot.error.toString());
           }
 
           return ScrollListView<CarInfo>(
@@ -65,6 +64,6 @@ class _CarOverviewPageState
 
   Widget buildItemWidget(int index, CarInfo item) => GestureDetector(
         child: CarInfoListItem(item),
-        onTap: () => Navigate.to(context, VideoPage.pushIt(url: item.url)),
+        onTap: () => Navigate.to(context, VideoPage.pushIt(url: item.vidUrl)),
       );
 }

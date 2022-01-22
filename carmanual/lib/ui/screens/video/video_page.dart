@@ -1,6 +1,6 @@
 import 'package:carmanual/core/navigation/app_route_spec.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
-import 'package:carmanual/ui/screens/error_page.dart';
+import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/ui/widgets/loading_overlay.dart';
 import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:carmanual/viewmodels/video_vm.dart';
@@ -61,10 +61,7 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
       looping: false,
       errorBuilder: (context, errorMessage) {
         return Center(
-          child: Text(
-            errorMessage,
-            style: const TextStyle(color: Colors.white),
-          ),
+          child: ErrorInfoWidget(errorMessage),
         );
       },
     );
@@ -88,7 +85,7 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
                 future: initVideo,
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
-                    return ErrorPage(snapshot.error.toString());
+                    return ErrorInfoWidget(snapshot.error.toString());
                   }
                   if (snapshot.connectionState != ConnectionState.done) {
                     return LoadingOverlay();
@@ -99,7 +96,9 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
                       onVideoEnd: () {
                         print("Logging: Video end");
                         setState(() {
-                          controller.seekTo(VIDEO_START);
+                          controller
+                              .seekTo(VIDEO_START)
+                              .then((_) => controller.pause());
                         });
                       });
                 }),

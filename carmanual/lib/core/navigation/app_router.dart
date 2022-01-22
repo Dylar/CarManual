@@ -103,7 +103,7 @@ Widget _navigateToCarInfoIndex(BuildContext context) {
 }
 
 Widget _navigateToVideo(BuildContext context, Map<String, dynamic> arguments) {
-  final url = arguments[VideoPage.ARG_URL] ?? DEBUG_VID_URL;
+  final url = arguments[VideoPage.ARG_URL] ?? DEBUG_INTRO_VID_URL;
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
   final vm = Provider.of<VideoViewModel>(context);

@@ -78,9 +78,10 @@ final ThemeData appTheme = ThemeData(
       unselectedLabelColor: BaseColors.veryLightGrey,
       indicator: UnderlineTabIndicator(
           borderSide: BorderSide(color: BaseColors.lightGrey, width: 2.0))),
-  appBarTheme: const AppBarTheme(
+  appBarTheme: AppBarTheme(
       color: Colors.white,
-      iconTheme: IconThemeData(color: BaseColors.lightGrey)),
+      iconTheme: IconThemeData(color: BaseColors.lightGrey),
+      titleTextStyle: textSizes.merge(primaryTextColors).headline6),
   inputDecorationTheme: const InputDecorationTheme(
       labelStyle: TextStyle(color: BaseColors.primary),
       floatingLabelBehavior: FloatingLabelBehavior.always),

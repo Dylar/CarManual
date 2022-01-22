@@ -110,7 +110,6 @@ abstract class ViewModel extends ChangeNotifier {
   /// framework creates.
   @mustCallSuper
   void init() {
-    print("init aha");
     _routeController = StreamController();
   }
 

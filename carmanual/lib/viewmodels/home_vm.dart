@@ -1,25 +1,19 @@
-import 'package:carmanual/core/navigation/app_viewmodel.dart';
+import 'package:carmanual/core/constants/debug.dart';
+import 'package:carmanual/viewmodels/video_vm.dart';
 import 'package:provider/provider.dart';
 
 class HomeViewModelProvider extends ChangeNotifierProvider<HomeViewModel> {
   HomeViewModelProvider() : super(create: (_) => HomeVM());
 }
 
-abstract class HomeViewModel extends ViewModel {
-  int get count;
-
-  void incrementCounter();
-}
+abstract class HomeViewModel extends VideoVM {}
 
 class HomeVM extends HomeViewModel {
-  int _counter = 0;
-
   @override
-  int get count => _counter;
-
-  @override
-  void incrementCounter() {
-    _counter++;
-    notifyListeners();
+  void init() {
+    url = DEBUG_INTRO_VID_URL;
+    super.init();
+    controller.setLooping(true);
+    controller.play();
   }
 }

@@ -4,36 +4,27 @@ import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/ui/widgets/loading_overlay.dart';
 import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:carmanual/viewmodels/video_vm.dart';
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 
 class VideoPage extends View<VideoViewModel> {
   static const String routeName = "/VideoPage";
   static const ARG_URL = "url";
+  static const ARG_TITLE = "title";
 
   const VideoPage(
-    VideoViewModel viewModel, {
-    this.title,
-    this.url,
+    VideoViewModel viewModel,
+    this.title, {
     this.aspectRatio,
   }) : super.model(viewModel);
 
-  static AppRouteSpec popAndPush({String? url}) => AppRouteSpec(
-        name: routeName,
-        action: AppRouteAction.popAndPushTo,
-        arguments: {ARG_URL: url},
-      );
-
-  static AppRouteSpec pushIt({String? url}) => AppRouteSpec(
+  static AppRouteSpec pushIt({String? url, String? title}) => AppRouteSpec(
         name: routeName,
         action: AppRouteAction.pushTo,
-        arguments: {ARG_URL: url},
+        arguments: {ARG_URL: url, ARG_TITLE: title},
       );
 
-  final String? title;
-  final String? url;
   final double? aspectRatio;
+  final String title;
 
   @override
   State<VideoPage> createState() => _VideoPageState(viewModel);
@@ -42,71 +33,58 @@ class VideoPage extends View<VideoViewModel> {
 class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
   _VideoPageState(VideoViewModel viewModel) : super(viewModel);
 
-  late ChewieController controller;
-  late Future<void> initVideo;
-
-  @override
-  void initState() {
-    super.initState();
-    final videoPlayerController = VideoPlayerController.network(widget.url!);
-    initVideo = videoPlayerController.initialize();
-    controller = ChewieController(
-      videoPlayerController: videoPlayerController,
-      // aspectRatio: widget.aspectRatio,
-      fullScreenByDefault: false,
-      autoInitialize: true,
-      showOptions: false,
-      showControls: true,
-      autoPlay: false,
-      looping: false,
-      errorBuilder: (context, errorMessage) {
-        return Center(
-          child: ErrorInfoWidget(errorMessage),
-        );
-      },
-    );
-  }
-
-  @override
-  void dispose() {
-    controller.videoPlayerController.dispose();
-    controller.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title!)),
+      appBar: AppBar(title: Text(widget.title)),
       body: Column(
         children: [
           Flexible(
             child: FutureBuilder<void>(
-                future: initVideo,
+                future: viewModel.initVideo,
                 builder: (context, snapshot) {
                   if (snapshot.hasError) {
                     return ErrorInfoWidget(snapshot.error.toString());
                   }
                   if (snapshot.connectionState != ConnectionState.done) {
-                    return LoadingOverlay();
+                    return VideoDownload();
                   }
                   return VideoWidget(
-                      controller: controller,
+                      controller: viewModel.controller,
                       onVideoStart: () => print("Logging: Video start"),
-                      onVideoEnd: () {
-                        print("Logging: Video end");
-                        setState(() {
-                          controller
-                              .seekTo(VIDEO_START)
-                              .then((_) => controller.pause());
-                        });
-                      });
+                      onVideoEnd: viewModel.onVideoEnd);
                 }),
           ),
           Spacer(),
-          Placeholder(fallbackHeight: 200),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Card(
+                elevation: 4,
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Irgendwas nen Text der was übers Auto sagt oder so",
+                      style: Theme.of(context).textTheme.subtitle1,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
+    );
+  }
+}
+
+class VideoDownload extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return LoadingOverlay(
+      opacity: OPACITY_20,
+      child: Container(child: Center(child: Icon(Icons.cloud_download))),
     );
   }
 }

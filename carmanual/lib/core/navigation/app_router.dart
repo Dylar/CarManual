@@ -1,4 +1,5 @@
 import 'package:carmanual/core/constants/debug.dart';
+import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
 import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
@@ -10,7 +11,6 @@ import 'package:carmanual/viewmodels/intro_vm.dart';
 import 'package:carmanual/viewmodels/qr_vm.dart';
 import 'package:carmanual/viewmodels/video_vm.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 abstract class AppRoute<T> extends Route<T> {
@@ -26,7 +26,7 @@ class RouteWrapper<T> extends MaterialPageRoute<T> implements AppRoute<T> {
   }) : super(builder: builder, settings: settings);
 
   @override
-  String get appName => 'CarManual';
+  String get appName => EnvironmentConfig.APP_NAME;
 
   @override
   String? get viewName => settings.name;
@@ -94,7 +94,7 @@ Widget _navigateToIntro(BuildContext context) {
 
 Widget _navigateToHome(BuildContext context) {
   final vm = Provider.of<HomeViewModel>(context);
-  return HomePage(vm, title: AppLocalizations.of(context)!.homoPageTitle);
+  return HomePage(vm);
 }
 
 Widget _navigateToCarInfoIndex(BuildContext context) {
@@ -102,20 +102,21 @@ Widget _navigateToCarInfoIndex(BuildContext context) {
   return CarOverviewPage.model(vm);
 }
 
+Widget _navigateToQrScan(BuildContext context) {
+  final vm = Provider.of<QrViewModel>(context);
+  return QrScanPage(vm);
+}
+
 Widget _navigateToVideo(BuildContext context, Map<String, dynamic> arguments) {
+  final title = arguments[VideoPage.ARG_TITLE] ?? DEBUG_INTRO_VID_URL;
   final url = arguments[VideoPage.ARG_URL] ?? DEBUG_INTRO_VID_URL;
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
   final vm = Provider.of<VideoViewModel>(context);
+  vm.url = url;
   return VideoPage(
     vm,
-    title: "videoPageTitle",
-    url: url,
+    title,
     aspectRatio: width / height / 3, //16 / 9
   );
-}
-
-Widget _navigateToQrScan(BuildContext context) {
-  final vm = Provider.of<QrViewModel>(context);
-  return QrScanPage(vm, title: "qrScanTitle");
 }

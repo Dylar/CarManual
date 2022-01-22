@@ -6,11 +6,11 @@ import 'package:carmanual/ui/widgets/qr_camera_view.dart';
 import 'package:carmanual/viewmodels/qr_vm.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class QrScanPage extends View<QrViewModel> {
-  QrScanPage(QrViewModel viewModel, {Key? key, this.title})
-      : super.model(viewModel);
+  QrScanPage(QrViewModel viewModel, {Key? key}) : super.model(viewModel);
 
   static const String routeName = "/qrScanPage";
 
@@ -24,8 +24,6 @@ class QrScanPage extends View<QrViewModel> {
         action: AppRouteAction.popAndPushTo,
       );
 
-  final String? title;
-
   @override
   State<QrScanPage> createState() => _QrScanPageState(viewModel);
 }
@@ -36,7 +34,9 @@ class _QrScanPageState extends ViewState<QrScanPage, QrViewModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title!)),
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.qrScanPageTitle),
+      ),
       body: _buildBody(context),
       bottomNavigationBar: AppNavigation(
         QrScanPage.routeName,

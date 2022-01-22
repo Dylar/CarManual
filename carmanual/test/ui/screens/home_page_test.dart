@@ -15,7 +15,7 @@ void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     await initNavigateToHome(tester);
 
-    expect(find.byType(CounterPage), findsOneWidget);
+    expect(find.byType(HomeVideoPage), findsOneWidget);
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);

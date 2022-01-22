@@ -39,7 +39,7 @@ class _CarOverviewPageState
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.introPageTitle)),
+      appBar: AppBar(title: Text(l10n.carOverViewPageTitle)),
       body: _buildBody(context, l10n),
       bottomNavigationBar: AppNavigation(
         CarOverviewPage.routeName,
@@ -64,6 +64,9 @@ class _CarOverviewPageState
 
   Widget buildItemWidget(int index, CarInfo item) => GestureDetector(
         child: CarInfoListItem(item),
-        onTap: () => Navigate.to(context, VideoPage.pushIt(url: item.vidUrl)),
+        onTap: () => Navigate.to(
+          context,
+          VideoPage.pushIt(url: item.vidUrl, title: item.name),
+        ),
       );
 }

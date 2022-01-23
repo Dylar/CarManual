@@ -120,7 +120,6 @@ abstract class ViewModel extends ChangeNotifier {
   @mustCallSuper
   void dispose() {
     super.dispose();
-    print("closing aha");
     _routeController.close();
   }
 

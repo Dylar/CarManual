@@ -65,7 +65,7 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Irgendwas nen Text der was übers Auto sagt oder so",
+                      "Was für ein schönes Auto",
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ),

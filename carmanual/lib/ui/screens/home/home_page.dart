@@ -87,7 +87,7 @@ class _HomeVideoPageState extends ViewState<HomeVideoPage, HomeViewModel> {
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    "Hier steht ein Willkommenstext, der den Käufer willkommen heißt. Natürlich sagt dieser noch nix aus und ist nur ein Platzhalter. Aber freut mich trotzdem, dass Sie das Auto gekauft haben.",
+                    "Hier steht ein Willkommenstext, der den Käufer Willkommen heißt. Natürlich sagt dieser noch nix aus und ist nur ein Platzhalter. Aber freut mich trotzdem, dass Sie das Auto gekauft haben.",
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
                 ),

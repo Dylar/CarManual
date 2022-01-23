@@ -41,6 +41,7 @@ class _QRCameraViewState extends State<QRCameraView> {
       onTap: () => controller.resumeCamera(),
       child: QRView(
         key: qrKey,
+        overlay: QrScannerOverlayShape(),
         onQRViewCreated: _onQRViewCreated,
       ),
     );

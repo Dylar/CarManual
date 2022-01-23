@@ -6,7 +6,7 @@ import 'package:carmanual/core/services.dart';
 import 'package:carmanual/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
-import 'package:carmanual/ui/screens/loading_page.dart';
+import 'package:carmanual/ui/screens/intro/loading_page.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/viewmodels/car_overview_vm.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
@@ -88,21 +88,19 @@ class _AppState extends State<App> {
 
           if (snapshot.connectionState != ConnectionState.done) {
             return fixView(LoadingStartPage());
+            // return LoadingStartPage();
           }
 
           final env = EnvironmentConfig.ENV == Env.PROD.name
               ? ""
               : "(${EnvironmentConfig.ENV}) ";
 
-          var navigatorKey = GlobalKey<NavigatorState>();
           return Services.init(
-            navigatorKey: navigatorKey,
             carInfoService: widget.carInfoService,
             child: AppProviders(
               child: MaterialApp(
                 title: env + EnvironmentConfig.APP_NAME,
                 theme: appTheme,
-                navigatorKey: navigatorKey,
                 initialRoute: IntroPage.routeName,
                 onGenerateInitialRoutes: AppRouter.generateInitRoute,
                 onGenerateRoute: AppRouter.generateRoute,
@@ -131,7 +129,7 @@ class _AppState extends State<App> {
   }
 
   Future<void> initDB() async {
-    await Future.delayed(Duration(seconds: 2));
+    await Future.delayed(Duration(seconds: EnvironmentConfig.isDev ? 1 : 3));
     return widget.database.isOpen ? Future.value() : widget.database.init();
   }
 }

@@ -52,10 +52,7 @@ class _QrScanPageState extends ViewState<QrScanPage, QrViewModel> {
           flex: 5,
           child: QRCameraView(context.read<QrViewModel>().onScan),
         ),
-        Expanded(
-          flex: 1,
-          child: buildScanInfo(),
-        )
+        Expanded(flex: 1, child: buildScanInfo())
       ],
     );
   }

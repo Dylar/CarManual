@@ -1,11 +1,10 @@
-import 'package:carmanual/viewmodels/qr_vm.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  late QrViewModel viewModel;
+  // late QrViewModel viewModel;
 
   setUp(() {
-    viewModel = QrVM();
+    // viewModel = QrVM(CarInfoService(CarInfoDS(AppDatabase())));
   });
 
   group('QrViewModel', () {

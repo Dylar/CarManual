@@ -19,7 +19,6 @@ class CarInfoDS implements CarInfoDataSource {
 
   final streamController = BehaviorSubject<List<CarInfo>>();
 
-  @override
   void dispose() {
     streamController.close();
   }

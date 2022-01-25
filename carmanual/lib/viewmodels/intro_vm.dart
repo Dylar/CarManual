@@ -44,7 +44,7 @@ class IntroVM extends IntroViewModel {
 
   @override
   void onScan(String scan) {
-    print("Logging: scan: ${scan}");
+    print("Logging: scan: $scan");
     carInfoService.onNewScan(scan).then((state) {
       _state.qrState = state.first!;
       _state.carInfo = state.second;

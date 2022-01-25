@@ -46,7 +46,7 @@ class QrVM extends QrViewModel {
   void onScan(Barcode barcode) {
     this._state.barcode = barcode;
     final data = barcode.code ?? "";
-    print("Logging: data: ${data}");
+    print("Logging: data: $data");
     carInfoService.onNewScan(data).then((state) {
       print("Logging: state: ${state.first}");
       _state.qrState = state.first!;

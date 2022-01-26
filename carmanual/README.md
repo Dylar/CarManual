@@ -6,6 +6,9 @@ Create app icon: (https://pub.dev/packages/flutter_launcher_icons)
 Linter:
  flutter analyze
 
+Localization:
+    if not resolved => Dart Analysis tab -> Restart Dart Analysis Server
+
 Run:
  flutter run --dart-define=ENV="DEV" --dart-define=FLAVOR="TEST"
  flutter run --dart-define=ENV="DEV",FLAVOR="TEST"

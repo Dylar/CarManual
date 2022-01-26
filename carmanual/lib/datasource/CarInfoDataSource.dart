@@ -1,15 +1,19 @@
 import 'dart:async';
 
-import 'package:carmanual/core/database.dart';
+import 'package:carmanual/core/database/database.dart';
 import 'package:carmanual/models/car_info.dart';
 import 'package:rxdart/rxdart.dart';
 
 abstract class CarInfoDataSource {
   Stream<List<CarInfo>> watchCarInfo();
-
   Future<void> addCarInfo(CarInfo info);
-
   Future<List<CarInfo>> getAllCars();
+}
+
+abstract class CarInfoDatabase {
+  Future<void> upsertCarInfo(CarInfo carInfo);
+  Future<List<CarInfo>> getCarInfos();
+  Future<CarInfo?> getCarInfo(String name);
 }
 
 class CarInfoDS implements CarInfoDataSource {
@@ -25,18 +29,18 @@ class CarInfoDS implements CarInfoDataSource {
 
   @override
   Future<void> addCarInfo(CarInfo note) async {
-    database.upsertCarInfo(note);
+    await database.upsertCarInfo(note);
     streamController.sink.add(await database.getCarInfos());
   }
 
   @override
   Future<List<CarInfo>> getAllCars() async {
-    return database.carInfoDB;
+    return database.getCarInfos();
   }
 
   @override
   Stream<List<CarInfo>> watchCarInfo() async* {
     yield* streamController.stream;
-    streamController.sink.add(await database.getCarInfos());
+    yield await database.getCarInfos();
   }
 }

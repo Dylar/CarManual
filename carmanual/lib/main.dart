@@ -6,8 +6,8 @@ void main() {
   // debugPaintSizeEnabled = true;
 
   WidgetsFlutterBinding.ensureInitialized();
-  SystemChrome.setPreferredOrientations(
-      [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then((_) {
-    runApp(App.load());
-  });
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((_) async => runApp(App.load()));
 }

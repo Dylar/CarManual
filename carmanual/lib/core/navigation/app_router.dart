@@ -46,7 +46,16 @@ class AppRouter {
       RouteObserver<ModalRoute>();
 
   static List<Route<dynamic>> generateInitRoute(String initialRoute) {
-    return [_wrapRoute(RouteSettings(name: initialRoute), _navigateToIntro)];
+    late WidgetBuilder builder;
+    switch (initialRoute) {
+      case IntroPage.routeName:
+        builder = _navigateToIntro;
+        break;
+      case HomePage.routeName:
+        builder = _navigateToHome;
+        break;
+    }
+    return [_wrapRoute(RouteSettings(name: initialRoute), builder)];
   }
 
   static AppRoute<dynamic> generateRoute(RouteSettings settings) {

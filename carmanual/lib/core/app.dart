@@ -2,6 +2,7 @@ import 'package:carmanual/core/app_theme.dart';
 import 'package:carmanual/core/database/database.dart';
 import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/core/navigation/app_router.dart';
+import 'package:carmanual/core/network/app_client.dart';
 import 'package:carmanual/core/services.dart';
 import 'package:carmanual/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/service/car_info_service.dart';
@@ -43,6 +44,7 @@ class AppProviders extends StatelessWidget {
 class App extends StatefulWidget {
   const App({
     required this.database,
+    required this.appClient,
     required this.carInfoService,
     required this.carInfoDataSource,
   }) : super();
@@ -54,14 +56,17 @@ class App extends StatefulWidget {
   }) {
     final db = database ?? AppDatabase();
     final carSource = carInfoDataSource ?? CarInfoDS(db);
+    final appClient = AppClient();
     return App(
       database: db,
+      appClient: appClient,
       carInfoService: carInfoService ?? CarInfoService(carSource),
       carInfoDataSource: carSource,
     );
   }
 
   final AppDatabase database;
+  final AppClient appClient;
   final CarInfoService carInfoService;
   final CarInfoDataSource carInfoDataSource;
 
@@ -70,18 +75,23 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  Future<bool>? loadDb;
+  late Future<bool> initDb;
+  late Future<bool> initClient;
 
   @override
   void initState() {
     super.initState();
-    loadDb = initDB();
+    initDb = initDB();
+    initClient = initAppClient();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<bool>(
-        future: loadDb,
+    return FutureBuilder<List<bool>>(
+        initialData: [false, false],
+        future: Future.wait([
+          initDb,
+        ]),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return fixView(ErrorInfoWidget(snapshot.error.toString()));
@@ -95,15 +105,23 @@ class _AppState extends State<App> {
               ? ""
               : "(${EnvironmentConfig.ENV}) ";
 
-          final hasData = snapshot.data ?? false;
+          final hasData = snapshot.data!.first;
+          final isConnected = snapshot.data!.last;
+
+          String firstRoute = IntroPage.routeName;
+          if (hasData) {
+            firstRoute = HomePage.routeName;
+            if (!isConnected) {
+              firstRoute = HomePage.routeName;
+            }
+          }
           return Services.init(
             carInfoService: widget.carInfoService,
             child: AppProviders(
               child: MaterialApp(
                 title: env + EnvironmentConfig.APP_NAME,
                 theme: appTheme,
-                initialRoute:
-                    hasData ? HomePage.routeName : IntroPage.routeName,
+                initialRoute: firstRoute,
                 onGenerateInitialRoutes: AppRouter.generateInitRoute,
                 onGenerateRoute: AppRouter.generateRoute,
                 navigatorObservers: [AppRouter.routeObserver],
@@ -134,5 +152,11 @@ class _AppState extends State<App> {
     await Future.delayed(Duration(seconds: EnvironmentConfig.isDev ? 1 : 3));
     await (widget.database.isOpen ? Future.value() : widget.database.init());
     return (await widget.carInfoDataSource.getAllCars()).isNotEmpty;
+  }
+
+  Future<bool> initAppClient() async {
+    widget.appClient.initClient();
+    final result = widget.appClient.connect();
+    return result != "empty";
   }
 }

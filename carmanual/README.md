@@ -15,3 +15,7 @@ Run:
 
  Env: DEV,STAGE,PROD
  Flavors: TEST
+
+Build:
+    flutter pub run build_runner build
+    flutter packages get

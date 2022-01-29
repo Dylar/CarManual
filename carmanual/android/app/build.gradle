@@ -39,7 +39,7 @@ apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 31
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
@@ -50,11 +50,12 @@ android {
     }
 
     defaultConfig {
+        multiDexEnabled true
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "de.bitb.carmanual"
         applicationIdSuffix(dartEnvironmentVariables.ENV == "PROD" ? "" : "." + dartEnvironmentVariables.ENV)
         minSdkVersion 20
-        targetSdkVersion 29
+        targetSdkVersion 31
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         resValue "string", "app_name", (dartEnvironmentVariables.ENV == "PROD" ? "" : "(" + dartEnvironmentVariables.ENV + ") ") + dartEnvironmentVariables.APP_NAME
@@ -75,4 +76,5 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'androidx.multidex:multidex:2.0.1'
 }

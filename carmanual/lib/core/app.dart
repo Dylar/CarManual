@@ -81,17 +81,15 @@ class _AppState extends State<App> {
   @override
   void initState() {
     super.initState();
-    initDb = initDB();
-    initClient = initAppClient();
+    initDb = _initDB();
+    initClient = _initAppClient();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<bool>>(
         initialData: [false, false],
-        future: Future.wait([
-          initDb,
-        ]),
+        future: Future.wait([initDb, initClient]),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return fixView(ErrorInfoWidget(snapshot.error.toString()));
@@ -116,6 +114,7 @@ class _AppState extends State<App> {
             }
           }
           return Services.init(
+            appClient: widget.appClient,
             carInfoService: widget.carInfoService,
             child: AppProviders(
               child: MaterialApp(
@@ -125,10 +124,7 @@ class _AppState extends State<App> {
                 onGenerateInitialRoutes: AppRouter.generateInitRoute,
                 onGenerateRoute: AppRouter.generateRoute,
                 navigatorObservers: [AppRouter.routeObserver],
-                supportedLocales: const [
-                  Locale('en'),
-                  Locale('de'),
-                ],
+                supportedLocales: const [Locale('en'), Locale('de')],
                 localizationsDelegates: const [
                   AppLocalizations.delegate,
                   GlobalMaterialLocalizations.delegate,
@@ -148,15 +144,14 @@ class _AppState extends State<App> {
     );
   }
 
-  Future<bool> initDB() async {
+  Future<bool> _initDB() async {
     await Future.delayed(Duration(seconds: EnvironmentConfig.isDev ? 1 : 3));
     await (widget.database.isOpen ? Future.value() : widget.database.init());
     return (await widget.carInfoDataSource.getAllCars()).isNotEmpty;
   }
 
-  Future<bool> initAppClient() async {
+  Future<bool> _initAppClient() async {
     widget.appClient.initClient();
-    final result = widget.appClient.connect();
-    return result != "empty";
+    return true;
   }
 }

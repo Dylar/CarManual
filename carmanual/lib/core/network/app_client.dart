@@ -1,4 +1,5 @@
 import 'package:carmanual/core/environment_config.dart';
+import 'package:flutter/services.dart';
 import 'package:ssh2/ssh2.dart';
 
 class AppClient {
@@ -20,11 +21,14 @@ class AppClient {
 
   Future<String> connect() async {
     try {
-      final result = await client?.connectSFTP();
+      String? result = await client?.connect();
       print("Log: connect: $result");
+      result = await client?.connectSFTP();
+      print("Log: connect SFTP: $result");
+      // sftp://
       return result ?? "empty";
     } catch (e) {
-      print("Log: ERROR: $e");
+      print("Log: ERROR: ${(e as PlatformException).message}");
     }
     return "empty";
   }

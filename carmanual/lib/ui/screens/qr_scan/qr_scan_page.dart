@@ -38,10 +38,7 @@ class _QrScanPageState extends ViewState<QrScanPage, QrViewModel> {
         title: Text(AppLocalizations.of(context)!.qrScanPageTitle),
       ),
       body: _buildBody(context),
-      bottomNavigationBar: AppNavigation(
-        QrScanPage.routeName,
-        viewModel.navigateTo,
-      ),
+      bottomNavigationBar: AppNavigation(QrScanPage.routeName),
     );
   }
 

@@ -28,6 +28,6 @@ class CarOverVM extends CarOverViewModel {
 
   @override
   Stream<List<CarInfo>> watchCars() {
-    return carInfoService.carInfoDataSource.watchCarInfo().asBroadcastStream();
+    return carInfoService.carInfoDataSource.watchCarInfo();
   }
 }

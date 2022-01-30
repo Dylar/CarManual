@@ -1,9 +1,11 @@
 import 'package:carmanual/core/constants/debug.dart';
 import 'package:carmanual/core/environment_config.dart';
+import 'package:carmanual/ui/screens/debug_page.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
 import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
+import 'package:carmanual/ui/screens/settings_page.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
 import 'package:carmanual/viewmodels/car_overview_vm.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
@@ -54,15 +56,23 @@ class AppRouter {
       case HomePage.routeName:
         builder = _navigateToHome;
         break;
+      //TODO download page?
     }
     return [_wrapRoute(RouteSettings(name: initialRoute), builder)];
   }
 
   static AppRoute<dynamic> generateRoute(RouteSettings settings) {
     final arguments = settings.arguments as Map<String, dynamic>? ?? {};
+    print("Logging: Route: ${settings.name}");
 
     late WidgetBuilder builder;
     switch (settings.name) {
+      case DebugPage.routeName:
+        builder = _navigateToDebug;
+        break;
+      case SettingsPage.routeName:
+        builder = _navigateToSettings;
+        break;
       case IntroPage.routeName:
         builder = _navigateToIntro;
         break;
@@ -82,8 +92,6 @@ class AppRouter {
         throw Exception('Route ${settings.name} not implemented');
     }
 
-    print("Logging: ${settings.name}");
-
     return _wrapRoute(settings, builder);
   }
 
@@ -95,6 +103,14 @@ class AppRouter {
 }
 
 //------------------Navigate to page------------------//
+
+Widget _navigateToDebug(BuildContext context) {
+  return DebugPage();
+}
+
+Widget _navigateToSettings(BuildContext context) {
+  return SettingsPage();
+}
 
 Widget _navigateToIntro(BuildContext context) {
   final vm = Provider.of<IntroViewModel>(context);

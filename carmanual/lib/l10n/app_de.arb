@@ -6,6 +6,8 @@
 
   "carOverViewPageTitle": "Übersicht",
 
-  "qrScanPageTitle": "Bitte scannen"
+  "qrScanPageTitle": "Bitte scannen",
+
+  "settingsPageTitle": "Einstellungen"
 
 }

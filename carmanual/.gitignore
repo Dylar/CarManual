@@ -1,5 +1,8 @@
 *.g.dart
 .env
+Podfile.lock
+
+
 # Miscellaneous
 *.class
 *.log

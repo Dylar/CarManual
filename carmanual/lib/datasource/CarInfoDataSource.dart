@@ -39,8 +39,8 @@ class CarInfoDS implements CarInfoDataSource {
   }
 
   @override
-  Stream<List<CarInfo>> watchCarInfo() async* {
-    yield* streamController.stream;
-    yield await database.getCarInfos();
+  Stream<List<CarInfo>> watchCarInfo() {
+    database.getCarInfos().then((data) => streamController.add(data));
+    return streamController;
   }
 }

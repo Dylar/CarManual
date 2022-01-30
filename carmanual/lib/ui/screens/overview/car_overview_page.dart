@@ -41,10 +41,7 @@ class _CarOverviewPageState
     return Scaffold(
       appBar: AppBar(title: Text(l10n.carOverViewPageTitle)),
       body: _buildBody(context, l10n),
-      bottomNavigationBar: AppNavigation(
-        CarOverviewPage.routeName,
-        viewModel.navigateTo,
-      ),
+      bottomNavigationBar: AppNavigation(CarOverviewPage.routeName),
     );
   }
 

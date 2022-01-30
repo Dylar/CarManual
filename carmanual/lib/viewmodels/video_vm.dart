@@ -1,4 +1,3 @@
-import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/ui/widgets/video_widget.dart';
@@ -38,10 +37,8 @@ class VideoVM extends VideoViewModel {
 
   @override
   void init() {
-    // final url = _url;
-    final url = EnvironmentConfig.domain;
-    print("URL: $url");
     super.init();
+    final url = _url;
     final videoPlayerController = VideoPlayerController.network(url);
     _initVideo = videoPlayerController.initialize();
     _controller = ChewieController(

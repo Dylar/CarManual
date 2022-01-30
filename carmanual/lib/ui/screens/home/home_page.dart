@@ -39,10 +39,7 @@ class _HomePageState extends ViewState<HomePage, HomeViewModel> {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
       body: HomeVideoPage.model(viewModel),
-      bottomNavigationBar: AppNavigation(
-        HomePage.routeName,
-        viewModel.navigateTo,
-      ),
+      bottomNavigationBar: AppNavigation(HomePage.routeName),
     );
   }
 }

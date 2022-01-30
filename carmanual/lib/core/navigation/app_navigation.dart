@@ -1,55 +1,37 @@
+import 'package:carmanual/core/helper/tuple.dart';
 import 'package:carmanual/core/navigation/app_route_spec.dart';
+import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
+import 'package:carmanual/ui/screens/settings_page.dart';
 import 'package:carmanual/ui/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
 
-const routeNames = [
-  HomePage.routeName,
-  CarOverviewPage.routeName,
-  QrScanPage.routeName,
-  "Settings",
+final _naviBarData = <Triple<String, String, IconData>>[
+  Triple(HomePage.routeName, "Home", Icons.home_outlined),
+  Triple(CarOverviewPage.routeName, "Videos", Icons.ondemand_video_sharp),
+  Triple(QrScanPage.routeName, "QR", Icons.qr_code_scanner),
+  Triple(SettingsPage.routeName, "Settings", Icons.settings),
 ];
 
 class AppNavigation extends StatefulWidget {
-  const AppNavigation(this.routeName, this.onNavigation);
+  const AppNavigation(this.routeName);
 
   final String routeName;
-
-  //TODO entfern das
-  final void Function(AppRouteSpec routeSpec) onNavigation;
 
   @override
   State<AppNavigation> createState() => _AppNavigationState();
 }
 
 class _AppNavigationState extends State<AppNavigation> {
-  final _navigationIcons = const <BottomNavigationBarItem>[
-    BottomNavigationBarItem(
-      icon: Icon(Icons.home),
-      label: 'Home',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.video_camera_back),
-      label: 'Videos',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.qr_code),
-      label: 'QR',
-    ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.settings),
-      label: 'Settings',
-    ),
-  ];
-
-  int? _pageIndex;
+  late int _pageIndex;
 
   @override
   void initState() {
     super.initState();
-    _pageIndex = routeNames.indexOf(widget.routeName);
+    _pageIndex = _naviBarData
+        .indexWhere((data) => data.firstOrThrow == widget.routeName);
     if (_pageIndex == -1) {
       throw Exception("Route not in list");
     }
@@ -62,10 +44,21 @@ class _AppNavigationState extends State<AppNavigation> {
       backgroundColor: Colors.black,
       selectedItemColor: Colors.greenAccent,
       unselectedItemColor: Colors.grey,
-      items: _navigationIcons,
-      currentIndex: _pageIndex ?? 0,
+      currentIndex: _pageIndex,
+      items: _buildIcons(),
       onTap: (index) => _onItemTapped(context, index),
     );
+  }
+
+  List<BottomNavigationBarItem> _buildIcons() {
+    return _naviBarData
+        .map<BottomNavigationBarItem>(
+          (data) => BottomNavigationBarItem(
+            icon: Icon(data.lastOrThrow),
+            label: data.middleOrThrow,
+          ),
+        )
+        .toList();
   }
 
   void _onItemTapped(BuildContext context, int index) {
@@ -74,15 +67,10 @@ class _AppNavigationState extends State<AppNavigation> {
       showAlreadyHereSnackBar(context);
       return;
     }
-    final isEnd = index == _navigationIcons.length - 1;
-    if (isEnd) {
-      showNothingToSeeSnackBar(context);
-      return;
-    }
+    final routeName = _naviBarData[index];
+    final thisIsHome = _pageIndex == 0;
     AppRouteSpec routeSpec;
-    final routeName = routeNames[index];
-    final thisIsHome = routeNames.indexOf(HomePage.routeName) == _pageIndex;
-    switch (routeName) {
+    switch (routeName.firstOrThrow) {
       case HomePage.routeName:
         print("Logging: Home tapped");
         routeSpec = HomePage.poopToRoot();
@@ -98,10 +86,15 @@ class _AppNavigationState extends State<AppNavigation> {
         routeSpec = routeSpec =
             thisIsHome ? QrScanPage.pushIt() : QrScanPage.popAndPush();
         break;
+      case SettingsPage.routeName:
+        print("Logging: Settings tapped");
+        routeSpec = routeSpec =
+            thisIsHome ? SettingsPage.pushIt() : SettingsPage.popAndPush();
+        break;
       default:
         throw Exception("No route found");
     }
     print("Logging: ${routeSpec.name}");
-    widget.onNavigation(routeSpec);
+    Navigate.to(context, routeSpec);
   }
 }

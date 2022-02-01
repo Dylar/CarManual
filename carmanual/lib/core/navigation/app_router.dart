@@ -7,6 +7,7 @@ import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
 import 'package:carmanual/ui/screens/settings_page.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
+import 'package:carmanual/ui/screens/video_settings_page.dart';
 import 'package:carmanual/viewmodels/car_overview_vm.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
 import 'package:carmanual/viewmodels/intro_vm.dart';
@@ -50,6 +51,9 @@ class AppRouter {
   static List<Route<dynamic>> generateInitRoute(String initialRoute) {
     late WidgetBuilder builder;
     switch (initialRoute) {
+      case DebugPage.routeName:
+        builder = _navigateToDebug;
+        break;
       case IntroPage.routeName:
         builder = _navigateToIntro;
         break;
@@ -72,6 +76,9 @@ class AppRouter {
         break;
       case SettingsPage.routeName:
         builder = _navigateToSettings;
+        break;
+      case VideoSettingsPage.routeName:
+        builder = _navigateToVideoSettings;
         break;
       case IntroPage.routeName:
         builder = _navigateToIntro;
@@ -110,6 +117,10 @@ Widget _navigateToDebug(BuildContext context) {
 
 Widget _navigateToSettings(BuildContext context) {
   return SettingsPage();
+}
+
+Widget _navigateToVideoSettings(BuildContext context) {
+  return VideoSettingsPage();
 }
 
 Widget _navigateToIntro(BuildContext context) {

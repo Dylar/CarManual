@@ -49,6 +49,7 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
                   if (snapshot.connectionState != ConnectionState.done) {
                     return VideoDownload();
                   }
+                  print("Logging: load video");
                   return VideoWidget(
                       controller: viewModel.controller,
                       onVideoStart: () => print("Logging: Video start"),

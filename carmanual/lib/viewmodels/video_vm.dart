@@ -1,4 +1,5 @@
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
+import 'package:carmanual/ui/screens/video_settings_page.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:chewie/chewie.dart';
@@ -38,19 +39,22 @@ class VideoVM extends VideoViewModel {
   @override
   void init() {
     super.init();
+    print("Logging: init video VM 1");
     final url = _url;
     final videoPlayerController = VideoPlayerController.network(url);
     _initVideo = videoPlayerController.initialize();
+    print("Logging: init video VM 2");
     _controller = ChewieController(
       videoPlayerController: videoPlayerController,
       // aspectRatio: widget.aspectRatio,
       fullScreenByDefault: false,
-      showControlsOnInitialize: false,
+      showControlsOnInitialize:
+          VIDEO_SETTINGS["showControlsOnInitialize"] ?? false,
       autoInitialize: false,
-      showOptions: false,
-      showControls: true,
-      autoPlay: false,
-      looping: false,
+      showOptions: VIDEO_SETTINGS["showOptions"] ?? false,
+      showControls: VIDEO_SETTINGS["showControls"] ?? true,
+      autoPlay: VIDEO_SETTINGS["autoPlay"] ?? true,
+      looping: VIDEO_SETTINGS["looping"] ?? false,
       errorBuilder: (context, errorMessage) => ErrorInfoWidget(errorMessage),
     );
   }

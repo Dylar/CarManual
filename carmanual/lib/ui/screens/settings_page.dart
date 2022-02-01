@@ -3,6 +3,7 @@ import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_route_spec.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/ui/screens/debug_page.dart';
+import 'package:carmanual/ui/screens/video_settings_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -38,6 +39,9 @@ class SettingsPage extends StatelessWidget {
         children: [
           if (EnvironmentConfig.isDev)
             Flexible(child: SettingsButton("Debug", DebugPage.pushIt())),
+          Flexible(
+              child: SettingsButton(
+                  "Video Einstellungen", VideoSettingsPage.pushIt())),
         ],
       ),
     );

@@ -32,7 +32,7 @@ class AppProviders extends StatelessWidget {
       providers: [
         CarOverViewModelProvider(services.carInfoService),
         IntroViewModelProvider(services.carInfoService),
-        HomeViewModelProvider(),
+        HomeViewModelProvider(services.appClient),
         QrViewModelProvider(services.carInfoService),
         VideoViewModelProvider(),
       ],
@@ -106,6 +106,7 @@ class _AppState extends State<App> {
           final hasData = snapshot.data!.first;
           final isConnected = snapshot.data!.last;
 
+          // String firstRoute = DebugPage.routeName;
           String firstRoute = IntroPage.routeName;
           if (hasData) {
             firstRoute = HomePage.routeName;
@@ -145,13 +146,15 @@ class _AppState extends State<App> {
   }
 
   Future<bool> _initDB() async {
-    await Future.delayed(Duration(seconds: EnvironmentConfig.isDev ? 1 : 3));
+    await Future.delayed(Duration(seconds: EnvironmentConfig.isDev ? 0 : 3));
     await (widget.database.isOpen ? Future.value() : widget.database.init());
     return (await widget.carInfoDataSource.getAllCars()).isNotEmpty;
   }
 
   Future<bool> _initAppClient() async {
-    widget.appClient.initClient();
-    return true;
+    if (widget.appClient.filesInfoLoaded) {
+      return true;
+    }
+    return await widget.appClient.loadFilesData();
   }
 }

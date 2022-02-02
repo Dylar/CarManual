@@ -44,6 +44,8 @@ class VideoVM extends VideoViewModel {
     final videoPlayerController = VideoPlayerController.network(url);
     _initVideo = videoPlayerController.initialize();
     print("Logging: init video VM 2");
+    final autoPlay = VIDEO_SETTINGS["autoPlay"];
+    print("Logging: $autoPlay");
     _controller = ChewieController(
       videoPlayerController: videoPlayerController,
       // aspectRatio: widget.aspectRatio,
@@ -61,9 +63,27 @@ class VideoVM extends VideoViewModel {
 
   @override
   void dispose() {
-    super.dispose();
     _controller.videoPlayerController.dispose();
     _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  void routingDidPushNext() {
+    print("video invisible");
+    _controller.videoPlayerController.pause();
+    _controller.pause();
+    super.routingDidPopNext();
+  }
+
+  @override
+  void routingDidPopNext() {
+    print("video visible");
+    if (VIDEO_SETTINGS["autoPlay"] ?? true) {
+      _controller.videoPlayerController.play();
+      _controller.play();
+    }
+    super.routingDidPop();
   }
 
   @override

@@ -6,12 +6,14 @@ import 'package:carmanual/ui/screens/intro/intro_page.dart';
 import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
 import 'package:carmanual/ui/screens/settings_page.dart';
+import 'package:carmanual/ui/screens/video/video_overview_page.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
 import 'package:carmanual/ui/screens/video_settings_page.dart';
 import 'package:carmanual/viewmodels/car_overview_vm.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
 import 'package:carmanual/viewmodels/intro_vm.dart';
 import 'package:carmanual/viewmodels/qr_vm.dart';
+import 'package:carmanual/viewmodels/video_overview_vm.dart';
 import 'package:carmanual/viewmodels/video_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -86,14 +88,17 @@ class AppRouter {
       case HomePage.routeName:
         builder = _navigateToHome;
         break;
+      case QrScanPage.routeName:
+        builder = _navigateToQrScan;
+        break;
       case CarOverviewPage.routeName:
-        builder = _navigateToCarInfoIndex;
+        builder = _navigateToCarOverview;
+        break;
+      case VideoOverviewPage.routeName:
+        builder = _navigateToVideoOverview;
         break;
       case VideoPage.routeName:
         builder = (context) => _navigateToVideo(context, arguments);
-        break;
-      case QrScanPage.routeName:
-        builder = _navigateToQrScan;
         break;
       default:
         throw Exception('Route ${settings.name} not implemented');
@@ -133,9 +138,14 @@ Widget _navigateToHome(BuildContext context) {
   return HomePage(vm);
 }
 
-Widget _navigateToCarInfoIndex(BuildContext context) {
+Widget _navigateToCarOverview(BuildContext context) {
   final vm = Provider.of<CarOverViewModel>(context);
   return CarOverviewPage.model(vm);
+}
+
+Widget _navigateToVideoOverview(BuildContext context) {
+  final vm = Provider.of<VideoOverViewModel>(context);
+  return VideoOverviewPage.model(vm);
 }
 
 Widget _navigateToQrScan(BuildContext context) {

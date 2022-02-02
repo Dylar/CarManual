@@ -70,7 +70,7 @@ class _HomeVideoPageState extends ViewState<HomeVideoPage, HomeViewModel> {
                 }
                 return VideoWidget(
                     controller: viewModel.controller,
-                    onVideoStart: () => print("Logging: Video start"),
+                    onVideoStart: () => print("Logging: Home Video start"),
                     onVideoEnd: viewModel.onVideoEnd);
               }),
         ),

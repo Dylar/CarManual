@@ -1,10 +1,11 @@
 import 'package:carmanual/core/app_theme.dart';
 import 'package:carmanual/core/database/database.dart';
+import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
+import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/core/navigation/app_router.dart';
 import 'package:carmanual/core/network/app_client.dart';
 import 'package:carmanual/core/services.dart';
-import 'package:carmanual/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
@@ -21,38 +22,18 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
-class AppProviders extends StatelessWidget {
-  const AppProviders({required this.child});
-
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    final services = Services.of(context)!;
-    return MultiProvider(
-      providers: [
-        IntroViewModelProvider(services.carInfoService),
-        HomeViewModelProvider(services.appClient),
-        QrViewModelProvider(services.carInfoService),
-        CarOverViewModelProvider(services.carInfoService),
-        VideoOverViewModelProvider(services.appClient),
-        VideoViewModelProvider(),
-      ],
-      child: child,
-    );
-  }
-}
-
 class App extends StatefulWidget {
   const App({
     required this.database,
     required this.appClient,
     required this.carInfoService,
     required this.carInfoDataSource,
+    required this.settings,
   }) : super();
 
   factory App.load({
     AppDatabase? database,
+    SettingsDataSource? settingsDataSource,
     CarInfoService? carInfoService,
     CarInfoDataSource? carInfoDataSource,
   }) {
@@ -62,6 +43,7 @@ class App extends StatefulWidget {
     return App(
       database: db,
       appClient: appClient,
+      settings: settingsDataSource ?? SettingsDS(db),
       carInfoService: carInfoService ?? CarInfoService(carSource),
       carInfoDataSource: carSource,
     );
@@ -71,6 +53,7 @@ class App extends StatefulWidget {
   final AppClient appClient;
   final CarInfoService carInfoService;
   final CarInfoDataSource carInfoDataSource;
+  final SettingsDataSource settings;
 
   @override
   State<App> createState() => _AppState();
@@ -116,10 +99,20 @@ class _AppState extends State<App> {
               firstRoute = HomePage.routeName;
             }
           }
-          return Services.init(
+
+          return Services(
             appClient: widget.appClient,
+            settings: widget.settings,
             carInfoService: widget.carInfoService,
-            child: AppProviders(
+            child: MultiProvider(
+              providers: [
+                IntroViewModelProvider(widget.carInfoService),
+                HomeViewModelProvider(widget.settings, widget.appClient),
+                QrViewModelProvider(widget.carInfoService),
+                CarOverViewModelProvider(widget.carInfoService),
+                VideoOverViewModelProvider(widget.appClient),
+                VideoViewModelProvider(widget.settings),
+              ],
               child: MaterialApp(
                 title: env + EnvironmentConfig.APP_NAME,
                 theme: appTheme,

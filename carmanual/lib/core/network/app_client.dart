@@ -110,12 +110,7 @@ class FileData {
   final int fileSize;
   final bool isDir;
 
-  String get url {
-    final uuh =
-        "https://${EnvironmentConfig.domain}/${fileName.replaceAll(" ", "%20")}";
-    print("URL: $uuh");
-    return uuh;
-  }
+  String get url => "https://${EnvironmentConfig.domain}/$fileName";
 
   static FileData fromMap(Map<String, dynamic> map) {
     return FileData(

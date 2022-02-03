@@ -1,8 +1,8 @@
+import 'package:better_player/better_player.dart';
 import 'package:carmanual/core/navigation/app_route_spec.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/ui/widgets/loading_overlay.dart';
-import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:carmanual/viewmodels/video_vm.dart';
 import 'package:flutter/material.dart';
 
@@ -50,10 +50,10 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
                     return VideoDownload();
                   }
                   print("Logging: load video");
-                  return VideoWidget(
-                      controller: viewModel.controller,
-                      onVideoStart: () => print("Logging: Video start"),
-                      onVideoEnd: viewModel.onVideoEnd);
+                  return BetterPlayer.network(
+                    viewModel.url,
+                    betterPlayerConfiguration: viewModel.videoConfig,
+                  );
                 }),
           ),
           Spacer(),

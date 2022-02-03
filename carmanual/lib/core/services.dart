@@ -1,30 +1,37 @@
 import 'package:carmanual/core/database/database.dart';
+import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
+import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/network/app_client.dart';
-import 'package:carmanual/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:flutter/material.dart';
 
 class Services extends InheritedWidget {
   final AppClient appClient;
+  final SettingsDataSource settings;
+
   final CarInfoService carInfoService;
 
-  const Services(
-    this.appClient,
-    this.carInfoService, {
-    Key? key,
+  const Services({
+    required this.appClient,
+    required this.settings,
+    required this.carInfoService,
     required Widget child,
-  }) : super(key: key, child: child);
+    Key? key,
+  }) : super(child: child);
 
   factory Services.init({
-    AppClient? appClient,
     AppDatabase? db,
+    AppClient? appClient,
+    SettingsDataSource? settings,
     CarInfoService? carInfoService,
     Key? key,
     required Widget child,
   }) {
+    final database = db ?? AppDatabase();
     return Services(
-      appClient ?? AppClient(),
-      carInfoService ?? CarInfoService(CarInfoDS(AppDatabase())),
+      appClient: appClient ?? AppClient(),
+      carInfoService: carInfoService ?? CarInfoService(CarInfoDS(database)),
+      settings: settings ?? SettingsDS(database),
       key: key,
       child: child,
     );

@@ -1,41 +1,75 @@
 import 'package:carmanual/core/app_theme.dart';
+import 'package:carmanual/core/database/settings.dart';
+import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/navigation/app_route_spec.dart';
+import 'package:carmanual/ui/screens/intro/loading_page.dart';
+import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/ui/widgets/scroll_list_view.dart';
 import 'package:flutter/material.dart';
 
-Map<String, bool> VIDEO_SETTINGS = {};
-
 class VideoSettingsPage extends StatefulWidget {
   static const String routeName = "/videoSettingsPage";
+
+  VideoSettingsPage(this.settings);
 
   static AppRouteSpec pushIt() => AppRouteSpec(
         name: routeName,
         action: AppRouteAction.pushTo,
       );
 
+  final SettingsDataSource settings;
+
   @override
   State<VideoSettingsPage> createState() => _VideoSettingsPageState();
 }
 
 class _VideoSettingsPageState extends State<VideoSettingsPage> {
+  Settings? _settings;
+  Map<String, bool>? settingsMap;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("VideoSettings")),
-      body: ScrollListView<MapEntry<String, bool>>(
-        items: VIDEO_SETTINGS.entries.toList(),
-        buildItemWidget: (_, item) => wrapWidget(
-            item.key, _VideoSettingsInfoText("${item.key}", item.value)),
-      ),
+      body: FutureBuilder<Settings>(
+          future: widget.settings.getSettings(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return ErrorInfoWidget(snapshot.error.toString());
+            }
+
+            if (snapshot.connectionState != ConnectionState.done) {
+              return LoadingStartPage();
+            }
+            final data = _settings = snapshot.data;
+            settingsMap ??= data?.videos;
+            return ScrollListView<MapEntry<String, bool>>(
+              items: settingsMap?.entries.toList(),
+              buildItemWidget: (_, item) => wrapWidget(
+                item.key,
+                _VideoSettingsInfoText("${item.key}", item.value),
+              ),
+            );
+          }),
+      persistentFooterButtons: [
+        Container(
+          height: 48,
+          padding: const EdgeInsets.all(4.0),
+          child: ElevatedButton(
+            onPressed: () {
+              _settings!.videos = settingsMap!;
+              widget.settings.saveSettings(_settings!);
+            },
+            child: Text("Speichern"),
+          ),
+        )
+      ],
     );
   }
 
   Widget wrapWidget(String key, Widget child) => GestureDetector(
-        onTap: () {
-          setState(() {
-            VIDEO_SETTINGS[key] = !(VIDEO_SETTINGS[key] ?? false);
-          });
-        },
+        onTap: () =>
+            setState(() => settingsMap![key] = !(settingsMap![key] ?? false)),
         child: Container(
           height: 48,
           padding: const EdgeInsets.all(4.0),

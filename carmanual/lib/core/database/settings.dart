@@ -6,4 +6,6 @@ part 'settings.g.dart';
 class Settings extends HiveObject {
   @HiveField(0)
   Map<String, String> values = {};
+  @HiveField(1)
+  Map<String, bool> videos = {};
 }

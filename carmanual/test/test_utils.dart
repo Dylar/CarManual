@@ -1,6 +1,6 @@
 import 'package:carmanual/core/app.dart';
 import 'package:carmanual/core/database/database.dart';
-import 'package:carmanual/datasource/CarInfoDataSource.dart';
+import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:mockito/mockito.dart';
 

@@ -60,7 +60,7 @@ class _VideoOverviewPageState
         child: FileDataListItem(item),
         onTap: () => Navigate.to(
           context,
-          VideoPage.pushIt(url: item.fileName, title: item.fileName),
+          VideoPage.pushIt(url: item.url, title: item.fileName),
         ),
       );
 }

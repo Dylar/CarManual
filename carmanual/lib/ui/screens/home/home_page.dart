@@ -1,9 +1,9 @@
+import 'package:better_player/better_player.dart';
 import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_route_spec.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
-import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -68,10 +68,10 @@ class _HomeVideoPageState extends ViewState<HomeVideoPage, HomeViewModel> {
                 if (snapshot.connectionState != ConnectionState.done) {
                   return VideoDownload();
                 }
-                return VideoWidget(
-                    controller: viewModel.controller,
-                    onVideoStart: () => print("Logging: Home Video start"),
-                    onVideoEnd: viewModel.onVideoEnd);
+                return BetterPlayer.network(
+                  viewModel.url,
+                  betterPlayerConfiguration: viewModel.videoConfig,
+                );
               }),
         ),
         Spacer(),

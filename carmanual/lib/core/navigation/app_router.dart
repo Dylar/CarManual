@@ -1,5 +1,6 @@
 import 'package:carmanual/core/constants/debug.dart';
 import 'package:carmanual/core/environment_config.dart';
+import 'package:carmanual/core/services.dart';
 import 'package:carmanual/ui/screens/debug_page.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
@@ -125,7 +126,7 @@ Widget _navigateToSettings(BuildContext context) {
 }
 
 Widget _navigateToVideoSettings(BuildContext context) {
-  return VideoSettingsPage();
+  return VideoSettingsPage(Services.of(context)!.settings);
 }
 
 Widget _navigateToIntro(BuildContext context) {

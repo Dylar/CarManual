@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/core/helper/tuple.dart';
-import 'package:carmanual/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/models/car_info.dart';
 
 enum QrScanState { NEW, OLD, DAFUQ, WAITING }
@@ -9,7 +9,7 @@ enum QrScanState { NEW, OLD, DAFUQ, WAITING }
 class CarInfoService {
   CarInfoService(this.carInfoDataSource);
 
-  CarInfoDataSource carInfoDataSource;
+  CarInfoDataSource carInfoDataSource; //TODO private
 
   Future<Tuple<QrScanState, CarInfo>> onNewScan(String scan) async {
     print("Logging: scan: $scan");

@@ -5,8 +5,12 @@ import 'package:carmanual/core/database/settings.dart';
 
 abstract class SettingsDataSource {
   Future<bool> saveSettings(Settings settings);
+
   Future<Settings> getSettings();
+
   Future<Map<String, bool>> getVideoSettings();
+
+  Stream<Settings> watchSettings();
 }
 
 class SettingsDS implements SettingsDataSource {
@@ -30,5 +34,10 @@ class SettingsDS implements SettingsDataSource {
   Future<bool> saveSettings(Settings settings) async {
     await _database.upsertSettings(settings);
     return true;
+  }
+
+  @override
+  Stream<Settings> watchSettings() async* {
+    yield await _database.getSettings();
   }
 }

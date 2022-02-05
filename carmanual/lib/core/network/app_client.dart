@@ -7,9 +7,6 @@ const String CLIENT_DISCONNECTED = "sftp_disconnected";
 
 class AppClient {
   SSHClient? client;
-  List<FileData> files = [];
-
-  bool get filesInfoLoaded => files.isNotEmpty;
 
   String? state;
 
@@ -66,13 +63,13 @@ class AppClient {
         [];
   }
 
-  Future<bool> loadFilesData() async {
+  Future<List<FileData>> loadFilesData() async {
     print("Logging: loadFilesData");
     initClient();
     await connect();
-    files = await getFileList();
+    List<FileData> files = await getFileList();
     disconnect();
-    return filesInfoLoaded;
+    return files;
   }
 
   //TODO download for demand
@@ -109,8 +106,6 @@ class FileData {
   final String modificationDate, fileName;
   final int fileSize;
   final bool isDir;
-
-  String get url => "https://${EnvironmentConfig.domain}/$fileName";
 
   static FileData fromMap(Map<String, dynamic> map) {
     return FileData(

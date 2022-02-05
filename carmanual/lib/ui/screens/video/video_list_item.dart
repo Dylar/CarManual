@@ -1,12 +1,12 @@
 import 'package:carmanual/core/constants/debug.dart';
-import 'package:carmanual/core/network/app_client.dart';
+import 'package:carmanual/core/database/video_info.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:flutter/material.dart';
 
-class FileDataListItem extends StatelessWidget {
-  const FileDataListItem(this.fileData);
+class VideoInfoListItem extends StatelessWidget {
+  const VideoInfoListItem(this.video);
 
-  final FileData fileData;
+  final VideoInfo video;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class FileDataListItem extends StatelessWidget {
             Expanded(
               flex: 95,
               child: Text(
-                'Name: ${fileData.fileName}',
+                'Name: ${video.name}',
                 style: Theme.of(context).textTheme.subtitle1,
               ),
             ),

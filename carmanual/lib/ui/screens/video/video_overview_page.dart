@@ -1,7 +1,6 @@
-import 'package:carmanual/core/navigation/app_route_spec.dart';
+import 'package:carmanual/core/database/video_info.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
-import 'package:carmanual/core/network/app_client.dart';
 import 'package:carmanual/models/car_info.dart';
 import 'package:carmanual/ui/screens/video/video_list_item.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
@@ -44,23 +43,25 @@ class _VideoOverviewPageState
 
   Widget _buildBody(BuildContext context, AppLocalizations l10n) {
     final viewModel = context.read<VideoOverViewModel>();
-    return StreamBuilder<List<FileData>>(
+    return StreamBuilder<List<VideoInfo>>(
         stream: viewModel.watchVideos(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return ErrorInfoWidget(snapshot.error.toString());
           }
 
-          return ScrollListView<FileData>(
-              items: snapshot.data, buildItemWidget: buildItemWidget);
+          return ScrollListView<VideoInfo>(
+            items: snapshot.data,
+            buildItemWidget: buildItemWidget,
+          );
         });
   }
 
-  Widget buildItemWidget(int index, FileData item) => GestureDetector(
-        child: FileDataListItem(item),
+  Widget buildItemWidget(int index, VideoInfo item) => GestureDetector(
+        child: VideoInfoListItem(item),
         onTap: () => Navigate.to(
           context,
-          VideoPage.pushIt(url: item.url, title: item.fileName),
+          VideoPage.pushIt(video: item),
         ),
       );
 }

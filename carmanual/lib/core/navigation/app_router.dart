@@ -1,4 +1,3 @@
-import 'package:carmanual/core/constants/debug.dart';
 import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/core/services.dart';
 import 'package:carmanual/ui/screens/debug_page.dart';
@@ -37,7 +36,7 @@ class RouteWrapper<T> extends MaterialPageRoute<T> implements AppRoute<T> {
   @override
   String? get viewName => settings.name;
 
-  @override //TODO
+  @override //TODO do into args/settings
   Duration get transitionDuration => Duration.zero;
 
   @override
@@ -155,15 +154,12 @@ Widget _navigateToQrScan(BuildContext context) {
 }
 
 Widget _navigateToVideo(BuildContext context, Map<String, dynamic> arguments) {
-  final title = arguments[VideoPage.ARG_TITLE] ?? DEBUG_INTRO_VID_URL;
-  final url = arguments[VideoPage.ARG_URL] ?? DEBUG_INTRO_VID_URL;
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
   final vm = Provider.of<VideoViewModel>(context);
-  vm.url = url;
+  vm.videoInfo = arguments[VideoPage.ARG_VIDEO];
   return VideoPage(
     vm,
-    title,
     aspectRatio: width / height / 3, //16 / 9
   );
 }

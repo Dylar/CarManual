@@ -13,18 +13,10 @@ abstract class CarOverViewModel extends ViewModel {
   Stream<List<CarInfo>> watchCars();
 }
 
-// class _CarOverVMState {
-//   QrScanState qrState = QrScanState.WAITING;
-//   Barcode? barcode;
-//   CarInfo? carInfo;
-// }
-
 class CarOverVM extends CarOverViewModel {
   CarInfoService carInfoService;
 
   CarOverVM(this.carInfoService);
-
-  // final _CarOverVMState _state = _CarOverVMState();
 
   @override
   Stream<List<CarInfo>> watchCars() {

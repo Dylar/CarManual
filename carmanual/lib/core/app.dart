@@ -2,7 +2,9 @@ import 'package:carmanual/core/app_theme.dart';
 import 'package:carmanual/core/database/database.dart';
 import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/core/datasource/SettingsDataSource.dart';
+import 'package:carmanual/core/datasource/VideoInfoDataSource.dart';
 import 'package:carmanual/core/environment_config.dart';
+import 'package:carmanual/core/helper/player_config.dart';
 import 'package:carmanual/core/navigation/app_router.dart';
 import 'package:carmanual/core/network/app_client.dart';
 import 'package:carmanual/core/services.dart';
@@ -26,9 +28,10 @@ class App extends StatefulWidget {
   const App({
     required this.database,
     required this.appClient,
+    required this.settings,
     required this.carInfoService,
     required this.carInfoDataSource,
-    required this.settings,
+    required this.videoInfoDataSource,
   }) : super();
 
   factory App.load({
@@ -40,42 +43,37 @@ class App extends StatefulWidget {
     final db = database ?? AppDatabase();
     final carSource = carInfoDataSource ?? CarInfoDS(db);
     final appClient = AppClient();
+    final videoSource = VideoInfoDS(db);
     return App(
       database: db,
       appClient: appClient,
       settings: settingsDataSource ?? SettingsDS(db),
-      carInfoService: carInfoService ?? CarInfoService(carSource),
+      carInfoService: carInfoService ?? CarInfoService(carSource, videoSource),
       carInfoDataSource: carSource,
+      videoInfoDataSource: videoSource,
     );
   }
 
   final AppDatabase database;
   final AppClient appClient;
+  final SettingsDataSource settings;
   final CarInfoService carInfoService;
   final CarInfoDataSource carInfoDataSource;
-  final SettingsDataSource settings;
+  final VideoInfoDataSource videoInfoDataSource;
 
   @override
   State<App> createState() => _AppState();
 }
 
 class _AppState extends State<App> {
-  late Future<bool> initDb;
-  late Future<bool> initClient;
-
-  @override
-  void initState() {
-    super.initState();
-    initDb = _initDB();
-    initClient = _initAppClient();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<bool>>(
-        initialData: [false, false],
-        future: Future.wait([initDb, initClient]),
+    print("Logging: build");
+    return FutureBuilder<bool>(
+        initialData: false,
+        future: _initApp(),
         builder: (context, snapshot) {
+          print("Logging: load app");
           if (snapshot.hasError) {
             return fixView(ErrorInfoWidget(snapshot.error.toString()));
           }
@@ -88,17 +86,13 @@ class _AppState extends State<App> {
               ? ""
               : "(${EnvironmentConfig.ENV}) ";
 
-          final hasData = snapshot.data!.first;
-          final isConnected = snapshot.data!.last;
-
-          // String firstRoute = DebugPage.routeName;
+          final bool hasCars = snapshot.data ?? false;
+          print("Logging: hasCars - $hasCars");
           String firstRoute = IntroPage.routeName;
-          if (hasData) {
+          if (hasCars) {
             firstRoute = HomePage.routeName;
-            if (!isConnected) {
-              firstRoute = HomePage.routeName;
-            }
           }
+          // firstRoute = DebugPage.routeName;
 
           return Services(
             appClient: widget.appClient,
@@ -107,10 +101,10 @@ class _AppState extends State<App> {
             child: MultiProvider(
               providers: [
                 IntroViewModelProvider(widget.carInfoService),
-                HomeViewModelProvider(widget.settings, widget.appClient),
+                HomeViewModelProvider(widget.settings, widget.carInfoService),
                 QrViewModelProvider(widget.carInfoService),
                 CarOverViewModelProvider(widget.carInfoService),
-                VideoOverViewModelProvider(widget.appClient),
+                VideoOverViewModelProvider(widget.videoInfoDataSource),
                 VideoViewModelProvider(widget.settings),
               ],
               child: MaterialApp(
@@ -140,16 +134,19 @@ class _AppState extends State<App> {
     );
   }
 
-  Future<bool> _initDB() async {
+  Future<bool> _initApp() async {
     await Future.delayed(Duration(seconds: EnvironmentConfig.isDev ? 0 : 3));
     await (widget.database.isOpen ? Future.value() : widget.database.init());
-    return (await widget.carInfoDataSource.getAllCars()).isNotEmpty;
-  }
 
-  Future<bool> _initAppClient() async {
-    if (widget.appClient.filesInfoLoaded) {
-      return true;
+    final settings = await widget.settings.getSettings();
+    final vidSettings = initPlayerSettings();
+
+    if (settings.videos.isEmpty ||
+        settings.videos.length != vidSettings.length) {
+      settings.videos = vidSettings;
+      widget.settings.saveSettings(settings);
     }
-    return await widget.appClient.loadFilesData();
+
+    return await widget.carInfoService.hasCars();
   }
 }

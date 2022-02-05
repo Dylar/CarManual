@@ -45,13 +45,15 @@ class IntroVM extends IntroViewModel {
   @override
   void onScan(String scan) {
     print("Logging: scan: $scan");
-    carInfoService.onNewScan(scan).then((state) {
+    carInfoService.onNewScan(scan).then((state) async {
       _state.qrState = state.first!;
       _state.carInfo = state.second;
       print("Logging: state: ${state.first}");
       switch (state.first!) {
         case QrScanState.OLD:
         case QrScanState.NEW:
+          final service = carInfoService;
+          await service.loadVideoInfo();
           navigateTo(HomePage.replaceWith());
           break;
         case QrScanState.DAFUQ:

@@ -1,5 +1,4 @@
 import 'package:carmanual/core/helper/tuple.dart';
-import 'package:carmanual/core/navigation/app_route_spec.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/overview/car_overview_page.dart';

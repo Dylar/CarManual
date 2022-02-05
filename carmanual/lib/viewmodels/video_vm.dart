@@ -1,4 +1,5 @@
-import 'package:better_player/better_player.dart';
+import 'package:carmanual/core/database/settings.dart';
+import 'package:carmanual/core/database/video_info.dart';
 import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:provider/provider.dart';
@@ -9,41 +10,24 @@ class VideoViewModelProvider extends ChangeNotifierProvider<VideoViewModel> {
 }
 
 abstract class VideoViewModel extends ViewModel {
-  late BetterPlayerConfiguration videoConfig;
+  String get title;
 
-  late String url;
+  VideoInfo? videoInfo;
 
-  Future get initVideo;
-
-  void onVideoEnd();
+  Stream<Settings> watchSettings();
 }
 
 class VideoVM extends VideoViewModel {
-  VideoVM(this.settingsDataSource);
+  VideoVM(this.settings);
 
-  SettingsDataSource settingsDataSource;
-  late Future _initVideo;
-
-  @override
-  Future get initVideo => _initVideo;
+  SettingsDataSource settings;
 
   @override
-  void init() {
-    super.init();
-    _initVideo = Future(() async {
-      final settings = await settingsDataSource.getVideoSettings();
-      videoConfig = BetterPlayerConfiguration(
-        // aspectRatio: widget.aspectRatio,
-        fullScreenByDefault: false,
-        autoPlay: settings["autoPlay"] ?? true,
-        looping: settings["looping"] ?? false,
-      );
-    });
-  }
+  String get title => videoInfo?.name.replaceAll(".mp4", "") ?? "";
 
   @override
-  void dispose() {
-    super.dispose();
+  Stream<Settings> watchSettings() {
+    return settings.watchSettings();
   }
 
   @override

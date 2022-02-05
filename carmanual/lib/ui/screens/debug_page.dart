@@ -1,6 +1,6 @@
 import 'package:carmanual/core/app_theme.dart';
 import 'package:carmanual/core/environment_config.dart';
-import 'package:carmanual/core/navigation/app_route_spec.dart';
+import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/core/network/app_client.dart';
 import 'package:carmanual/core/services.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +18,8 @@ class DebugPage extends StatefulWidget {
 }
 
 class _DebugPageState extends State<DebugPage> {
+  List<FileData> files = [];
+
   @override
   Widget build(BuildContext context) {
     final appClient = Services.of(context)!.appClient;
@@ -30,13 +32,15 @@ class _DebugPageState extends State<DebugPage> {
           wrapWidget(_DebugInfoText("Domain:", "${EnvironmentConfig.domain}")),
           wrapWidget(_DebugInfoText("Host:", "${EnvironmentConfig.host}")),
           wrapWidget(_DebugInfoText("Port:", "${EnvironmentConfig.port}")),
-          if (appClient.files.isNotEmpty) ..._buildDir(appClient),
+          if (files.isNotEmpty) ..._buildDir(appClient),
         ],
       ),
       persistentFooterButtons: [
         _DebugButton(
           "Load files",
-          () => appClient.loadFilesData().then((value) => setState(() {})),
+          () => appClient.loadFilesData().then((value) => setState(() {
+                files = value;
+              })),
         ),
       ],
     );
@@ -46,7 +50,7 @@ class _DebugPageState extends State<DebugPage> {
       child: Padding(padding: const EdgeInsets.all(4.0), child: child));
 
   List<Widget> _buildDir(AppClient appClient) {
-    return appClient.files
+    return files
         .map<Widget>(
             (element) => wrapWidget(_DebugInfoText("Dir:", "${element}")))
         .toList();

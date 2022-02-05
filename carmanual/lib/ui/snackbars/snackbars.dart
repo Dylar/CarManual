@@ -17,3 +17,12 @@ void showAlreadyHereSnackBar(BuildContext context) {
     ),
   );
 }
+
+void showSettingsSavedSnackBar(BuildContext context) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('Gespeichert'),
+      duration: Duration(seconds: 1),
+    ),
+  );
+}

@@ -1,9 +1,10 @@
 import 'package:carmanual/core/app_theme.dart';
 import 'package:carmanual/core/database/settings.dart';
 import 'package:carmanual/core/datasource/SettingsDataSource.dart';
-import 'package:carmanual/core/navigation/app_route_spec.dart';
-import 'package:carmanual/ui/screens/intro/loading_page.dart';
+import 'package:carmanual/core/navigation/navi.dart';
+import 'package:carmanual/ui/snackbars/snackbars.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
+import 'package:carmanual/ui/widgets/loading_overlay.dart';
 import 'package:carmanual/ui/widgets/scroll_list_view.dart';
 import 'package:flutter/material.dart';
 
@@ -39,10 +40,10 @@ class _VideoSettingsPageState extends State<VideoSettingsPage> {
             }
 
             if (snapshot.connectionState != ConnectionState.done) {
-              return LoadingStartPage();
+              return LoadingOverlay();
             }
-            final data = _settings = snapshot.data;
-            settingsMap ??= data?.videos;
+            _settings = snapshot.data;
+            settingsMap ??= _settings?.videos;
             return ScrollListView<MapEntry<String, bool>>(
               items: settingsMap?.entries.toList(),
               buildItemWidget: (_, item) => wrapWidget(
@@ -58,7 +59,9 @@ class _VideoSettingsPageState extends State<VideoSettingsPage> {
           child: ElevatedButton(
             onPressed: () {
               _settings!.videos = settingsMap!;
-              widget.settings.saveSettings(_settings!);
+              widget.settings
+                  .saveSettings(_settings!)
+                  .then((value) => showSettingsSavedSnackBar(context));
             },
             child: Text("Speichern"),
           ),

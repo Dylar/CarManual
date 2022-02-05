@@ -1,5 +1,4 @@
 import 'package:carmanual/core/navigation/app_navigation.dart';
-import 'package:carmanual/core/navigation/app_route_spec.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/models/car_info.dart';

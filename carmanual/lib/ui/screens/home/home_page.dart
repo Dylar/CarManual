@@ -1,9 +1,9 @@
 import 'package:better_player/better_player.dart';
+import 'package:carmanual/core/helper/player_config.dart';
 import 'package:carmanual/core/navigation/app_navigation.dart';
-import 'package:carmanual/core/navigation/app_route_spec.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
+import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
-import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -59,21 +59,20 @@ class _HomeVideoPageState extends ViewState<HomeVideoPage, HomeViewModel> {
     return Column(
       children: [
         Flexible(
-          child: FutureBuilder<void>(
-              future: viewModel.initVideo,
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return ErrorInfoWidget(snapshot.error.toString());
-                }
-                if (snapshot.connectionState != ConnectionState.done) {
-                  return VideoDownload();
-                }
-                return BetterPlayer.network(
-                  viewModel.url,
-                  betterPlayerConfiguration: viewModel.videoConfig,
-                );
-              }),
-        ),
+            child: StreamBuilder<BetterPlayerConfiguration>(
+                stream: viewModel.watchSettings().map((settings) {
+                  final vidSettings = settings.videos;
+                  return playerConfigFromMap(vidSettings);
+                }),
+                builder: (context, snapshot) {
+                  return viewModel.introVideo == null
+                      ? VideoDownload()
+                      : BetterPlayer.network(
+                          viewModel.introVideo!.url,
+                          betterPlayerConfiguration: snapshot.data,
+                        );
+                  ;
+                })),
         Spacer(),
         Expanded(
           child: Padding(

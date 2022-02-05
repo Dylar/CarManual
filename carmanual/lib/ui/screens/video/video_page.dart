@@ -1,30 +1,28 @@
 import 'package:better_player/better_player.dart';
-import 'package:carmanual/core/navigation/app_route_spec.dart';
+import 'package:carmanual/core/database/video_info.dart';
+import 'package:carmanual/core/helper/player_config.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
-import 'package:carmanual/ui/widgets/error_widget.dart';
+import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/ui/widgets/loading_overlay.dart';
 import 'package:carmanual/viewmodels/video_vm.dart';
 import 'package:flutter/material.dart';
 
 class VideoPage extends View<VideoViewModel> {
   static const String routeName = "/VideoPage";
-  static const ARG_URL = "url";
-  static const ARG_TITLE = "title";
+  static const ARG_VIDEO = "video";
 
   const VideoPage(
-    VideoViewModel viewModel,
-    this.title, {
+    VideoViewModel viewModel, {
     this.aspectRatio,
   }) : super.model(viewModel);
 
-  static AppRouteSpec pushIt({String? url, String? title}) => AppRouteSpec(
+  static AppRouteSpec pushIt({VideoInfo? video}) => AppRouteSpec(
         name: routeName,
         action: AppRouteAction.pushTo,
-        arguments: {ARG_URL: url, ARG_TITLE: title},
+        arguments: {ARG_VIDEO: video},
       );
 
   final double? aspectRatio;
-  final String title;
 
   @override
   State<VideoPage> createState() => _VideoPageState(viewModel);
@@ -36,26 +34,24 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(widget.title)),
+      appBar: AppBar(title: Text(viewModel.title)),
       body: Column(
         children: [
           Flexible(
-            child: FutureBuilder<void>(
-                future: viewModel.initVideo,
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return ErrorInfoWidget(snapshot.error.toString());
-                  }
-                  if (snapshot.connectionState != ConnectionState.done) {
-                    return VideoDownload();
-                  }
-                  print("Logging: load video");
-                  return BetterPlayer.network(
-                    viewModel.url,
-                    betterPlayerConfiguration: viewModel.videoConfig,
-                  );
-                }),
-          ),
+              child: StreamBuilder<BetterPlayerConfiguration>(
+                  stream: viewModel.watchSettings().map((settings) {
+                    final vidSettings = settings.videos;
+                    return playerConfigFromMap(vidSettings);
+                  }),
+                  builder: (context, snapshot) {
+                    return viewModel.videoInfo == null
+                        ? VideoDownload()
+                        : BetterPlayer.network(
+                            viewModel.videoInfo!.url,
+                            betterPlayerConfiguration: snapshot.data,
+                          );
+                    ;
+                  })),
           Spacer(),
           Expanded(
             child: Padding(

@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:carmanual/core/navigation/app_route_spec.dart';
 import 'package:carmanual/core/navigation/app_router.dart';
 import 'package:carmanual/core/tracking.dart';
 import 'package:flutter/material.dart';
@@ -110,6 +109,7 @@ abstract class ViewModel extends ChangeNotifier {
   /// framework creates.
   @mustCallSuper
   void init() {
+    print("Logging init view: $this");
     _routeController = StreamController();
   }
 
@@ -119,6 +119,7 @@ abstract class ViewModel extends ChangeNotifier {
   @override
   @mustCallSuper
   void dispose() {
+    print("Logging dispose view: $this");
     super.dispose();
     _routeController.close();
   }

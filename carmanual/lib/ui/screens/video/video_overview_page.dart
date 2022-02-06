@@ -42,7 +42,7 @@ class _VideoOverviewPageState
   }
 
   Widget _buildBody(BuildContext context, AppLocalizations l10n) {
-    final viewModel = context.read<VideoOverViewModel>();
+    final viewModel = context.read<VideoOverViewProvider>().viewModel;
     return StreamBuilder<List<VideoInfo>>(
         stream: viewModel.watchVideos(),
         builder: (context, snapshot) {

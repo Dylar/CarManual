@@ -5,10 +5,10 @@ import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
 import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
-import 'package:carmanual/ui/screens/settings_page.dart';
+import 'package:carmanual/ui/screens/settings/settings_page.dart';
+import 'package:carmanual/ui/screens/settings/video_settings_page.dart';
 import 'package:carmanual/ui/screens/video/video_overview_page.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
-import 'package:carmanual/ui/screens/video_settings_page.dart';
 import 'package:carmanual/viewmodels/car_overview_vm.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
 import 'package:carmanual/viewmodels/intro_vm.dart';
@@ -129,37 +129,37 @@ Widget _navigateToVideoSettings(BuildContext context) {
 }
 
 Widget _navigateToIntro(BuildContext context) {
-  final vm = Provider.of<IntroViewModel>(context);
-  return IntroPage.model(vm);
+  final vm = Provider.of<IntroProvider>(context);
+  return IntroPage.model(vm.viewModel);
 }
 
 Widget _navigateToHome(BuildContext context) {
-  final vm = Provider.of<HomeViewModel>(context);
-  return HomePage(vm);
+  final vm = Provider.of<HomeProvider>(context);
+  return HomePage(vm.viewModel);
 }
 
 Widget _navigateToCarOverview(BuildContext context) {
-  final vm = Provider.of<CarOverViewModel>(context);
-  return CarOverviewPage.model(vm);
+  final vm = Provider.of<CarOverViewProvider>(context);
+  return CarOverviewPage.model(vm.viewModel);
 }
 
 Widget _navigateToVideoOverview(BuildContext context) {
-  final vm = Provider.of<VideoOverViewModel>(context);
-  return VideoOverviewPage.model(vm);
+  final vm = Provider.of<VideoOverViewProvider>(context);
+  return VideoOverviewPage.model(vm.viewModel);
 }
 
 Widget _navigateToQrScan(BuildContext context) {
-  final vm = Provider.of<QrViewModel>(context);
-  return QrScanPage(vm);
+  final vm = Provider.of<QrProvider>(context);
+  return QrScanPage(vm.viewModel);
 }
 
 Widget _navigateToVideo(BuildContext context, Map<String, dynamic> arguments) {
   final width = MediaQuery.of(context).size.width;
   final height = MediaQuery.of(context).size.height;
-  final vm = Provider.of<VideoViewModel>(context);
-  vm.videoInfo = arguments[VideoPage.ARG_VIDEO];
+  final vm = Provider.of<VideoProvider>(context);
+  vm.viewModel.videoInfo = arguments[VideoPage.ARG_VIDEO];
   return VideoPage(
-    vm,
+    vm.viewModel,
     aspectRatio: width / height / 3, //16 / 9
   );
 }

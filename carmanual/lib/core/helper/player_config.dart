@@ -3,6 +3,7 @@ import 'package:carmanual/ui/widgets/error_widget.dart';
 
 BetterPlayerConfiguration playerConfigFromMap(Map<String, bool> map) {
   return BetterPlayerConfiguration(
+    autoDispose: false,
     // aspectRatio: widget.aspectRatio,
     fullScreenByDefault: false,
     autoPlay: map["autoPlay"]!,

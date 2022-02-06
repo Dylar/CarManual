@@ -4,9 +4,13 @@ import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:provider/provider.dart';
 
-class VideoViewModelProvider extends ChangeNotifierProvider<VideoViewModel> {
+class VideoViewModelProvider extends ChangeNotifierProvider<VideoProvider> {
   VideoViewModelProvider(SettingsDataSource settingsDataSource)
-      : super(create: (_) => VideoVM(settingsDataSource));
+      : super(create: (_) => VideoProvider(VideoVM(settingsDataSource)));
+}
+
+class VideoProvider extends ViewModelProvider<VideoViewModel> {
+  VideoProvider(VideoViewModel viewModel) : super(viewModel);
 }
 
 abstract class VideoViewModel extends ViewModel {

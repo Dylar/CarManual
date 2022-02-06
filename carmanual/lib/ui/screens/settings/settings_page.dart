@@ -2,7 +2,8 @@ import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/ui/screens/debug_page.dart';
-import 'package:carmanual/ui/screens/video_settings_page.dart';
+import 'package:carmanual/ui/screens/settings/video_settings_page.dart';
+import 'package:carmanual/ui/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -59,7 +60,12 @@ class SettingsButton extends StatelessWidget {
       height: 48,
       padding: const EdgeInsets.all(4.0),
       child: ElevatedButton(
-        onPressed: () => Navigate.to(context, route),
+        onPressed: () async {
+          final result = await Navigate.to(context, route);
+          if (result) {
+            showSettingsSavedSnackBar(context);
+          }
+        },
         child: Text(name),
       ),
     );

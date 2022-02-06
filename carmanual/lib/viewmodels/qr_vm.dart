@@ -5,9 +5,13 @@ import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class QrViewModelProvider extends ChangeNotifierProvider<QrViewModel> {
+class QrViewModelProvider extends ChangeNotifierProvider<QrProvider> {
   QrViewModelProvider(CarInfoService carInfoService)
-      : super(create: (_) => QrVM(carInfoService));
+      : super(create: (_) => QrProvider(QrVM(carInfoService)));
+}
+
+class QrProvider extends ViewModelProvider<QrViewModel> {
+  QrProvider(QrViewModel viewModel) : super(viewModel);
 }
 
 abstract class QrViewModel extends ViewModel {

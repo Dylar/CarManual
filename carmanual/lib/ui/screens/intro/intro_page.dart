@@ -30,7 +30,7 @@ class _IntroScanPageState extends ViewState<IntroPage, IntroViewModel> {
   }
 
   Widget _buildBody(BuildContext context, AppLocalizations l10n) {
-    final viewModel = context.read<IntroViewModel>();
+    final viewModel = context.read<IntroProvider>().viewModel;
     return Column(
       children: <Widget>[
         Expanded(
@@ -47,7 +47,7 @@ class _IntroScanPageState extends ViewState<IntroPage, IntroViewModel> {
           ),
         ),
         if (EnvironmentConfig.isDev)
-          SkipDebugButton(context.read<IntroViewModel>().onScan),
+          SkipDebugButton(context.read<IntroProvider>().viewModel.onScan),
       ],
     );
   }

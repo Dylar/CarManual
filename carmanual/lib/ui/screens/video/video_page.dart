@@ -1,9 +1,8 @@
-import 'package:better_player/better_player.dart';
+import 'package:carmanual/core/database/settings.dart';
 import 'package:carmanual/core/database/video_info.dart';
-import 'package:carmanual/core/helper/player_config.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
-import 'package:carmanual/ui/widgets/loading_overlay.dart';
+import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:carmanual/viewmodels/video_vm.dart';
 import 'package:flutter/material.dart';
 
@@ -38,21 +37,18 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
       body: Column(
         children: [
           Flexible(
-              child: StreamBuilder<BetterPlayerConfiguration>(
-                  stream: viewModel.watchSettings().map((settings) {
-                    final vidSettings = settings.videos;
-                    return playerConfigFromMap(vidSettings);
-                  }),
+              child: StreamBuilder<Settings>(
+                  stream: viewModel.watchSettings(),
                   builder: (context, snapshot) {
-                    return viewModel.videoInfo == null
-                        ? VideoDownload()
-                        : BetterPlayer.network(
-                            viewModel.videoInfo!.url,
-                            betterPlayerConfiguration: snapshot.data,
-                          );
-                    ;
+                    if (!snapshot.hasData || viewModel.videoInfo == null) {
+                      print("LOGGING: LOADING VID");
+                      return VideoDownload();
+                    }
+                    return VideoWidget(
+                      url: viewModel.videoInfo!.url,
+                      settings: snapshot.data!,
+                    );
                   })),
-          Spacer(),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -72,16 +68,6 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class VideoDownload extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return LoadingOverlay(
-      opacity: OPACITY_20,
-      child: Container(child: Center(child: Icon(Icons.cloud_download))),
     );
   }
 }

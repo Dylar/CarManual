@@ -3,7 +3,7 @@ import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
-import 'package:carmanual/ui/screens/settings_page.dart';
+import 'package:carmanual/ui/screens/settings/settings_page.dart';
 import 'package:carmanual/ui/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
 

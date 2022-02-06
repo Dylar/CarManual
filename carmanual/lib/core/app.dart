@@ -136,7 +136,7 @@ class _AppState extends State<App> {
 
   Future<bool> _initApp() async {
     await Future.delayed(Duration(seconds: EnvironmentConfig.isDev ? 0 : 3));
-    await (widget.database.isOpen ? Future.value() : widget.database.init());
+    await widget.database.init();
 
     final settings = await widget.settings.getSettings();
     final vidSettings = initPlayerSettings();

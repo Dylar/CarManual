@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+const String POP_RESULT = "result";
+
 enum AppRouteAction {
   pushTo,
   popAndPushTo,
@@ -28,11 +30,6 @@ class AppRouteSpec {
     this.action = AppRouteAction.pushTo,
   });
 
-  const AppRouteSpec.pop()
-      : name = '',
-        action = AppRouteAction.pop,
-        arguments = const {};
-
   const AppRouteSpec.popUntilRoot()
       : name = '',
         action = AppRouteAction.popUntilRoot,
@@ -40,44 +37,46 @@ class AppRouteSpec {
 }
 
 class Navigate {
-  static Future<void> to(BuildContext context, AppRouteSpec spec) async {
+  static void pop<T>(BuildContext context, [T? result]) {
+    final popSpec = AppRouteSpec(
+      name: '',
+      action: AppRouteAction.pop,
+      arguments: {POP_RESULT: result},
+    );
+    to(context, popSpec);
+  }
+
+  static Future<T> to<T>(BuildContext context, AppRouteSpec spec) async {
     switch (spec.action) {
       //TODO complete list
       case AppRouteAction.pushTo:
-        await Navigator.of(context).pushNamed(
+        return (await Navigator.of(context).pushNamed(
           spec.name,
           arguments: spec.arguments,
-        );
-        break;
+        )) as T;
       case AppRouteAction.popAndPushTo:
-        await Navigator.of(context).popAndPushNamed(
+        return await Navigator.of(context).popAndPushNamed(
           spec.name,
           arguments: spec.arguments,
-        );
-        break;
+        ) as T;
       case AppRouteAction.replaceWith:
-        await Navigator.of(context).pushReplacementNamed(
+        return await Navigator.of(context).pushReplacementNamed(
           spec.name,
           arguments: spec.arguments,
-        );
-        break;
+        ) as T;
       case AppRouteAction.replaceAllWith:
-        await Navigator.of(context).pushNamedAndRemoveUntil(
+        return await Navigator.of(context).pushNamedAndRemoveUntil(
           spec.name,
           (route) => false,
           arguments: spec.arguments,
-        );
-        break;
+        ) as T;
       case AppRouteAction.pop:
-        Navigator.of(context).pop();
-        break;
+        return Navigator.of(context).pop(spec.arguments[POP_RESULT]) as T;
       case AppRouteAction.popUntil:
-        Navigator.of(context)
-            .popUntil((route) => route.settings.name == spec.name);
-        break;
+        return Navigator.of(context)
+            .popUntil((route) => route.settings.name == spec.name) as T;
       case AppRouteAction.popUntilRoot:
-        Navigator.of(context).popUntil((route) => route.isFirst);
-        break;
+        return Navigator.of(context).popUntil((route) => route.isFirst) as T;
       default:
         throw UnsupportedError("Unknown app route action");
     }

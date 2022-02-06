@@ -100,10 +100,19 @@ abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
       routes.listen((spec) => Navigate.to(context, spec));
 }
 
-abstract class ViewModel extends ChangeNotifier {
+abstract class ViewModelProvider<T extends ViewModel> extends ChangeNotifier {
+  ViewModelProvider(this.viewModel) {
+    viewModel.notifyListeners = () => notifyListeners();
+  }
+
+  T viewModel;
+}
+
+abstract class ViewModel {
   ViewModel();
 
   late StreamController<AppRouteSpec> _routeController;
+  late void Function() notifyListeners;
 
   /// This method is executed exactly once for each State object Flutter's
   /// framework creates.
@@ -116,11 +125,9 @@ abstract class ViewModel extends ChangeNotifier {
   ///  This method is executed whenever the Widget's Stateful State gets
   /// disposed. It might happen a few times, always matching the amount of times
   /// `init` is called.
-  @override
   @mustCallSuper
   void dispose() {
     print("Logging dispose view: $this");
-    super.dispose();
     _routeController.close();
   }
 

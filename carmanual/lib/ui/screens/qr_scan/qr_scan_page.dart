@@ -47,7 +47,7 @@ class _QrScanPageState extends ViewState<QrScanPage, QrViewModel> {
       children: <Widget>[
         Expanded(
           flex: 5,
-          child: QRCameraView(context.read<QrViewModel>().onScan),
+          child: QRCameraView(context.read<QrProvider>().viewModel.onScan),
         ),
         Expanded(flex: 1, child: buildScanInfo())
       ],
@@ -55,9 +55,10 @@ class _QrScanPageState extends ViewState<QrScanPage, QrViewModel> {
   }
 
   Widget buildScanInfo() {
-    final state = context.watch<QrViewModel>().qrState;
-    final carInfo = context.watch<QrViewModel>().carInfo;
-    final barcode = context.watch<QrViewModel>().barcode;
+    final vm = context.watch<QrProvider>().viewModel;
+    final state = vm.qrState;
+    final carInfo = vm.carInfo;
+    final barcode = vm.barcode;
     String text;
     switch (state) {
       case QrScanState.NEW:

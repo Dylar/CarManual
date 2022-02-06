@@ -45,7 +45,7 @@ class _CarOverviewPageState
   }
 
   Widget _buildBody(BuildContext context, AppLocalizations l10n) {
-    final viewModel = context.read<CarOverViewModel>();
+    final viewModel = context.read<CarOverViewProvider>().viewModel;
     return StreamBuilder<List<CarInfo>>(
         stream: viewModel.watchCars(),
         builder: (context, snapshot) {

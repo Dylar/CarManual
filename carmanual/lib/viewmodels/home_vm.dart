@@ -5,10 +5,14 @@ import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:provider/provider.dart';
 
-class HomeViewModelProvider extends ChangeNotifierProvider<HomeViewModel> {
+class HomeViewModelProvider extends ChangeNotifierProvider<HomeProvider> {
   HomeViewModelProvider(
       SettingsDataSource settings, CarInfoService carInfoService)
-      : super(create: (_) => HomeVM(settings, carInfoService));
+      : super(create: (_) => HomeProvider(HomeVM(settings, carInfoService)));
+}
+
+class HomeProvider extends ViewModelProvider<HomeViewModel> {
+  HomeProvider(HomeViewModel viewModel) : super(viewModel);
 }
 
 abstract class HomeViewModel extends ViewModel {

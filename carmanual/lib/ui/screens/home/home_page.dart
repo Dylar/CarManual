@@ -1,9 +1,9 @@
-import 'package:better_player/better_player.dart';
-import 'package:carmanual/core/helper/player_config.dart';
+import 'package:carmanual/core/database/settings.dart';
 import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
+import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:carmanual/viewmodels/home_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -59,19 +59,16 @@ class _HomeVideoPageState extends ViewState<HomeVideoPage, HomeViewModel> {
     return Column(
       children: [
         Flexible(
-            child: StreamBuilder<BetterPlayerConfiguration>(
-                stream: viewModel.watchSettings().map((settings) {
-                  final vidSettings = settings.videos;
-                  return playerConfigFromMap(vidSettings);
-                }),
+            child: StreamBuilder<Settings>(
+                stream: viewModel.watchSettings(),
                 builder: (context, snapshot) {
-                  return viewModel.introVideo == null
-                      ? VideoDownload()
-                      : BetterPlayer.network(
-                          viewModel.introVideo!.url,
-                          betterPlayerConfiguration: snapshot.data,
-                        );
-                  ;
+                  if (!snapshot.hasData || viewModel.introVideo == null) {
+                    return VideoDownload();
+                  }
+                  return VideoWidget(
+                    url: viewModel.introVideo!.url,
+                    settings: snapshot.data!,
+                  );
                 })),
         Spacer(),
         Expanded(

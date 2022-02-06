@@ -5,9 +5,13 @@ import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
-class IntroViewModelProvider extends ChangeNotifierProvider<IntroViewModel> {
+class IntroViewModelProvider extends ChangeNotifierProvider<IntroProvider> {
   IntroViewModelProvider(CarInfoService carInfoService)
-      : super(create: (_) => IntroVM(carInfoService));
+      : super(create: (_) => IntroProvider(IntroVM(carInfoService)));
+}
+
+class IntroProvider extends ViewModelProvider<IntroViewModel> {
+  IntroProvider(IntroViewModel viewModel) : super(viewModel);
 }
 
 abstract class IntroViewModel extends ViewModel {
@@ -24,6 +28,7 @@ class _IntroVMState {
   QrScanState qrState = QrScanState.WAITING;
   Barcode? barcode;
   CarInfo? carInfo;
+  bool isScanned = false;
 }
 
 class IntroVM extends IntroViewModel {
@@ -44,8 +49,13 @@ class IntroVM extends IntroViewModel {
 
   @override
   void onScan(String scan) {
+    if (_state.isScanned) {
+      return;
+    }
+    _state.isScanned = true;
     print("Logging: scan: $scan");
     carInfoService.onNewScan(scan).then((state) async {
+      _state.isScanned = false;
       _state.qrState = state.first!;
       _state.carInfo = state.second;
       print("Logging: state: ${state.first}");

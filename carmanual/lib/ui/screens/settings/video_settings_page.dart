@@ -2,7 +2,6 @@ import 'package:carmanual/core/app_theme.dart';
 import 'package:carmanual/core/database/settings.dart';
 import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/navigation/navi.dart';
-import 'package:carmanual/ui/snackbars/snackbars.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/ui/widgets/loading_overlay.dart';
 import 'package:carmanual/ui/widgets/scroll_list_view.dart';
@@ -57,11 +56,10 @@ class _VideoSettingsPageState extends State<VideoSettingsPage> {
           height: 48,
           padding: const EdgeInsets.all(4.0),
           child: ElevatedButton(
-            onPressed: () {
+            onPressed: () async {
               _settings!.videos = settingsMap!;
-              widget.settings
-                  .saveSettings(_settings!)
-                  .then((value) => showSettingsSavedSnackBar(context));
+              await widget.settings.saveSettings(_settings!);
+              Navigate.pop(context, true);
             },
             child: Text("Speichern"),
           ),

@@ -4,9 +4,14 @@ import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:provider/provider.dart';
 
 class VideoOverViewModelProvider
-    extends ChangeNotifierProvider<VideoOverViewModel> {
+    extends ChangeNotifierProvider<VideoOverViewProvider> {
   VideoOverViewModelProvider(VideoInfoDataSource videoInfoSource)
-      : super(create: (_) => VideoOverVM(videoInfoSource));
+      : super(
+            create: (_) => VideoOverViewProvider(VideoOverVM(videoInfoSource)));
+}
+
+class VideoOverViewProvider extends ViewModelProvider<VideoOverViewModel> {
+  VideoOverViewProvider(VideoOverViewModel viewModel) : super(viewModel);
 }
 
 abstract class VideoOverViewModel extends ViewModel {

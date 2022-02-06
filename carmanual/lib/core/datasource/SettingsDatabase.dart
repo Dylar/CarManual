@@ -1,5 +1,5 @@
-import 'package:carmanual/core/database/database.dart';
-import 'package:carmanual/core/database/settings.dart';
+import 'package:carmanual/core/datasource/database.dart';
+import 'package:carmanual/models/settings.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class SettingsDatabase {

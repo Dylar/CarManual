@@ -1,19 +1,27 @@
-import 'package:carmanual/ui/screens/home/home_page.dart';
+import 'package:carmanual/core/app.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_utils.dart';
+import 'builder/app_builder.dart';
+import 'test_checker.dart';
 
-Future<void> initNavigateToHome(WidgetTester tester) async {
+Future<void> loadApp(WidgetTester tester, {AppInfrastructure? infra}) async {
   // Build our app and trigger a frame.
-  await tester.pumpWidget(TestUtils.loadTestApp());
-  await tester.pump(Duration(seconds: 2));
-  expect(find.byType(HomePage), findsOneWidget);
+  final appWidget = await buildTestApp(infra: infra);
+  await tester.pumpWidget(appWidget);
+  // await tester.pumpWidget(await TestUtils.loadTestApp(infra: infra));
+  for (int i = 0; i < 30; i++) {
+    await tester.pump(Duration(seconds: 1));
+  }
 }
 
-// Future<void> initNavigateToNotes(WidgetTester tester) async {
-//   await initNavigateToHome(tester);
-//
-//   await tester.tap(find.byIcon(Icons.record_voice_over));
-//   await tester.pumpAndSettle();
-//   expect(find.byType(NotesPage), findsOneWidget);
-// }
+Future<void> initNavigateToIntro(WidgetTester tester,
+    {AppInfrastructure? infra}) async {
+  await loadApp(tester, infra: infra);
+  checkIntroPage();
+}
+
+Future<void> initNavigateToHome(WidgetTester tester,
+    {AppInfrastructure? infra}) async {
+  await loadApp(tester, infra: infra);
+  checkHomePage();
+}

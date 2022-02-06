@@ -1,6 +1,8 @@
-import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/car_info_entity.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:flutter/material.dart';
+
+import '../../../core/constants/debug.dart';
 
 class CarInfoListItem extends StatelessWidget {
   const CarInfoListItem(this.carInfo);
@@ -19,7 +21,7 @@ class CarInfoListItem extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(4.0),
-              child: CarInfoPic(carInfo.picUrl),
+              child: CarInfoPic(DEBUG_PIC_URL),
             ),
             Spacer(flex: 5),
             Expanded(
@@ -28,10 +30,10 @@ class CarInfoListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Auto: ${carInfo.name}',
+                    'Marke: ${carInfo.brand}',
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
-                  Text('Verkäufer: ${carInfo.seller}'),
+                  Text('Model: ${carInfo.model}'),
                 ],
               ),
             ),

@@ -1,22 +1,32 @@
+import 'dart:io';
+
 import 'package:carmanual/core/app.dart';
-import 'package:carmanual/core/database/database.dart';
-import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
-import 'package:carmanual/service/car_info_service.dart';
-import 'package:mockito/mockito.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
-class FakeDatabase extends Mock implements AppDatabase {}
-
-class FakeNotesDataSource extends Mock implements CarInfoDataSource {}
+import 'mocks/path_provider_mock.dart';
+import 'mocks/test_mock.dart';
+import 'ui/screens/intro_test.mocks.dart';
 
 class TestUtils {
-  static App loadTestApp({
-    AppDatabase? database,
-    CarInfoService? carInfoService,
-  }) {
-    final db = database ?? AppDatabase();
-    return App.load(
-      database: db,
-      carInfoService: carInfoService ?? CarInfoService(FakeNotesDataSource()),
-    );
+  static Future<void> prepareDependency() async {
+    TestWidgetsFlutterBinding.ensureInitialized();
+    dotenv.testLoad(fileInput: File('test/.testEnv').readAsStringSync());
+    PathProviderPlatform.instance = FakePathProviderPlatform();
+  }
+
+  static AppInfrastructure defaultTestInfra() {
+    final db = MockAppDatabase();
+    final appClient = mockAppClient();
+    final settingsSource = mockSettings();
+    final carSource = mockCarSource();
+    final videoSource = mockVideoSource();
+    return AppInfrastructure.load(
+        client: appClient,
+        database: db,
+        settingsDataSource: settingsSource,
+        carInfoDataSource: carSource,
+        videoInfoDataSource: videoSource);
   }
 }

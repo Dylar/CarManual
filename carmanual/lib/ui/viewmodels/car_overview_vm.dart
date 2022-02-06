@@ -1,5 +1,5 @@
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
-import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/car_info_entity.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:provider/provider.dart';
 

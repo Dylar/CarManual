@@ -1,9 +1,10 @@
 import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/service/car_info_service.dart';
+import 'package:carmanual/ui/viewmodels/intro_vm.dart';
 import 'package:carmanual/ui/widgets/debug/debug_skip_button.dart';
 import 'package:carmanual/ui/widgets/qr_camera_view.dart';
-import 'package:carmanual/viewmodels/intro_vm.dart';
+import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -30,21 +31,38 @@ class _IntroScanPageState extends ViewState<IntroPage, IntroViewModel> {
   }
 
   Widget _buildBody(BuildContext context, AppLocalizations l10n) {
-    final viewModel = context.read<IntroProvider>().viewModel;
+    String status = "";
+    switch (viewModel.qrState) {
+      case QrScanState.NEW:
+      case QrScanState.OLD:
+        break;
+      case QrScanState.DAFUQ:
+        status = "Ungültiger QR-Code, bitte neu scannen.";
+        break;
+      case QrScanState.WAITING:
+        status = l10n.introPageMessage;
+        break;
+      case QrScanState.SCANNING:
+        status = "Scanning...";
+        break;
+    }
     return Column(
       children: <Widget>[
         Expanded(
           flex: 1,
-          child: Center(
-              child: Text(viewModel.qrState == QrScanState.WAITING
-                  ? l10n.introPageMessage
-                  : "Scan neu")),
+          child: Center(child: Text(status)),
         ),
         Expanded(
           flex: 7,
-          child: QRCameraView(
-            (barcode) => viewModel.onScan(barcode.code ?? ""),
-          ),
+          child: viewModel.qrState == QrScanState.SCANNING
+              ? VideoDownload()
+              : QRCameraView(
+                  (barcode) {
+                    setState(() {
+                      viewModel.onScan(barcode.code ?? "");
+                    });
+                  },
+                ),
         ),
         if (EnvironmentConfig.isDev)
           SkipDebugButton(context.read<IntroProvider>().viewModel.onScan),

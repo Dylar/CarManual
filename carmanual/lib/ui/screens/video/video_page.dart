@@ -1,9 +1,9 @@
-import 'package:carmanual/core/database/settings.dart';
-import 'package:carmanual/core/database/video_info.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
+import 'package:carmanual/models/settings.dart';
+import 'package:carmanual/models/video_info.dart';
+import 'package:carmanual/ui/viewmodels/video_vm.dart';
 import 'package:carmanual/ui/widgets/video_widget.dart';
-import 'package:carmanual/viewmodels/video_vm.dart';
 import 'package:flutter/material.dart';
 
 class VideoPage extends View<VideoViewModel> {
@@ -41,7 +41,6 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
                   stream: viewModel.watchSettings(),
                   builder: (context, snapshot) {
                     if (!snapshot.hasData || viewModel.videoInfo == null) {
-                      print("LOGGING: LOADING VID");
                       return VideoDownload();
                     }
                     return VideoWidget(

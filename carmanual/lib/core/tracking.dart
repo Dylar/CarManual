@@ -6,9 +6,24 @@ class TrackEvent {
 }
 
 class Logger {
-  Logger(String string);
+  static void logI(String msg) {
+    log("Logging", msg, false);
+  }
 
-  void fine(String s) {}
+  static void logD(String msg, {bool printTrace = false}) {
+    log("DELETE ME", msg, printTrace);
+  }
 
-  void finer(String s) {}
+  static void logE(String msg, {bool printTrace = false}) {
+    log("Error", msg, printTrace);
+  }
+
+  static void logT(String msg, {bool printTrace = false}) {
+    log("Test", msg, printTrace);
+  }
+
+  static void log(String tag, msg, bool printTrace) {
+    print("$tag: $msg");
+    if (printTrace) print(StackTrace.current);
+  }
 }

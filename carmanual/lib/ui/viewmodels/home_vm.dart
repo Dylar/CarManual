@@ -1,9 +1,11 @@
-import 'package:carmanual/core/database/settings.dart';
-import 'package:carmanual/core/database/video_info.dart';
 import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
+import 'package:carmanual/models/settings.dart';
+import 'package:carmanual/models/video_info.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:provider/provider.dart';
+
+import '../../core/tracking.dart';
 
 class HomeViewModelProvider extends ChangeNotifierProvider<HomeProvider> {
   HomeViewModelProvider(
@@ -32,13 +34,13 @@ class HomeVM extends HomeViewModel {
   @override
   void init() {
     super.init();
-    Future.wait([
-      initVideo(),
-    ]).then((value) => notifyListeners());
+    initVideo();
   }
 
   Future<void> initVideo() async {
     introVideo = await carInfoService.getIntroVideo();
+    Logger.logI("Intro: ${introVideo!.url}");
+    notifyListeners();
   }
 
   @override

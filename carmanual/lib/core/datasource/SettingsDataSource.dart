@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:carmanual/core/database/database.dart';
-import 'package:carmanual/core/database/settings.dart';
+import 'package:carmanual/core/datasource/database.dart';
+import 'package:carmanual/models/settings.dart';
 
 abstract class SettingsDataSource {
   Future<bool> saveSettings(Settings settings);

@@ -1,7 +1,7 @@
 import 'package:carmanual/core/app_theme.dart';
-import 'package:carmanual/core/database/settings.dart';
 import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/navigation/navi.dart';
+import 'package:carmanual/models/settings.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/ui/widgets/loading_overlay.dart';
 import 'package:carmanual/ui/widgets/scroll_list_view.dart';

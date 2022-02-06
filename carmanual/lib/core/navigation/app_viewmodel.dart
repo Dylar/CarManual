@@ -15,7 +15,6 @@ abstract class View<VM extends ViewModel> extends StatefulWidget {
 abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
     with RouteAware {
   late final VM _viewModel;
-  late final Logger logger;
 
   VM get viewModel => _viewModel;
 
@@ -25,13 +24,13 @@ abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
 
   @mustCallSuper
   ViewState(this._viewModel) {
-    logger = Logger(runtimeType.toString());
-    logger.fine('Created $runtimeType.');
+    Logger.logI('Created $runtimeType.');
   }
 
   @mustCallSuper
   @override
   void initState() {
+    Logger.logI('initState $_sanitisedRoutePageName');
     super.initState();
     viewModel.init();
     listenToRoutesSpecs(viewModel._routeController.stream);
@@ -53,7 +52,7 @@ abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
   @override
   void dispose() {
     AppRouter.routeObserver.unsubscribe(this);
-    logger.fine('Disposing $runtimeType.');
+    Logger.logI('dispose $_sanitisedRoutePageName');
     viewModel.dispose();
     super.dispose();
   }
@@ -63,7 +62,7 @@ abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
   @mustCallSuper
   @override
   void didPopNext() {
-    logger.finer('🚚 $_sanitisedRoutePageName didPopNext');
+    Logger.logI('🚚 $_sanitisedRoutePageName didPopNext');
     viewModel.routingDidPopNext();
   }
 
@@ -71,7 +70,7 @@ abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
   @mustCallSuper
   @override
   void didPush() {
-    logger.finer('🚚 $_sanitisedRoutePageName didPush');
+    Logger.logI('🚚 $_sanitisedRoutePageName didPush');
     viewModel.routingDidPush();
   }
 
@@ -79,7 +78,7 @@ abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
   @mustCallSuper
   @override
   void didPop() {
-    logger.finer('🚚 $_sanitisedRoutePageName didPop');
+    Logger.logI('🚚 $_sanitisedRoutePageName didPop');
     viewModel.routingDidPop();
   }
 
@@ -88,7 +87,7 @@ abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
   @mustCallSuper
   @override
   void didPushNext() {
-    logger.finer('🚚 $_sanitisedRoutePageName didPushNext');
+    Logger.logI('🚚 $_sanitisedRoutePageName didPushNext');
     viewModel.routingDidPushNext();
   }
 
@@ -118,7 +117,6 @@ abstract class ViewModel {
   /// framework creates.
   @mustCallSuper
   void init() {
-    print("Logging init view: $this");
     _routeController = StreamController();
   }
 
@@ -127,7 +125,6 @@ abstract class ViewModel {
   /// `init` is called.
   @mustCallSuper
   void dispose() {
-    print("Logging dispose view: $this");
     _routeController.close();
   }
 

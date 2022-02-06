@@ -1,5 +1,5 @@
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
-import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/car_info_entity.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:provider/provider.dart';
@@ -50,22 +50,26 @@ class QrVM extends QrViewModel {
   void onScan(Barcode barcode) {
     this._state.barcode = barcode;
     final data = barcode.code ?? "";
-    print("Logging: data: $data");
-    carInfoService.onNewScan(data).then((state) {
-      print("Logging: state: ${state.first}");
-      _state.qrState = state.first!;
-      _state.carInfo = state.second;
-      switch (_state.qrState) {
-        case QrScanState.NEW:
-          navigateTo(CarOverviewPage.popAndPush());
-          break;
-        case QrScanState.OLD:
-        case QrScanState.DAFUQ:
-        case QrScanState.WAITING:
-          break;
-      }
+    _state.qrState = QrScanState.SCANNING;
+    //hint: yea we need a delay to disable the camera/qrscan
+    Future.delayed(Duration(milliseconds: 10)).then((value) async {
+      //TODO 1x then weg
+      return await carInfoService.onNewScan(data).then((state) {
+        _state.qrState = state.first!;
+        _state.carInfo = state.second;
+        switch (_state.qrState) {
+          case QrScanState.NEW:
+            navigateTo(CarOverviewPage.popAndPush());
+            break;
+          case QrScanState.OLD:
+          case QrScanState.DAFUQ:
+          case QrScanState.WAITING:
+          case QrScanState.SCANNING:
+            break;
+        }
 
-      notifyListeners();
+        notifyListeners();
+      });
     });
   }
 }

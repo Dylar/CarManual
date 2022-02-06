@@ -1,11 +1,12 @@
-import 'package:carmanual/core/database/database.dart';
-import 'package:carmanual/core/database/video_info.dart';
+import 'package:carmanual/core/datasource/database.dart';
+import 'package:carmanual/models/car_info_entity.dart';
+import 'package:carmanual/models/video_info.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class VideoInfoDatabase {
   Future<void> upsertVideoInfo(VideoInfo videoInfo);
 
-  Future<List<VideoInfo>> getVideoInfos();
+  Future<List<VideoInfo>> getVideoInfos(CarInfo carInfo);
 
   Future<VideoInfo?> getVideoInfo(String name);
 }
@@ -22,8 +23,12 @@ mixin VideoInfoDB implements VideoInfoDatabase {
   }
 
   @override
-  Future<List<VideoInfo>> getVideoInfos() async {
-    return videoInfoBox.values.toList();
+  Future<List<VideoInfo>> getVideoInfos(CarInfo carInfo) async {
+    return videoInfoBox.values
+        .where((vid) =>
+            vid.path.contains(carInfo.brand) &&
+            vid.path.contains(carInfo.model))
+        .toList();
   }
 
   @override

@@ -1,5 +1,5 @@
 import 'package:carmanual/core/environment_config.dart';
-import 'package:carmanual/core/services.dart';
+import 'package:carmanual/service/services.dart';
 import 'package:carmanual/ui/screens/debug_page.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
@@ -9,14 +9,18 @@ import 'package:carmanual/ui/screens/settings/settings_page.dart';
 import 'package:carmanual/ui/screens/settings/video_settings_page.dart';
 import 'package:carmanual/ui/screens/video/video_overview_page.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
-import 'package:carmanual/viewmodels/car_overview_vm.dart';
-import 'package:carmanual/viewmodels/home_vm.dart';
-import 'package:carmanual/viewmodels/intro_vm.dart';
-import 'package:carmanual/viewmodels/qr_vm.dart';
-import 'package:carmanual/viewmodels/video_overview_vm.dart';
-import 'package:carmanual/viewmodels/video_vm.dart';
+import 'package:carmanual/ui/viewmodels/car_overview_vm.dart';
+import 'package:carmanual/ui/viewmodels/home_vm.dart';
+import 'package:carmanual/ui/viewmodels/intro_vm.dart';
+import 'package:carmanual/ui/viewmodels/qr_vm.dart';
+import 'package:carmanual/ui/viewmodels/video_overview_vm.dart';
+import 'package:carmanual/ui/viewmodels/video_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../../ui/screens/dir/dir_page.dart';
+import '../../ui/viewmodels/dir_vm.dart';
+import '../tracking.dart';
 
 abstract class AppRoute<T> extends Route<T> {
   String get appName;
@@ -69,7 +73,7 @@ class AppRouter {
 
   static AppRoute<dynamic> generateRoute(RouteSettings settings) {
     final arguments = settings.arguments as Map<String, dynamic>? ?? {};
-    print("Logging: Route: ${settings.name}");
+    Logger.logI("Route: ${settings.name}");
 
     late WidgetBuilder builder;
     switch (settings.name) {
@@ -95,7 +99,10 @@ class AppRouter {
         builder = _navigateToCarOverview;
         break;
       case VideoOverviewPage.routeName:
-        builder = _navigateToVideoOverview;
+        builder = (context) => _navigateToVideoOverview(context, arguments);
+        break;
+      case DirPage.routeName:
+        builder = (context) => _navigateToDirs(context, arguments);
         break;
       case VideoPage.routeName:
         builder = (context) => _navigateToVideo(context, arguments);
@@ -143,14 +150,23 @@ Widget _navigateToCarOverview(BuildContext context) {
   return CarOverviewPage.model(vm.viewModel);
 }
 
-Widget _navigateToVideoOverview(BuildContext context) {
+Widget _navigateToVideoOverview(
+    BuildContext context, Map<String, dynamic> arguments) {
   final vm = Provider.of<VideoOverViewProvider>(context);
+  vm.viewModel.selectedCar = arguments[VideoOverviewPage.ARG_CAR];
+  vm.viewModel.selectedDir = arguments[VideoOverviewPage.ARG_DIR];
   return VideoOverviewPage.model(vm.viewModel);
 }
 
 Widget _navigateToQrScan(BuildContext context) {
   final vm = Provider.of<QrProvider>(context);
   return QrScanPage(vm.viewModel);
+}
+
+Widget _navigateToDirs(BuildContext context, Map<String, dynamic> arguments) {
+  final vm = Provider.of<DirViewProvider>(context);
+  vm.viewModel.selectedCar = arguments[DirPage.ARG_CAR];
+  return DirPage.model(vm.viewModel);
 }
 
 Widget _navigateToVideo(BuildContext context, Map<String, dynamic> arguments) {

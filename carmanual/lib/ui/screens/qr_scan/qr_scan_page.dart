@@ -2,8 +2,9 @@ import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/service/car_info_service.dart';
+import 'package:carmanual/ui/viewmodels/qr_vm.dart';
 import 'package:carmanual/ui/widgets/qr_camera_view.dart';
-import 'package:carmanual/viewmodels/qr_vm.dart';
+import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -47,7 +48,9 @@ class _QrScanPageState extends ViewState<QrScanPage, QrViewModel> {
       children: <Widget>[
         Expanded(
           flex: 5,
-          child: QRCameraView(context.read<QrProvider>().viewModel.onScan),
+          child: viewModel.qrState == QrScanState.SCANNING
+              ? VideoDownload()
+              : QRCameraView(viewModel.onScan),
         ),
         Expanded(flex: 1, child: buildScanInfo())
       ],
@@ -65,7 +68,7 @@ class _QrScanPageState extends ViewState<QrScanPage, QrViewModel> {
         text = "Yeah neues Auto";
         break;
       case QrScanState.OLD:
-        text = 'Das Auto ${carInfo!.name} hast du schon';
+        text = 'Das Auto ${carInfo!.model} hast du schon';
         break;
       case QrScanState.DAFUQ:
         text = barcode == null
@@ -74,6 +77,9 @@ class _QrScanPageState extends ViewState<QrScanPage, QrViewModel> {
         break;
       case QrScanState.WAITING:
         text = 'Bitte einen QR Code scannen';
+        break;
+      case QrScanState.SCANNING:
+        text = 'Scanning...';
         break;
     }
     return Center(child: Text(text));

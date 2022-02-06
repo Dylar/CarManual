@@ -1,6 +1,7 @@
 import 'package:better_player/better_player.dart';
-import 'package:carmanual/core/database/settings.dart';
 import 'package:carmanual/core/helper/player_config.dart';
+import 'package:carmanual/core/tracking.dart';
+import 'package:carmanual/models/settings.dart';
 import 'package:flutter/material.dart';
 
 import 'loading_overlay.dart';
@@ -32,6 +33,7 @@ class _VideoWidgetState extends State<VideoWidget> {
 
   @override
   void initState() {
+    Logger.logI("Load video: ${widget.url}");
     final config = playerConfigFromMap(widget.settings.videos);
     controller = BetterPlayerController(
       config,
@@ -46,7 +48,6 @@ class _VideoWidgetState extends State<VideoWidget> {
 
   @override
   void dispose() {
-    print("LOGGING: DISPOSE IT");
     controller.videoPlayerController?.addListener(checkVideo);
     controller.videoPlayerController?.dispose();
     controller.dispose();
@@ -63,7 +64,7 @@ class _VideoWidgetState extends State<VideoWidget> {
     final playerValue = controller.videoPlayerController!.value;
     final position = playerValue.position.inMicroseconds;
     if (!onStartTriggered && position <= VIDEO_START.inMicroseconds) {
-      print("LOGGING: onVideoStart");
+      Logger.logI("onVideoStart");
       onStartTriggered = true;
       widget.onVideoStart?.call();
     }
@@ -71,7 +72,7 @@ class _VideoWidgetState extends State<VideoWidget> {
     final endPosition = playerValue.duration?.inMicroseconds ?? 0;
 
     if (onStartTriggered && position >= endPosition) {
-      print("LOGGING: onVideoEnd");
+      Logger.logI("onVideoEnd");
       onStartTriggered = false;
       widget.onVideoEnd?.call();
     }

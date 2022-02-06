@@ -2,17 +2,18 @@ import 'package:carmanual/core/environment_config.dart';
 import 'package:flutter/services.dart';
 import 'package:ssh2/ssh2.dart';
 
+import '../tracking.dart';
+
 const String CLIENT_CONNECTED = "sftp_connected";
 const String CLIENT_DISCONNECTED = "sftp_disconnected";
 
 class AppClient {
-  SSHClient? client;
+  SSHClient? _client;
 
-  String? state;
+  String? _state;
 
-  void initClient() {
-    print("Log: initClient");
-    client = SSHClient(
+  void _initClient() {
+    _client = SSHClient(
       host: EnvironmentConfig.host,
       port: EnvironmentConfig.port,
       username: EnvironmentConfig.user,
@@ -20,27 +21,27 @@ class AppClient {
     );
   }
 
-  Future<String> connect() async {
+  Future<String> _connect() async {
     try {
-      state = await client?.connect();
-      state = await client?.connectSFTP();
-      print("Log: connect SFTP: $state");
-      return state ?? "";
+      _state = await _client?.connect();
+      _state = await _client?.connectSFTP();
+      Logger.logI("connect SFTP: $_state");
+      return _state ?? "";
     } catch (e) {
-      print("Log: ERROR: ${(e as PlatformException).message}");
+      Logger.logE("${(e as PlatformException).message}", printTrace: true);
     }
     return "";
   }
 
-  Future<String> disconnect() async {
-    state = await client?.disconnect();
-    state = await client?.disconnectSFTP();
-    print("Log: disconnect SFTP: $state");
-    return state ?? "DAFUQ";
+  Future<String> _disconnect() async {
+    _state = await _client?.disconnect();
+    _state = await _client?.disconnectSFTP();
+    Logger.logI("disconnect SFTP: $_state");
+    return _state ?? "DAFUQ";
   }
 
-  Future<List<FileData>> getFileList({String path = "/"}) async {
-    final dirs = await client?.sftpLs(path);
+  Future<List<FileData>> _getFileList({String path = "/"}) async {
+    final dirs = await _client?.sftpLs(path);
     return dirs?.map<FileData>((json) {
           //Hint: its not real json ... so we need to parse shitty
           final splitFields = json.toString().split(",");
@@ -63,16 +64,37 @@ class AppClient {
         [];
   }
 
-  Future<List<FileData>> loadFilesData() async {
-    print("Logging: loadFilesData");
-    initClient();
-    await connect();
-    List<FileData> files = await getFileList();
-    disconnect();
-    return files;
+  Future<DirData> _loadFileDir(DirData dir) async {
+    try {
+      List<FileData> initialFiles = await _getFileList(path: dir.path);
+      initialFiles.forEach((file) {
+        if (file.isDir) {
+          final path = dir.path + file.name + "/";
+          dir.dirs.add(DirData(path));
+        } else {
+          dir.files.add(file);
+        }
+      });
+      if (dir.dirs.isNotEmpty) {
+        await Future.forEach<DirData>(dir.dirs, (e) => _loadFileDir(e));
+      }
+    } catch (e) {
+      Logger.logE("Path: ${dir.path}");
+      Logger.logE("error - ${e.toString()}");
+    }
+
+    return dir;
   }
 
-  //TODO download for demand
+  Future<DirData> loadFilesData() async {
+    _initClient();
+    await _connect();
+    final dirs = await _loadFileDir(DirData("/"));
+    _disconnect();
+    return dirs;
+  }
+
+//TODO download for demand
 // Future<String> downloadFile(Callback callback) async {
 //   final document = await getApplicationDocumentsDirectory();
 //   final path = document.path;
@@ -98,21 +120,33 @@ class AppClient {
 class FileData {
   FileData(
     this.modificationDate,
-    this.fileName,
+    this.name,
+    this.type,
     this.fileSize,
     this.isDir,
   );
 
-  final String modificationDate, fileName;
+  final String modificationDate, name, type;
   final int fileSize;
   final bool isDir;
 
   static FileData fromMap(Map<String, dynamic> map) {
+    final String name = map["filename"] ?? "";
+    final type = name.split(".").last;
     return FileData(
       map["modificationDate"] ?? "",
-      map["filename"] ?? "",
+      name,
+      type,
       int.tryParse(map["fileSize"]) ?? 0,
       map["isDirectory"] == "true",
     );
   }
+}
+
+class DirData {
+  DirData(this.path);
+
+  final String path;
+  final List<DirData> dirs = [];
+  final List<FileData> files = [];
 }

@@ -1,10 +1,9 @@
-import 'package:carmanual/core/database/settings.dart';
 import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
-import 'package:carmanual/ui/screens/video/video_page.dart';
+import 'package:carmanual/models/settings.dart';
+import 'package:carmanual/ui/viewmodels/home_vm.dart';
 import 'package:carmanual/ui/widgets/video_widget.dart';
-import 'package:carmanual/viewmodels/home_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

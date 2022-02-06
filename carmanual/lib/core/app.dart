@@ -1,24 +1,24 @@
 import 'package:carmanual/core/app_theme.dart';
-import 'package:carmanual/core/database/database.dart';
 import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/datasource/VideoInfoDataSource.dart';
+import 'package:carmanual/core/datasource/database.dart';
 import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/core/helper/player_config.dart';
 import 'package:carmanual/core/navigation/app_router.dart';
 import 'package:carmanual/core/network/app_client.dart';
-import 'package:carmanual/core/services.dart';
 import 'package:carmanual/service/car_info_service.dart';
+import 'package:carmanual/service/services.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
 import 'package:carmanual/ui/screens/intro/loading_page.dart';
+import 'package:carmanual/ui/viewmodels/car_overview_vm.dart';
+import 'package:carmanual/ui/viewmodels/home_vm.dart';
+import 'package:carmanual/ui/viewmodels/intro_vm.dart';
+import 'package:carmanual/ui/viewmodels/qr_vm.dart';
+import 'package:carmanual/ui/viewmodels/video_overview_vm.dart';
+import 'package:carmanual/ui/viewmodels/video_vm.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
-import 'package:carmanual/viewmodels/car_overview_vm.dart';
-import 'package:carmanual/viewmodels/home_vm.dart';
-import 'package:carmanual/viewmodels/intro_vm.dart';
-import 'package:carmanual/viewmodels/qr_vm.dart';
-import 'package:carmanual/viewmodels/video_overview_vm.dart';
-import 'package:carmanual/viewmodels/video_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -68,12 +68,10 @@ class App extends StatefulWidget {
 class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
-    print("Logging: build");
     return FutureBuilder<bool>(
         initialData: false,
         future: _initApp(),
         builder: (context, snapshot) {
-          print("Logging: load app");
           if (snapshot.hasError) {
             return fixView(ErrorInfoWidget(snapshot.error.toString()));
           }
@@ -87,7 +85,6 @@ class _AppState extends State<App> {
               : "(${EnvironmentConfig.ENV}) ";
 
           final bool hasCars = snapshot.data ?? false;
-          print("Logging: hasCars - $hasCars");
           String firstRoute = IntroPage.routeName;
           if (hasCars) {
             firstRoute = HomePage.routeName;

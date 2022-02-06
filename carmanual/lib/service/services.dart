@@ -1,7 +1,7 @@
-import 'package:carmanual/core/database/database.dart';
 import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/datasource/VideoInfoDataSource.dart';
+import 'package:carmanual/core/datasource/database.dart';
 import 'package:carmanual/core/network/app_client.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:flutter/material.dart';

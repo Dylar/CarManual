@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:carmanual/core/database/database.dart';
-import 'package:carmanual/core/database/video_info.dart';
+import 'package:carmanual/core/datasource/database.dart';
+import 'package:carmanual/models/video_info.dart';
 
 abstract class VideoInfoDataSource {
   Future<List<VideoInfo>> getVideos();

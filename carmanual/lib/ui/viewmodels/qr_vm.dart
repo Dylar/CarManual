@@ -1,5 +1,5 @@
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
-import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/car_info_entity.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:provider/provider.dart';
@@ -50,9 +50,7 @@ class QrVM extends QrViewModel {
   void onScan(Barcode barcode) {
     this._state.barcode = barcode;
     final data = barcode.code ?? "";
-    print("Logging: data: $data");
     carInfoService.onNewScan(data).then((state) {
-      print("Logging: state: ${state.first}");
       _state.qrState = state.first!;
       _state.carInfo = state.second;
       switch (_state.qrState) {

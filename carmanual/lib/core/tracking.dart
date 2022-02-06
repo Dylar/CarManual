@@ -6,9 +6,7 @@ class TrackEvent {
 }
 
 class Logger {
-  Logger(String string);
-
-  void fine(String s) {}
-
-  void finer(String s) {}
+  static void log(String s) {
+    print("Logging: $s");
+  }
 }

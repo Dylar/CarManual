@@ -1,4 +1,4 @@
-import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/car_info_entity.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:flutter/material.dart';
 

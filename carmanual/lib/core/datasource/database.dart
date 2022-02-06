@@ -1,11 +1,13 @@
-import 'package:carmanual/core/database/car_info_entity.dart';
-import 'package:carmanual/core/database/settings.dart';
-import 'package:carmanual/core/database/video_info.dart';
 import 'package:carmanual/core/datasource/CarInfoDatabase.dart';
 import 'package:carmanual/core/datasource/SettingsDatabase.dart';
 import 'package:carmanual/core/datasource/VideoInfoDatabase.dart';
+import 'package:carmanual/models/car_info_entity.dart';
+import 'package:carmanual/models/settings.dart';
+import 'package:carmanual/models/video_info.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart';
+
+import '../tracking.dart';
 
 class DatabaseOpenException implements Exception {}
 
@@ -17,24 +19,18 @@ const String BOX_VIDEO_INFO = "VideoInfoBox";
 
 class AppDatabase with SettingsDB, CarInfoDB, VideoInfoDB {
   Future<void> init() async {
-    print("Logging: init db 1");
     final document = await getApplicationDocumentsDirectory();
     await Hive.initFlutter(document.path);
-    print("Logging: init db 2");
     try {
-      Hive.registerAdapter(CarInfoEntityAdapter());
+      Hive.registerAdapter(CarInfoAdapter());
       Hive.registerAdapter(VideoInfoAdapter());
       Hive.registerAdapter(SettingsAdapter());
     } catch (e) {
-      print("Logging: adapter already added");
+      Logger.log("adapter already added");
     }
-    print("Logging: init db 3");
     await Hive.openBox<Settings>(BOX_SETTINGS);
-    print("Logging: init db 4");
-    await Hive.openBox<CarInfoEntity>(BOX_CAR_INFO);
-    print("Logging: init db 5");
+    await Hive.openBox<CarInfo>(BOX_CAR_INFO);
     await Hive.openBox<VideoInfo>(BOX_VIDEO_INFO);
-    print("Logging: init db 6");
   }
 
   Future<void> close() async {

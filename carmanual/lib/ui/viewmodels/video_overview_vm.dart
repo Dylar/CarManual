@@ -1,6 +1,6 @@
-import 'package:carmanual/core/database/video_info.dart';
 import 'package:carmanual/core/datasource/VideoInfoDataSource.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
+import 'package:carmanual/models/video_info.dart';
 import 'package:provider/provider.dart';
 
 class VideoOverViewModelProvider

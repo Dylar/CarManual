@@ -2,7 +2,7 @@ import 'package:carmanual/core/app_theme.dart';
 import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/core/network/app_client.dart';
-import 'package:carmanual/core/services.dart';
+import 'package:carmanual/service/services.dart';
 import 'package:flutter/material.dart';
 
 class DebugPage extends StatefulWidget {

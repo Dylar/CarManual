@@ -7,6 +7,8 @@ import 'package:carmanual/ui/screens/settings/settings_page.dart';
 import 'package:carmanual/ui/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
 
+import '../tracking.dart';
+
 final _naviBarData = <Triple<String, String, IconData>>[
   Triple(HomePage.routeName, "Home", Icons.home_outlined),
   Triple(CarOverviewPage.routeName, "Videos", Icons.ondemand_video_sharp),
@@ -71,29 +73,29 @@ class _AppNavigationState extends State<AppNavigation> {
     AppRouteSpec routeSpec;
     switch (routeName.firstOrThrow) {
       case HomePage.routeName:
-        print("Logging: Home tapped");
+        Logger.log("Home tapped");
         routeSpec = HomePage.poopToRoot();
         break;
       case CarOverviewPage.routeName:
-        print("Logging: Overview tapped");
+        Logger.log("Overview tapped");
         routeSpec = thisIsHome
             ? CarOverviewPage.pushIt()
             : CarOverviewPage.popAndPush();
         break;
       case QrScanPage.routeName:
-        print("Logging: QR tapped");
+        Logger.log("QR tapped");
         routeSpec = routeSpec =
             thisIsHome ? QrScanPage.pushIt() : QrScanPage.popAndPush();
         break;
       case SettingsPage.routeName:
-        print("Logging: Settings tapped");
+        Logger.log("Settings tapped");
         routeSpec = routeSpec =
             thisIsHome ? SettingsPage.pushIt() : SettingsPage.popAndPush();
         break;
       default:
         throw Exception("No route found");
     }
-    print("Logging: ${routeSpec.name}");
+    Logger.log("${routeSpec.name}");
     Navigate.to(context, routeSpec);
   }
 }

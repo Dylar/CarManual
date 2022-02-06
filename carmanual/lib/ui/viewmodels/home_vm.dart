@@ -1,7 +1,7 @@
-import 'package:carmanual/core/database/settings.dart';
-import 'package:carmanual/core/database/video_info.dart';
 import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
+import 'package:carmanual/models/settings.dart';
+import 'package:carmanual/models/video_info.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:provider/provider.dart';
 

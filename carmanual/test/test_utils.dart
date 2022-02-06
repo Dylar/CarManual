@@ -1,6 +1,6 @@
 import 'package:carmanual/core/app.dart';
-import 'package:carmanual/core/database/database.dart';
 import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
+import 'package:carmanual/core/datasource/database.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:mockito/mockito.dart';
 
@@ -16,7 +16,7 @@ class TestUtils {
     final db = database ?? AppDatabase();
     return App.load(
       database: db,
-      carInfoService: carInfoService ?? CarInfoService(FakeNotesDataSource()),
+      // carInfoService: carInfoService ?? CarInfoService(FakeNotesDataSource()),
     );
   }
 }

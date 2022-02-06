@@ -1,5 +1,6 @@
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
-import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/core/tracking.dart';
+import 'package:carmanual/models/car_info_entity.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:provider/provider.dart';
@@ -53,12 +54,12 @@ class IntroVM extends IntroViewModel {
       return;
     }
     _state.isScanned = true;
-    print("Logging: scan: $scan");
+    Logger.log("scan: $scan");
     carInfoService.onNewScan(scan).then((state) async {
       _state.isScanned = false;
       _state.qrState = state.first!;
       _state.carInfo = state.second;
-      print("Logging: state: ${state.first}");
+      Logger.log("state: ${state.first}");
       switch (state.first!) {
         case QrScanState.OLD:
         case QrScanState.NEW:

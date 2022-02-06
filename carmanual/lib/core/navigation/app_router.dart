@@ -1,5 +1,5 @@
 import 'package:carmanual/core/environment_config.dart';
-import 'package:carmanual/core/services.dart';
+import 'package:carmanual/service/services.dart';
 import 'package:carmanual/ui/screens/debug_page.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
@@ -9,14 +9,16 @@ import 'package:carmanual/ui/screens/settings/settings_page.dart';
 import 'package:carmanual/ui/screens/settings/video_settings_page.dart';
 import 'package:carmanual/ui/screens/video/video_overview_page.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
-import 'package:carmanual/viewmodels/car_overview_vm.dart';
-import 'package:carmanual/viewmodels/home_vm.dart';
-import 'package:carmanual/viewmodels/intro_vm.dart';
-import 'package:carmanual/viewmodels/qr_vm.dart';
-import 'package:carmanual/viewmodels/video_overview_vm.dart';
-import 'package:carmanual/viewmodels/video_vm.dart';
+import 'package:carmanual/ui/viewmodels/car_overview_vm.dart';
+import 'package:carmanual/ui/viewmodels/home_vm.dart';
+import 'package:carmanual/ui/viewmodels/intro_vm.dart';
+import 'package:carmanual/ui/viewmodels/qr_vm.dart';
+import 'package:carmanual/ui/viewmodels/video_overview_vm.dart';
+import 'package:carmanual/ui/viewmodels/video_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../tracking.dart';
 
 abstract class AppRoute<T> extends Route<T> {
   String get appName;
@@ -69,7 +71,7 @@ class AppRouter {
 
   static AppRoute<dynamic> generateRoute(RouteSettings settings) {
     final arguments = settings.arguments as Map<String, dynamic>? ?? {};
-    print("Logging: Route: ${settings.name}");
+    Logger.log("Route: ${settings.name}");
 
     late WidgetBuilder builder;
     switch (settings.name) {

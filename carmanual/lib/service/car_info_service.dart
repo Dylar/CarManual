@@ -1,11 +1,12 @@
 import 'dart:convert';
 
-import 'package:carmanual/core/database/video_info.dart';
 import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/core/datasource/VideoInfoDataSource.dart';
 import 'package:carmanual/core/helper/tuple.dart';
 import 'package:carmanual/core/network/app_client.dart';
-import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/core/tracking.dart';
+import 'package:carmanual/models/car_info_entity.dart';
+import 'package:carmanual/models/video_info.dart';
 
 enum QrScanState { NEW, OLD, DAFUQ, WAITING }
 
@@ -16,7 +17,7 @@ class CarInfoService {
   VideoInfoDataSource _videoInfoDataSource;
 
   Future<Tuple<QrScanState, CarInfo>> onNewScan(String scan) async {
-    print("Logging: scan: $scan");
+    Logger.log("scan: $scan");
     try {
       Map<String, dynamic> infoMap = jsonDecode(scan);
       final carInfo = CarInfo.fromMap(infoMap);
@@ -28,7 +29,7 @@ class CarInfoService {
         return Tuple(QrScanState.NEW, carInfo);
       }
     } on Exception catch (e) {
-      print("Logging: ERROR ${e.toString()}");
+      Logger.log("ERROR ${e.toString()}");
     }
     return Tuple(QrScanState.DAFUQ, null);
   }
@@ -44,7 +45,7 @@ class CarInfoService {
       return true;
     }
 
-    final files = await AppClient().loadFilesData(); //TODO
+    final files = await AppClient().loadFilesData(); //TODO inject it to test it
     final info = files.where((file) => !file.isDir).map<Future<bool>>(
           (video) => _videoInfoDataSource.upsertVideo(
             VideoInfo()..name = video.fileName,

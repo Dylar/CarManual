@@ -2,6 +2,8 @@ import 'package:carmanual/core/environment_config.dart';
 import 'package:flutter/services.dart';
 import 'package:ssh2/ssh2.dart';
 
+import '../tracking.dart';
+
 const String CLIENT_CONNECTED = "sftp_connected";
 const String CLIENT_DISCONNECTED = "sftp_disconnected";
 
@@ -11,7 +13,6 @@ class AppClient {
   String? state;
 
   void initClient() {
-    print("Log: initClient");
     client = SSHClient(
       host: EnvironmentConfig.host,
       port: EnvironmentConfig.port,
@@ -24,10 +25,10 @@ class AppClient {
     try {
       state = await client?.connect();
       state = await client?.connectSFTP();
-      print("Log: connect SFTP: $state");
+      Logger.log("Log: connect SFTP: $state");
       return state ?? "";
     } catch (e) {
-      print("Log: ERROR: ${(e as PlatformException).message}");
+      Logger.log("Log: ERROR: ${(e as PlatformException).message}");
     }
     return "";
   }
@@ -35,7 +36,7 @@ class AppClient {
   Future<String> disconnect() async {
     state = await client?.disconnect();
     state = await client?.disconnectSFTP();
-    print("Log: disconnect SFTP: $state");
+    Logger.log("disconnect SFTP: $state");
     return state ?? "DAFUQ";
   }
 
@@ -64,7 +65,7 @@ class AppClient {
   }
 
   Future<List<FileData>> loadFilesData() async {
-    print("Logging: loadFilesData");
+    Logger.log("loadFilesData");
     initClient();
     await connect();
     List<FileData> files = await getFileList();

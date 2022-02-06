@@ -1,7 +1,7 @@
-import 'package:carmanual/core/database/settings.dart';
-import 'package:carmanual/core/database/video_info.dart';
 import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
+import 'package:carmanual/models/settings.dart';
+import 'package:carmanual/models/video_info.dart';
 import 'package:provider/provider.dart';
 
 class VideoViewModelProvider extends ChangeNotifierProvider<VideoProvider> {
@@ -36,7 +36,6 @@ class VideoVM extends VideoViewModel {
 
   @override
   void routingDidPushNext() {
-    print("video invisible");
     // _controller.videoPlayerController.pause();
     // _controller.pause();
     super.routingDidPopNext();
@@ -44,7 +43,6 @@ class VideoVM extends VideoViewModel {
 
   @override
   void routingDidPopNext() {
-    print("video visible");
     // if (VIDEO_SETTINGS["autoPlay"] ?? true) {
     // _controller.videoPlayerController.play();
     // _controller.play();
@@ -54,7 +52,6 @@ class VideoVM extends VideoViewModel {
 
   @override
   void onVideoEnd() {
-    print("Logging: Video end");
     // _controller.seekTo(VIDEO_START).then((_) => _controller.pause());
   }
 }

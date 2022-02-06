@@ -1,5 +1,5 @@
 import 'package:carmanual/core/constants/debug.dart';
-import 'package:carmanual/core/database/video_info.dart';
+import 'package:carmanual/models/video_info.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:flutter/material.dart';
 

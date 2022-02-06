@@ -1,6 +1,5 @@
-import 'package:carmanual/core/database/car_info_entity.dart';
-import 'package:carmanual/core/database/database.dart';
-import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/core/datasource/database.dart';
+import 'package:carmanual/models/car_info_entity.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class CarInfoDatabase {
@@ -10,23 +9,23 @@ abstract class CarInfoDatabase {
 }
 
 mixin CarInfoDB implements CarInfoDatabase {
-  Box<CarInfoEntity> get carInfoBox => Hive.box<CarInfoEntity>(BOX_CAR_INFO);
+  Box<CarInfo> get carInfoBox => Hive.box<CarInfo>(BOX_CAR_INFO);
 
   @override
   Future<void> upsertCarInfo(CarInfo carInfo) async {
     await carInfoBox.put(
       carInfo.name,
-      CarInfoEntity.fromCarInfo(carInfo),
+      carInfo,
     );
   }
 
   @override
   Future<List<CarInfo>> getCarInfos() async {
-    return carInfoBox.values.map<CarInfo>((e) => (e).toCarInfo()).toList();
+    return carInfoBox.values.toList();
   }
 
   @override
   Future<CarInfo?> getCarInfo(String name) async {
-    return carInfoBox.get(name)?.toCarInfo();
+    return carInfoBox.get(name);
   }
 }

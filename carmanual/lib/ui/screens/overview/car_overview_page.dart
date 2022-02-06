@@ -1,12 +1,12 @@
 import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
-import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/car_info_entity.dart';
 import 'package:carmanual/ui/screens/overview/car_info_list_item.dart';
 import 'package:carmanual/ui/screens/video/video_overview_page.dart';
+import 'package:carmanual/ui/viewmodels/car_overview_vm.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/ui/widgets/scroll_list_view.dart';
-import 'package:carmanual/viewmodels/car_overview_vm.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';

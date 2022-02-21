@@ -24,12 +24,13 @@ abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
 
   @mustCallSuper
   ViewState(this._viewModel) {
-    Logger.log('Created $runtimeType.');
+    Logger.logI('Created $runtimeType.');
   }
 
   @mustCallSuper
   @override
   void initState() {
+    Logger.logI('initState $_sanitisedRoutePageName');
     super.initState();
     viewModel.init();
     listenToRoutesSpecs(viewModel._routeController.stream);
@@ -51,7 +52,7 @@ abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
   @override
   void dispose() {
     AppRouter.routeObserver.unsubscribe(this);
-    Logger.log('Disposing $_sanitisedRoutePageName.');
+    Logger.logI('dispose $_sanitisedRoutePageName');
     viewModel.dispose();
     super.dispose();
   }
@@ -61,7 +62,7 @@ abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
   @mustCallSuper
   @override
   void didPopNext() {
-    Logger.log('🚚 $_sanitisedRoutePageName didPopNext');
+    Logger.logI('🚚 $_sanitisedRoutePageName didPopNext');
     viewModel.routingDidPopNext();
   }
 
@@ -69,7 +70,7 @@ abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
   @mustCallSuper
   @override
   void didPush() {
-    Logger.log('🚚 $_sanitisedRoutePageName didPush');
+    Logger.logI('🚚 $_sanitisedRoutePageName didPush');
     viewModel.routingDidPush();
   }
 
@@ -77,7 +78,7 @@ abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
   @mustCallSuper
   @override
   void didPop() {
-    Logger.log('🚚 $_sanitisedRoutePageName didPop');
+    Logger.logI('🚚 $_sanitisedRoutePageName didPop');
     viewModel.routingDidPop();
   }
 
@@ -86,7 +87,7 @@ abstract class ViewState<V extends View, VM extends ViewModel> extends State<V>
   @mustCallSuper
   @override
   void didPushNext() {
-    Logger.log('🚚 $_sanitisedRoutePageName didPushNext');
+    Logger.logI('🚚 $_sanitisedRoutePageName didPushNext');
     viewModel.routingDidPushNext();
   }
 
@@ -116,7 +117,6 @@ abstract class ViewModel {
   /// framework creates.
   @mustCallSuper
   void init() {
-    Logger.log("init view: $this");
     _routeController = StreamController();
   }
 
@@ -125,7 +125,6 @@ abstract class ViewModel {
   /// `init` is called.
   @mustCallSuper
   void dispose() {
-    Logger.log("dispose view: $this");
     _routeController.close();
   }
 

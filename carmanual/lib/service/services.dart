@@ -29,10 +29,11 @@ class Services extends InheritedWidget {
     required Widget child,
   }) {
     final database = db ?? AppDatabase();
+    final client = appClient ?? AppClient();
     return Services(
-      appClient: appClient ?? AppClient(),
+      appClient: client,
       carInfoService: carInfoService ??
-          CarInfoService(CarInfoDS(database), VideoInfoDS(database)),
+          CarInfoService(client, CarInfoDS(database), VideoInfoDS(database)),
       settings: settings ?? SettingsDS(database),
       key: key,
       child: child,

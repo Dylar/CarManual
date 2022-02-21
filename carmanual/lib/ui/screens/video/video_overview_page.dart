@@ -13,12 +13,16 @@ import 'package:provider/provider.dart';
 
 class VideoOverviewPage extends View<VideoOverViewModel> {
   static const String routeName = "/videoOverviewPage";
-  static const ARG_CAR_INFO = "cardInfo";
+  static const ARG_CAR = "cardInfo";
+  static const ARG_DIR = "dir";
 
-  static AppRouteSpec pushIt(CarInfo carInfo) => AppRouteSpec(
+  static AppRouteSpec pushIt(CarInfo carInfo, String dir) => AppRouteSpec(
         name: routeName,
         action: AppRouteAction.pushTo,
-        arguments: {ARG_CAR_INFO: carInfo},
+        arguments: {
+          ARG_CAR: carInfo,
+          ARG_DIR: dir,
+        },
       );
 
   VideoOverviewPage.model(VideoOverViewModel viewModel)

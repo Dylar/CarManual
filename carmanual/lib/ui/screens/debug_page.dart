@@ -18,7 +18,7 @@ class DebugPage extends StatefulWidget {
 }
 
 class _DebugPageState extends State<DebugPage> {
-  List<FileData> files = [];
+  DirData? dir;
 
   @override
   Widget build(BuildContext context) {
@@ -32,15 +32,15 @@ class _DebugPageState extends State<DebugPage> {
           wrapWidget(_DebugInfoText("Domain:", "${EnvironmentConfig.domain}")),
           wrapWidget(_DebugInfoText("Host:", "${EnvironmentConfig.host}")),
           wrapWidget(_DebugInfoText("Port:", "${EnvironmentConfig.port}")),
-          if (files.isNotEmpty) ..._buildDir(appClient),
+          if (dir != null) _buildDir(dir!),
         ],
       ),
       persistentFooterButtons: [
         _DebugButton(
           "Load files",
-          () => appClient.loadFilesData().then((value) => setState(() {
-                files = value;
-              })),
+          () => appClient
+              .loadFilesData()
+              .then((value) => setState(() => dir = value)),
         ),
       ],
     );
@@ -49,11 +49,15 @@ class _DebugPageState extends State<DebugPage> {
   Widget wrapWidget(Widget child) => Flexible(
       child: Padding(padding: const EdgeInsets.all(4.0), child: child));
 
-  List<Widget> _buildDir(AppClient appClient) {
-    return files
-        .map<Widget>(
-            (element) => wrapWidget(_DebugInfoText("Dir:", "${element}")))
-        .toList();
+  Column _buildDir(DirData dir) {
+    return Column(children: [
+      _DebugInfoText("Dir:", dir.path),
+      if (dir.files.isNotEmpty)
+        ...dir.files.map<Widget>(
+            (element) => wrapWidget(_DebugInfoText("File:", "${element}"))),
+      if (dir.dirs.isNotEmpty)
+        ...dir.dirs.map<Widget>((element) => _buildDir(element))
+    ]);
   }
 }
 

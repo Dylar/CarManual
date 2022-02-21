@@ -50,20 +50,26 @@ class QrVM extends QrViewModel {
   void onScan(Barcode barcode) {
     this._state.barcode = barcode;
     final data = barcode.code ?? "";
-    carInfoService.onNewScan(data).then((state) {
-      _state.qrState = state.first!;
-      _state.carInfo = state.second;
-      switch (_state.qrState) {
-        case QrScanState.NEW:
-          navigateTo(CarOverviewPage.popAndPush());
-          break;
-        case QrScanState.OLD:
-        case QrScanState.DAFUQ:
-        case QrScanState.WAITING:
-          break;
-      }
+    _state.qrState = QrScanState.SCANNING;
+    //hint: yea we need a delay to disable the camera/qrscan
+    Future.delayed(Duration(milliseconds: 10)).then((value) async {
+      //TODO 1x then weg
+      return await carInfoService.onNewScan(data).then((state) {
+        _state.qrState = state.first!;
+        _state.carInfo = state.second;
+        switch (_state.qrState) {
+          case QrScanState.NEW:
+            navigateTo(CarOverviewPage.popAndPush());
+            break;
+          case QrScanState.OLD:
+          case QrScanState.DAFUQ:
+          case QrScanState.WAITING:
+          case QrScanState.SCANNING:
+            break;
+        }
 
-      notifyListeners();
+        notifyListeners();
+      });
     });
   }
 }

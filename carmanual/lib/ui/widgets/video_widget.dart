@@ -33,6 +33,7 @@ class _VideoWidgetState extends State<VideoWidget> {
 
   @override
   void initState() {
+    Logger.logI("Load video: ${widget.url}");
     final config = playerConfigFromMap(widget.settings.videos);
     controller = BetterPlayerController(
       config,
@@ -63,7 +64,7 @@ class _VideoWidgetState extends State<VideoWidget> {
     final playerValue = controller.videoPlayerController!.value;
     final position = playerValue.position.inMicroseconds;
     if (!onStartTriggered && position <= VIDEO_START.inMicroseconds) {
-      Logger.log("onVideoStart");
+      Logger.logI("onVideoStart");
       onStartTriggered = true;
       widget.onVideoStart?.call();
     }
@@ -71,7 +72,7 @@ class _VideoWidgetState extends State<VideoWidget> {
     final endPosition = playerValue.duration?.inMicroseconds ?? 0;
 
     if (onStartTriggered && position >= endPosition) {
-      Logger.log("onVideoEnd");
+      Logger.logI("onVideoEnd");
       onStartTriggered = false;
       widget.onVideoEnd?.call();
     }

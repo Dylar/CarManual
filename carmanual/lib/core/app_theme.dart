@@ -1,37 +1,19 @@
 import 'package:flutter/material.dart';
 
 class BaseColors {
-  static const Color primary = Color.fromRGBO(27, 102, 179, 1);
-
-  static const Color primaryLight = Color.fromRGBO(246, 249, 253, 1);
+  static const Color primary = Color.fromRGBO(24, 22, 22, 1);
+  static const Color accent = Color.fromRGBO(34, 32, 32, 1);
 
   static const Color green = Color.fromRGBO(121, 206, 27, 1);
-
   static const Color yellow = Color.fromRGBO(252, 229, 49, 1);
+  static const Color red = Color.fromRGBO(222, 30, 30, 1);
+  static const Color blue = Color.fromRGBO(30, 30, 222, 1);
 
-  static const Color red = Color.fromRGBO(176, 0, 32, 1);
-
-  static const Color darkGrey = Color.fromRGBO(0, 0, 0, 0.87);
-
-  static const Color lightGrey = Color.fromRGBO(0, 0, 0, 0.6);
-
-  static const Color veryLightGrey = Color.fromRGBO(196, 196, 196, 1);
-
-  static const Color veryVeryLightGrey = Color.fromRGBO(245, 245, 245, 1);
-
-  // equivalent to #3196E5 at 8% opacity on white
-  static const Color selectedState = Color.fromRGBO(240, 247, 253, 1);
-
-  static const Color highlighted = Color.fromRGBO(49, 150, 229, 1);
-
-  static const Color accent = veryLightGrey;
-
-  static const Color lightAccent = veryVeryLightGrey;
-
-  static const Color accentText = darkGrey;
-
-  /// Color for highlighting the current day
-  static const Color today = Color(0xFFF27910);
+  static const Color black = Color.fromRGBO(0, 0, 0, 1);
+  static const Color darkGrey = Color.fromRGBO(0, 0, 0, 0.4);
+  static const Color grey = Color.fromRGBO(196, 196, 196, 0.4);
+  static const Color lightGrey = Color.fromRGBO(196, 196, 196, 1);
+  static const Color veryLightGrey = Color.fromRGBO(245, 245, 245, 1);
 }
 
 const TextTheme textSizes = TextTheme(
@@ -44,45 +26,51 @@ const TextTheme textSizes = TextTheme(
     headline6: TextStyle(letterSpacing: 0.25, fontSize: 20.0));
 
 const TextTheme textColors = TextTheme(
-    bodyText1: TextStyle(color: BaseColors.lightGrey),
-    bodyText2: TextStyle(color: BaseColors.lightGrey),
-    subtitle1: TextStyle(color: Colors.black),
-    subtitle2: TextStyle(color: BaseColors.lightGrey),
-    caption: TextStyle(color: BaseColors.primary));
+    bodyText1: TextStyle(color: BaseColors.veryLightGrey),
+    bodyText2: TextStyle(color: BaseColors.veryLightGrey),
+    subtitle1: TextStyle(color: BaseColors.veryLightGrey),
+    subtitle2: TextStyle(color: BaseColors.veryLightGrey),
+    caption: TextStyle(color: BaseColors.veryLightGrey));
 
 const TextTheme primaryTextColors = TextTheme(
     bodyText2: TextStyle(color: Color.fromRGBO(255, 255, 255, 0.6)),
-    subtitle1: TextStyle(color: Colors.white),
-    subtitle2: TextStyle(color: BaseColors.primary),
-    headline6: TextStyle(color: BaseColors.darkGrey));
+    subtitle1: TextStyle(color: BaseColors.veryLightGrey),
+    subtitle2: TextStyle(color: BaseColors.veryLightGrey),
+    headline6: TextStyle(color: BaseColors.veryLightGrey));
 
 const TextTheme accentTextColors = TextTheme(
-    subtitle1: TextStyle(color: BaseColors.darkGrey),
-    subtitle2: TextStyle(color: BaseColors.veryVeryLightGrey));
+    subtitle1: TextStyle(color: BaseColors.veryLightGrey),
+    subtitle2: TextStyle(color: BaseColors.veryLightGrey));
 
 final ThemeData appTheme = ThemeData(
+  fontFamily: 'RobotoCondensed',
   brightness: Brightness.light,
   primaryColor: BaseColors.primary,
   // ignore: deprecated_member_use
   accentColor: BaseColors.accent,
-  fontFamily: 'RobotoCondensed',
+  canvasColor: BaseColors.primary,
+  backgroundColor: BaseColors.primary,
   primaryTextTheme: textSizes.merge(primaryTextColors),
   // ignore: deprecated_member_use
   accentTextTheme: textSizes.merge(accentTextColors),
   textTheme: textSizes.merge(textColors),
-  canvasColor: Colors.white,
-  backgroundColor: Colors.white,
-  iconTheme: const IconThemeData(color: BaseColors.lightGrey),
-  tabBarTheme: const TabBarTheme(
-      labelColor: BaseColors.darkGrey,
-      unselectedLabelColor: BaseColors.veryLightGrey,
-      indicator: UnderlineTabIndicator(
-          borderSide: BorderSide(color: BaseColors.lightGrey, width: 2.0))),
   appBarTheme: AppBarTheme(
-      color: Colors.white,
-      iconTheme: IconThemeData(color: BaseColors.lightGrey),
-      titleTextStyle: textSizes.merge(primaryTextColors).headline6),
+    color: BaseColors.primary,
+    iconTheme: IconThemeData(color: BaseColors.lightGrey),
+    titleTextStyle: textSizes.merge(primaryTextColors).headline6,
+  ),
+  tabBarTheme: const TabBarTheme(
+    labelColor: BaseColors.lightGrey,
+    unselectedLabelColor: BaseColors.grey,
+    indicator: UnderlineTabIndicator(
+      borderSide: BorderSide(color: BaseColors.lightGrey, width: 2.0),
+    ),
+  ),
+  bottomAppBarTheme: BottomAppBarTheme(color: BaseColors.primary),
+  unselectedWidgetColor: BaseColors.grey,
+  cardTheme: CardTheme(color: BaseColors.accent),
   inputDecorationTheme: const InputDecorationTheme(
-      labelStyle: TextStyle(color: BaseColors.primary),
-      floatingLabelBehavior: FloatingLabelBehavior.always),
+    labelStyle: TextStyle(color: BaseColors.primary),
+    floatingLabelBehavior: FloatingLabelBehavior.always,
+  ),
 );

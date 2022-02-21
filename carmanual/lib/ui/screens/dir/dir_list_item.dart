@@ -1,13 +1,12 @@
-import 'package:carmanual/models/car_info_entity.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/debug.dart';
 
-class CarInfoListItem extends StatelessWidget {
-  const CarInfoListItem(this.carInfo);
+class DirListItem extends StatelessWidget {
+  const DirListItem(this.dirName);
 
-  final CarInfo carInfo;
+  final String dirName;
 
   @override
   Widget build(BuildContext context) {
@@ -30,10 +29,9 @@ class CarInfoListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Marke: ${carInfo.brand}',
+                    '${dirName}',
                     style: Theme.of(context).textTheme.subtitle1,
                   ),
-                  Text('Model: ${carInfo.model}'),
                 ],
               ),
             ),

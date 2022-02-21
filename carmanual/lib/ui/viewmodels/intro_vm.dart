@@ -1,10 +1,10 @@
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
-import 'package:carmanual/core/tracking.dart';
 import 'package:carmanual/models/car_info_entity.dart';
 import 'package:carmanual/service/car_info_service.dart';
-import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+
+import '../screens/home/home_page.dart';
 
 class IntroViewModelProvider extends ChangeNotifierProvider<IntroProvider> {
   IntroViewModelProvider(CarInfoService carInfoService)
@@ -29,7 +29,6 @@ class _IntroVMState {
   QrScanState qrState = QrScanState.WAITING;
   Barcode? barcode;
   CarInfo? carInfo;
-  bool isScanned = false;
 }
 
 class IntroVM extends IntroViewModel {
@@ -50,28 +49,32 @@ class IntroVM extends IntroViewModel {
 
   @override
   void onScan(String scan) {
-    if (_state.isScanned) {
+    if (_state.qrState == QrScanState.SCANNING) {
       return;
     }
-    _state.isScanned = true;
-    Logger.log("scan: $scan");
-    carInfoService.onNewScan(scan).then((state) async {
-      _state.isScanned = false;
-      _state.qrState = state.first!;
-      _state.carInfo = state.second;
-      Logger.log("state: ${state.first}");
-      switch (state.first!) {
-        case QrScanState.OLD:
-        case QrScanState.NEW:
-          final service = carInfoService;
-          await service.loadVideoInfo();
-          navigateTo(HomePage.replaceWith());
-          break;
-        case QrScanState.DAFUQ:
-        case QrScanState.WAITING:
-          break;
-      }
-      notifyListeners();
+    _state.qrState = QrScanState.SCANNING;
+    notifyListeners();
+    //hint: yea we need a delay to disable the camera/qrscan
+    Future.delayed(Duration(milliseconds: 10)).then((value) async {
+      //TODO 1x then weg
+      return await carInfoService.onNewScan(scan).then((state) async {
+        _state.qrState = state.firstOrThrow;
+        _state.carInfo = state.second;
+        switch (_state.qrState) {
+          case QrScanState.OLD:
+            //hint: only on debug accessible
+            navigateTo(HomePage.replaceWith());
+            break;
+          case QrScanState.NEW:
+            navigateTo(HomePage.replaceWith());
+            break;
+          case QrScanState.DAFUQ:
+          case QrScanState.WAITING:
+          case QrScanState.SCANNING:
+            break;
+        }
+        notifyListeners();
+      });
     });
   }
 }

@@ -15,11 +15,11 @@ class QRCameraView extends StatefulWidget {
 class _QRCameraViewState extends State<QRCameraView> {
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
   Barcode? result;
-  late QRViewController controller;
+  QRViewController? controller;
 
   @override
   void dispose() {
-    controller.dispose();
+    controller?.dispose();
     super.dispose();
   }
 
@@ -29,16 +29,16 @@ class _QRCameraViewState extends State<QRCameraView> {
   void reassemble() {
     super.reassemble();
     if (Platform.isAndroid) {
-      controller.pauseCamera();
+      controller?.pauseCamera();
     } else if (Platform.isIOS) {
-      controller.resumeCamera();
+      controller?.resumeCamera();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => controller.resumeCamera(),
+      onTap: () => controller?.resumeCamera(),
       child: QRView(
         key: qrKey,
         overlay: QrScannerOverlayShape(),
@@ -48,9 +48,11 @@ class _QRCameraViewState extends State<QRCameraView> {
   }
 
   void _onQRViewCreated(QRViewController controller) {
-    this.controller = controller;
+    controller = controller;
     controller.scannedDataStream.listen((scanData) {
-      setState(() => widget.onScan(scanData));
+      if (mounted) {
+        setState(() => widget.onScan(scanData));
+      }
     });
   }
 }

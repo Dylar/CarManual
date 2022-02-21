@@ -7,9 +7,11 @@ import 'package:carmanual/ui/screens/settings/settings_page.dart';
 import 'package:carmanual/ui/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
 
+import '../../service/services.dart';
+import '../../ui/screens/dir/dir_page.dart';
 import '../tracking.dart';
 
-final _naviBarData = <Triple<String, String, IconData>>[
+final naviBarData = <Triple<String, String, IconData>>[
   Triple(HomePage.routeName, "Home", Icons.home_outlined),
   Triple(CarOverviewPage.routeName, "Videos", Icons.ondemand_video_sharp),
   Triple(QrScanPage.routeName, "QR", Icons.qr_code_scanner),
@@ -31,8 +33,8 @@ class _AppNavigationState extends State<AppNavigation> {
   @override
   void initState() {
     super.initState();
-    _pageIndex = _naviBarData
-        .indexWhere((data) => data.firstOrThrow == widget.routeName);
+    _pageIndex =
+        naviBarData.indexWhere((data) => data.firstOrThrow == widget.routeName);
     if (_pageIndex == -1) {
       throw Exception("Route not in list");
     }
@@ -40,11 +42,12 @@ class _AppNavigationState extends State<AppNavigation> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
-      backgroundColor: Colors.black,
-      selectedItemColor: Colors.greenAccent,
-      unselectedItemColor: Colors.grey,
+      backgroundColor: theme.bottomAppBarTheme.color,
+      selectedItemColor: theme.tabBarTheme.labelColor,
+      unselectedItemColor: theme.tabBarTheme.unselectedLabelColor,
       currentIndex: _pageIndex,
       items: _buildIcons(),
       onTap: (index) => _onItemTapped(context, index),
@@ -52,7 +55,7 @@ class _AppNavigationState extends State<AppNavigation> {
   }
 
   List<BottomNavigationBarItem> _buildIcons() {
-    return _naviBarData
+    return naviBarData
         .map<BottomNavigationBarItem>(
           (data) => BottomNavigationBarItem(
             icon: Icon(data.lastOrThrow),
@@ -62,40 +65,48 @@ class _AppNavigationState extends State<AppNavigation> {
         .toList();
   }
 
-  void _onItemTapped(BuildContext context, int index) {
+  Future<void> _onItemTapped(BuildContext context, int index) async {
     final isSame = index == _pageIndex;
     if (isSame) {
       showAlreadyHereSnackBar(context);
       return;
     }
-    final routeName = _naviBarData[index];
+    final routeName = naviBarData[index];
     final thisIsHome = _pageIndex == 0;
     AppRouteSpec routeSpec;
     switch (routeName.firstOrThrow) {
       case HomePage.routeName:
-        Logger.log("Home tapped");
+        Logger.logI("Home tapped");
         routeSpec = HomePage.poopToRoot();
         break;
       case CarOverviewPage.routeName:
-        Logger.log("Overview tapped");
-        routeSpec = thisIsHome
-            ? CarOverviewPage.pushIt()
-            : CarOverviewPage.popAndPush();
+        Logger.logI("Videos tapped");
+        final cars = await Services.of(context)!
+            .carInfoService
+            .carInfoDataSource
+            .getAllCars();
+        if (cars.length == 1) {
+          routeSpec = DirPage.pushIt(cars.first);
+        } else {
+          routeSpec = thisIsHome
+              ? CarOverviewPage.pushIt()
+              : CarOverviewPage.popAndPush();
+        }
         break;
       case QrScanPage.routeName:
-        Logger.log("QR tapped");
+        Logger.logI("QR tapped");
         routeSpec = routeSpec =
             thisIsHome ? QrScanPage.pushIt() : QrScanPage.popAndPush();
         break;
       case SettingsPage.routeName:
-        Logger.log("Settings tapped");
+        Logger.logI("Settings tapped");
         routeSpec = routeSpec =
             thisIsHome ? SettingsPage.pushIt() : SettingsPage.popAndPush();
         break;
       default:
         throw Exception("No route found");
     }
-    Logger.log("${routeSpec.name}");
+    Logger.logI("Navi to: ${routeSpec.name}");
     Navigate.to(context, routeSpec);
   }
 }

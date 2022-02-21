@@ -2,14 +2,13 @@ import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/models/car_info_entity.dart';
+import 'package:carmanual/ui/screens/dir/dir_page.dart';
 import 'package:carmanual/ui/screens/overview/car_info_list_item.dart';
-import 'package:carmanual/ui/screens/video/video_overview_page.dart';
 import 'package:carmanual/ui/viewmodels/car_overview_vm.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/ui/widgets/scroll_list_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class CarOverviewPage extends View<CarOverViewModel> {
   static const String routeName = "/carOverviewPage";
@@ -45,7 +44,6 @@ class _CarOverviewPageState
   }
 
   Widget _buildBody(BuildContext context, AppLocalizations l10n) {
-    final viewModel = context.read<CarOverViewProvider>().viewModel;
     return StreamBuilder<List<CarInfo>>(
         stream: viewModel.watchCars(),
         builder: (context, snapshot) {
@@ -54,7 +52,9 @@ class _CarOverviewPageState
           }
 
           return ScrollListView<CarInfo>(
-              items: snapshot.data, buildItemWidget: buildItemWidget);
+            items: snapshot.data,
+            buildItemWidget: buildItemWidget,
+          );
         });
   }
 
@@ -62,7 +62,7 @@ class _CarOverviewPageState
         child: CarInfoListItem(item),
         onTap: () => Navigate.to(
           context,
-          VideoOverviewPage.pushIt(item),
+          DirPage.pushIt(item),
         ),
       );
 }

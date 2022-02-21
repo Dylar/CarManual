@@ -56,6 +56,7 @@ class _HomeVideoPageState extends ViewState<HomeVideoPage, HomeViewModel> {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Flexible(
             child: StreamBuilder<Settings>(
@@ -69,7 +70,6 @@ class _HomeVideoPageState extends ViewState<HomeVideoPage, HomeViewModel> {
                     settings: snapshot.data!,
                   );
                 })),
-        Spacer(),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8.0),

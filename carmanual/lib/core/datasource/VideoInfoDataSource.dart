@@ -1,14 +1,15 @@
 import 'dart:async';
 
 import 'package:carmanual/core/datasource/database.dart';
+import 'package:carmanual/models/car_info_entity.dart';
 import 'package:carmanual/models/video_info.dart';
 
 abstract class VideoInfoDataSource {
-  Future<List<VideoInfo>> getVideos();
+  Future<List<VideoInfo>> getVideos(CarInfo carInfo);
 
   Future<bool> upsertVideo(VideoInfo video);
 
-  Future<bool> hasVideosLoaded();
+  Future<bool> hasVideosLoaded(CarInfo carInfo);
 }
 
 class VideoInfoDS implements VideoInfoDataSource {
@@ -17,8 +18,8 @@ class VideoInfoDS implements VideoInfoDataSource {
   final AppDatabase _database;
 
   @override
-  Future<List<VideoInfo>> getVideos() async {
-    final videos = await _database.getVideoInfos();
+  Future<List<VideoInfo>> getVideos(CarInfo carInfo) async {
+    final videos = await _database.getVideoInfos(carInfo);
     return videos..sort((a, b) => a.name.compareTo(b.name));
   }
 
@@ -32,8 +33,8 @@ class VideoInfoDS implements VideoInfoDataSource {
   }
 
   @override
-  Future<bool> hasVideosLoaded() async {
-    final video = await _database.getVideoInfos();
+  Future<bool> hasVideosLoaded(CarInfo carInfo) async {
+    final video = await _database.getVideoInfos(carInfo);
     return video.isNotEmpty;
   }
 }

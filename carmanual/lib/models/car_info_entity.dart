@@ -2,33 +2,28 @@ import 'package:hive/hive.dart';
 
 part 'car_info_entity.g.dart';
 
+const FIELD_BRAND = "brand";
+const FIELD_MODEL = "model";
 const FIELD_SELLER = "seller";
-const FIELD_NAME = "name";
-const FIELD_PIC_URL = "pic_url";
-const FIELD_VID_URL = "vid_url";
 
 @HiveType(typeId: 1)
 class CarInfo extends HiveObject {
   CarInfo({
-    required this.name,
     required this.seller,
-    required this.picUrl,
-    required this.vidUrl,
+    required this.brand,
+    required this.model,
   });
 
   static CarInfo fromMap(Map<String, dynamic> map) => CarInfo(
-        name: map[FIELD_NAME] ?? "Unbekannt",
+        brand: map[FIELD_BRAND] ?? "Unbekannt",
+        model: map[FIELD_MODEL] ?? "",
         seller: map[FIELD_SELLER] ?? "Unbekannt",
-        picUrl: map[FIELD_PIC_URL] ?? "",
-        vidUrl: map[FIELD_VID_URL] ?? "",
       );
 
   @HiveField(0)
-  String name = "";
+  String brand = "";
   @HiveField(1)
-  String seller = "";
+  String model = "";
   @HiveField(2)
-  String picUrl = "";
-  @HiveField(3)
-  String vidUrl = "";
+  String seller = "";
 }

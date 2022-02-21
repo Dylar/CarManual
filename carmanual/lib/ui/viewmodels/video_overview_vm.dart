@@ -1,5 +1,6 @@
 import 'package:carmanual/core/datasource/VideoInfoDataSource.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
+import 'package:carmanual/models/car_info_entity.dart';
 import 'package:carmanual/models/video_info.dart';
 import 'package:provider/provider.dart';
 
@@ -15,17 +16,20 @@ class VideoOverViewProvider extends ViewModelProvider<VideoOverViewModel> {
 }
 
 abstract class VideoOverViewModel extends ViewModel {
+  late CarInfo selectedCar;
+  late String selectedDir;
+
   Stream<List<VideoInfo>> watchVideos();
 }
 
 class VideoOverVM extends VideoOverViewModel {
-  VideoInfoDataSource _videoInfoSource;
-
   VideoOverVM(this._videoInfoSource);
+
+  VideoInfoDataSource _videoInfoSource;
 
   @override
   Stream<List<VideoInfo>> watchVideos() async* {
-    final videos = await _videoInfoSource.getVideos();
-    yield videos.where((vid) => !vid.name.contains("Intro")).toList();
+    final videos = await _videoInfoSource.getVideos(selectedCar);
+    yield videos.where((vid) => vid.path.contains(selectedDir)).toList();
   }
 }

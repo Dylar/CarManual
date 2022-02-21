@@ -6,7 +6,7 @@ const OPACITY_100 = 1.0;
 
 class LoadingOverlay extends StatelessWidget {
   const LoadingOverlay({
-    this.backgroundColor = BaseColors.veryVeryLightGrey,
+    this.backgroundColor = BaseColors.veryLightGrey,
     this.opacity = OPACITY_100,
     this.child,
   });

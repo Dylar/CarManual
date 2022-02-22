@@ -29,4 +29,13 @@ class TestUtils {
         carInfoDataSource: carSource,
         videoInfoDataSource: videoSource);
   }
+
+  // /// Returns a configured instance of ArticleAdjustmentLocalization, to be used
+  // /// in Unit-Tests.
+  // /// Important: get this object after the page render in the test. Otherwise you
+  // /// will get exception with this method call.
+  // static Future<AppLocalizations> getTestL10n() async {
+  //   await initializeDateFormatting();
+  //   return AppLocalizations('de');
+  // }
 }

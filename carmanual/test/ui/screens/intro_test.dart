@@ -39,9 +39,10 @@ void main() {
     TestUtils.prepareDependency();
     await initNavigateToIntro(tester);
     final page = find.byType(IntroPage).evaluate().first.widget as IntroPage;
-    expect(find.text("Ungültiger QR-Code, bitte neu scannen."), findsNothing);
+    // final l10n = await TestUtils.getTestL10n();
+    expect(find.text("l10n.introPageMessageError"), findsNothing);
     page.viewModel.onScan("Bullshit");
     await tester.pumpAndSettle();
-    expect(find.text("Ungültiger QR-Code, bitte neu scannen."), findsOneWidget);
+    expect(find.text("l10n.introPageMessageError"), findsOneWidget);
   });
 }

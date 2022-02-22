@@ -9,7 +9,7 @@ import 'package:carmanual/core/datasource/database.dart' as _i6;
 import 'package:carmanual/core/datasource/SettingsDataSource.dart' as _i9;
 import 'package:carmanual/core/datasource/VideoInfoDataSource.dart' as _i11;
 import 'package:carmanual/core/network/app_client.dart' as _i2;
-import 'package:carmanual/models/car_info_entity.dart' as _i7;
+import 'package:carmanual/models/car_info.dart' as _i7;
 import 'package:carmanual/models/settings.dart' as _i4;
 import 'package:carmanual/models/video_info.dart' as _i8;
 import 'package:hive_flutter/hive_flutter.dart' as _i3;

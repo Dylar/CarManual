@@ -5,7 +5,7 @@ import 'package:carmanual/core/datasource/VideoInfoDataSource.dart';
 import 'package:carmanual/core/helper/tuple.dart';
 import 'package:carmanual/core/network/app_client.dart';
 import 'package:carmanual/core/tracking.dart';
-import 'package:carmanual/models/car_info_entity.dart';
+import 'package:carmanual/models/car_info.dart';
 import 'package:carmanual/models/video_info.dart';
 
 enum QrScanState { NEW, OLD, DAFUQ, WAITING, SCANNING }

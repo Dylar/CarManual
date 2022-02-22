@@ -1,5 +1,5 @@
 import 'package:carmanual/core/datasource/database.dart';
-import 'package:carmanual/models/car_info_entity.dart';
+import 'package:carmanual/models/car_info.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 abstract class CarInfoDatabase {

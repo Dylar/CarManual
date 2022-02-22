@@ -1,15 +1,21 @@
 {
+  "@_HOME_PAGE": {},
   "homoPageTitle": "Home",
 
+  "@_INTRO_PAGE": {},
   "introPageTitle": "Willkommen",
   "introPageMessage": "Bitte scannen Sie einen gültigen QR-Code um fortzufahren.",
+  "introPageMessageError": "Ungültiger QR-Code, bitte neu scannen.",
+  "introPageMessageScanning": "Scanning...",
 
+  "@_CAR_OVERVIEW_PAGE": {},
   "carOverViewPageTitle": "Übersicht",
   "videoOverviewPageTitle": "Videos",
 
-
+  "@_QR_SCAN_PAGE": {},
   "qrScanPageTitle": "Bitte scannen",
 
+  "@_SETTINGS_PAGE": {},
   "settingsPageTitle": "Einstellungen"
 
 }

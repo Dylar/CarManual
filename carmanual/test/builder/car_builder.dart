@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:carmanual/models/car_info_entity.dart';
+import 'package:carmanual/models/car_info.dart';
 
 const String TEST_CAR_MAJA = "car_info_maja.json";
 

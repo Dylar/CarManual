@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-part 'car_info_entity.g.dart';
+part 'car_info.g.dart';
 
 const FIELD_BRAND = "brand";
 const FIELD_MODEL = "model";

@@ -1,7 +1,7 @@
 import 'package:carmanual/core/datasource/CarInfoDatabase.dart';
 import 'package:carmanual/core/datasource/SettingsDatabase.dart';
 import 'package:carmanual/core/datasource/VideoInfoDatabase.dart';
-import 'package:carmanual/models/car_info_entity.dart';
+import 'package:carmanual/models/car_info.dart';
 import 'package:carmanual/models/settings.dart';
 import 'package:carmanual/models/video_info.dart';
 import 'package:hive_flutter/hive_flutter.dart';

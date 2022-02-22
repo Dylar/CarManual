@@ -1,6 +1,6 @@
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
-import 'package:carmanual/models/car_info_entity.dart';
+import 'package:carmanual/models/car_info.dart';
 import 'package:carmanual/ui/screens/dir/dir_list_item.dart';
 import 'package:carmanual/ui/widgets/loading_overlay.dart';
 import 'package:carmanual/ui/widgets/scroll_list_view.dart';
@@ -30,7 +30,6 @@ class _DirPageState extends ViewState<DirPage, DirViewModel> {
 
   @override
   Widget build(BuildContext context) {
-    print("BUIDL DIR");
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(title: Text(viewModel.title)),

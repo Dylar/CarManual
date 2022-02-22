@@ -37,13 +37,13 @@ class _IntroScanPageState extends ViewState<IntroPage, IntroViewModel> {
       case QrScanState.OLD:
         break;
       case QrScanState.DAFUQ:
-        status = "Ungültiger QR-Code, bitte neu scannen.";
+        status = l10n.introPageMessageError;
         break;
       case QrScanState.WAITING:
         status = l10n.introPageMessage;
         break;
       case QrScanState.SCANNING:
-        status = "Scanning...";
+        status = l10n.introPageMessageScanning;
         break;
     }
     return Column(

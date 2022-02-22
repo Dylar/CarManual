@@ -7,7 +7,6 @@ import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/core/helper/player_config.dart';
 import 'package:carmanual/core/navigation/app_router.dart';
 import 'package:carmanual/core/network/app_client.dart';
-import 'package:carmanual/core/tracking.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:carmanual/service/services.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
@@ -86,16 +85,13 @@ class _AppState extends State<App> {
         future: _initApp(),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            Logger.logD("ERROR - ${snapshot.error.toString()}");
             return fixView(ErrorInfoWidget(snapshot.error.toString()));
           }
 
           if (snapshot.connectionState != ConnectionState.done) {
-            Logger.logD("LOADING");
             return fixView(LoadingStartPage());
           }
 
-          Logger.logD("LOADED");
           final env = EnvironmentConfig.ENV == Env.PROD.name
               ? ""
               : "(${EnvironmentConfig.ENV}) ";

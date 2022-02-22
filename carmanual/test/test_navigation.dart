@@ -1,15 +1,18 @@
 import 'package:carmanual/core/app.dart';
+import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'builder/app_builder.dart';
+import 'builder/car_builder.dart';
 import 'test_checker.dart';
+import 'test_interactions.dart';
+import 'test_utils.dart';
 
 Future<void> loadApp(WidgetTester tester, {AppInfrastructure? infra}) async {
   // Build our app and trigger a frame.
   final appWidget = await buildTestApp(infra: infra);
   await tester.pumpWidget(appWidget);
-  // await tester.pumpWidget(await TestUtils.loadTestApp(infra: infra));
-  for (int i = 0; i < 30; i++) {
+  for (int i = 0; i < 5; i++) {
     await tester.pump(Duration(seconds: 1));
   }
 }
@@ -22,6 +25,20 @@ Future<void> initNavigateToIntro(WidgetTester tester,
 
 Future<void> initNavigateToHome(WidgetTester tester,
     {AppInfrastructure? infra}) async {
+  infra ??= TestUtils.defaultTestInfra();
+
+  final carsLoaded = await infra.carInfoService.hasCars();
+  if (!carsLoaded) {
+    final car = await buildCarInfo();
+    await infra.carInfoService.onNewScan(car.toJson());
+  }
   await loadApp(tester, infra: infra);
   checkHomePage();
+}
+
+Future<void> initNavigateToQRScan(WidgetTester tester,
+    {AppInfrastructure? infra}) async {
+  await initNavigateToHome(tester, infra: infra);
+  await tapNaviIcon(tester, QrScanPage.routeName);
+  checkQRScanPage();
 }

@@ -1,7 +1,7 @@
 import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
-import 'package:carmanual/models/car_info_entity.dart';
+import 'package:carmanual/models/car_info.dart';
 import 'package:carmanual/ui/screens/dir/dir_page.dart';
 import 'package:carmanual/ui/screens/overview/car_info_list_item.dart';
 import 'package:carmanual/ui/viewmodels/car_overview_vm.dart';

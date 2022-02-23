@@ -11,5 +11,7 @@ class TestAppLocalization {
 
   final Map<String, dynamic> _values;
 
+  String get introPageMessage => _values["introPageMessage"];
   String get introPageMessageError => _values["introPageMessageError"];
+  String get introPageMessageScanning => _values["introPageMessageScanning"];
 }

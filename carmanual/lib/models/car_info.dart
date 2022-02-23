@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:hive/hive.dart';
 
 part 'car_info.g.dart';
@@ -19,6 +21,14 @@ class CarInfo extends HiveObject {
         model: map[FIELD_MODEL] ?? "",
         seller: map[FIELD_SELLER] ?? "Unbekannt",
       );
+
+  Map<String, dynamic> toMap() => {
+        FIELD_BRAND: brand,
+        FIELD_MODEL: model,
+        FIELD_SELLER: seller,
+      };
+
+  String toJson() => jsonEncode(toMap());
 
   @HiveField(0)
   String brand = "";

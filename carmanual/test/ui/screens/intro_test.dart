@@ -8,6 +8,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 
 import '../../builder/car_builder.dart';
+import '../../test_l10n.dart';
 import '../../test_navigation.dart';
 import '../../test_utils.dart';
 
@@ -25,7 +26,7 @@ void main() {
     await initNavigateToIntro(tester);
   });
 
-  testWidgets('Load app - got cars - show intro screen',
+  testWidgets('Load app - got cars - show home screen',
       (WidgetTester tester) async {
     TestUtils.prepareDependency();
     final infra = TestUtils.defaultTestInfra();
@@ -39,10 +40,11 @@ void main() {
     TestUtils.prepareDependency();
     await initNavigateToIntro(tester);
     final page = find.byType(IntroPage).evaluate().first.widget as IntroPage;
-    // final l10n = await TestUtils.getTestL10n();
-    expect(find.text("l10n.introPageMessageError"), findsNothing);
+
+    final l10n = await getTestL10n();
+    expect(find.text(l10n.introPageMessageError), findsNothing);
     page.viewModel.onScan("Bullshit");
     await tester.pumpAndSettle();
-    expect(find.text("l10n.introPageMessageError"), findsOneWidget);
+    expect(find.text(l10n.introPageMessageError), findsOneWidget);
   });
 }

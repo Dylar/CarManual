@@ -8,7 +8,6 @@ Future<void> loadApp(WidgetTester tester, {AppInfrastructure? infra}) async {
   // Build our app and trigger a frame.
   final appWidget = await buildTestApp(infra: infra);
   await tester.pumpWidget(appWidget);
-  // await tester.pumpWidget(await TestUtils.loadTestApp(infra: infra));
   for (int i = 0; i < 30; i++) {
     await tester.pump(Duration(seconds: 1));
   }

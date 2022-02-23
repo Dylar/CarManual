@@ -30,7 +30,6 @@ class _DirPageState extends ViewState<DirPage, DirViewModel> {
 
   @override
   Widget build(BuildContext context) {
-    print("BUIDL DIR");
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(title: Text(viewModel.title)),

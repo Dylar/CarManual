@@ -1,6 +1,6 @@
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-enum Env { DEV, STAGE, PROD }
+enum Env { FEATURE, DEV, STAGE, PROD }
 enum FLAVOR { TEST }
 
 class EnvironmentConfig {

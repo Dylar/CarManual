@@ -29,15 +29,6 @@ void main() {
     expect(find.text(l10n.introPageMessage), findsOneWidget);
   });
 
-  testWidgets('Load app - got cars - show home screen',
-      (WidgetTester tester) async {
-    TestUtils.prepareDependency();
-    final infra = TestUtils.defaultTestInfra();
-    final car = await buildCarInfo();
-    await infra.carInfoDataSource.addCarInfo(car);
-    await initNavigateToHome(tester, infra: infra);
-  });
-
   testWidgets('Load app - scan bullshit - show error',
       (WidgetTester tester) async {
     TestUtils.prepareDependency();

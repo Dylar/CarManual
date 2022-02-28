@@ -58,9 +58,7 @@ class CarInfoService {
   Future<void> _loadDir(List<Future<void>> list, DirData data) async {
     list.addAll(data.files.map<Future<bool>>(
       (video) {
-        final vid = VideoInfo()
-          ..name = video.name
-          ..path = data.path;
+        final vid = VideoInfo(name: video.name, path: data.path);
         return _videoInfoDataSource.upsertVideo(vid);
       },
     ));
@@ -73,7 +71,7 @@ class CarInfoService {
         .getVideos(cars.last); //TODO make for many cars
     return videos.firstWhere(
         (video) => video.name.toLowerCase().contains("intro"),
-        orElse: () => VideoInfo());
+        orElse: () => VideoInfo(name: "empty", path: "No path"));
   }
 
   Future<bool> hasCars() async {

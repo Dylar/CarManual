@@ -6,12 +6,12 @@ import 'package:carmanual/core/network/app_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 
-import '../../builder/car_builder.dart';
-import '../../test_checker.dart';
-import '../../test_interactions.dart';
-import '../../test_l10n.dart';
-import '../../test_navigation.dart';
-import '../../test_utils.dart';
+import '../../builder/entity_builder.dart';
+import '../../utils/test_checker.dart';
+import '../../utils/test_interactions.dart';
+import '../../utils/test_l10n.dart';
+import '../../utils/test_navigation.dart';
+import '../../utils/test_utils.dart';
 
 @GenerateMocks([
   AppClient,
@@ -40,7 +40,7 @@ void main() {
     expect(find.text(l10n.introPageMessageError), findsOneWidget);
   });
 
-  testWidgets('Load app - show intro page - scan car - show home page',
+  testWidgets('Load app - show intro page - scan key - show home page',
       (WidgetTester tester) async {
     TestUtils.prepareDependency();
     final l10n = await getTestL10n();
@@ -48,10 +48,11 @@ void main() {
     final infra = TestUtils.defaultTestInfra();
     await initNavigateToIntro(tester, infra: infra);
 
-    final car = await buildCarInfo();
-    await scanOnIntroPage(tester, car.toJson(), settle: false);
+    final key = await buildSellKey();
+    await scanOnIntroPage(tester, key.toJson(), settle: false);
     expect(find.text(l10n.introPageMessage), findsNothing);
     expect(find.text(l10n.introPageMessageScanning), findsOneWidget);
+    await tester.pump(Duration(milliseconds: 10));
     await tester.pump(Duration(milliseconds: 10));
     await tester.pump(Duration(milliseconds: 10));
     checkHomePage();

@@ -1,8 +1,10 @@
 import 'package:hive/hive.dart';
 
+import 'model_data.dart';
+
 part 'settings.g.dart';
 
-@HiveType(typeId: 2)
+@HiveType(typeId: SETTINGS_TYPE_ID)
 class Settings extends HiveObject {
   @HiveField(0)
   Map<String, String> values = {};

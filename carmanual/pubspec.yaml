@@ -28,6 +28,8 @@ dependencies:
   ssh2: ^2.2.3
   flutter_dotenv: ^5.0.2
   path_provider: ^2.0.8
+  provider: ^5.0.0
+  rxdart: ^0.27.3
 
   # Localization
   flutter_localizations:
@@ -42,8 +44,7 @@ dependencies:
 
   # clean code
   linter: ^1.18.0
-  provider: ^5.0.0
-  rxdart: ^0.27.3
+  json_schema2: ^2.0.1+2
 
   # database
   hive: ^2.0.5

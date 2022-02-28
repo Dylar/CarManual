@@ -7,9 +7,9 @@ import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 
-import '../../test_checker.dart';
-import '../../test_navigation.dart';
-import '../../test_utils.dart';
+import '../../utils/test_checker.dart';
+import '../../utils/test_navigation.dart';
+import '../../utils/test_utils.dart';
 
 @GenerateMocks([
   AppClient,

@@ -1,6 +1,7 @@
 *.g.dart
 .env
 Podfile.lock
+*.mocks.dart
 
 
 # Miscellaneous

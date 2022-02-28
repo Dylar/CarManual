@@ -2,8 +2,8 @@ import 'package:carmanual/core/app.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'builder/app_builder.dart';
-import 'builder/car_builder.dart';
+import '../builder/app_builder.dart';
+import '../builder/entity_builder.dart';
 import 'test_checker.dart';
 import 'test_interactions.dart';
 import 'test_utils.dart';
@@ -29,8 +29,8 @@ Future<void> initNavigateToHome(WidgetTester tester,
 
   final carsLoaded = await infra.carInfoService.hasCars();
   if (!carsLoaded) {
-    final car = await buildCarInfo();
-    await infra.carInfoService.onNewScan(car.toJson());
+    final key = await buildSellKey();
+    await infra.carInfoService.onNewScan(key.toJson());
   }
   await loadApp(tester, infra: infra);
   checkHomePage();

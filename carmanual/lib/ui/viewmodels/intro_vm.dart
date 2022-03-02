@@ -49,35 +49,30 @@ class IntroVM extends IntroViewModel {
 
   @override
   void onScan(String scan) {
-    print("los geht scan?");
     if (_state.qrState == QrScanState.SCANNING) {
       return;
     }
     _state.qrState = QrScanState.SCANNING;
     notifyListeners();
-    print("los geht scan");
     //hint: yea we need a delay to disable the camera/qrscan
     Future.delayed(Duration(milliseconds: 10)).then((value) async {
-      //TODO 1x then weg
-      print("looooohoos geht scan");
-      return await carInfoService.onNewScan(scan).then((state) async {
-        _state.qrState = state.firstOrThrow;
-        _state.carInfo = state.second;
-        switch (_state.qrState) {
-          case QrScanState.OLD:
-            //hint: only on debug accessible
-            navigateTo(HomePage.replaceWith());
-            break;
-          case QrScanState.NEW:
-            navigateTo(HomePage.replaceWith());
-            break;
-          case QrScanState.DAFUQ:
-          case QrScanState.WAITING:
-          case QrScanState.SCANNING:
-            break;
-        }
-        notifyListeners();
-      });
+      final state = await carInfoService.onNewScan(scan);
+      _state.qrState = state.firstOrThrow;
+      _state.carInfo = state.second;
+      switch (_state.qrState) {
+        case QrScanState.OLD:
+          //hint: only on debug accessible
+          navigateTo(HomePage.replaceWith());
+          break;
+        case QrScanState.NEW:
+          navigateTo(HomePage.replaceWith());
+          break;
+        case QrScanState.DAFUQ:
+        case QrScanState.WAITING:
+        case QrScanState.SCANNING:
+          break;
+      }
+      notifyListeners();
     });
   }
 }

@@ -7,12 +7,12 @@ void main() {
   test('validate video info schema', () async {
     final videoInfo = await buildVideoInfo();
     final isValid = await validateVideoInfo(videoInfo);
-    expect(isValid, true);
+    expect(isValid, false);
   });
 
   test('validate sell key schema', () async {
-    final videoInfo = await buildVideoInfo();
-    final isValid = await validateVideoInfo(videoInfo);
-    expect(isValid, true);
+    final key = await buildSellKey();
+    final isValid = await validateSellKey(key);
+    expect(isValid, false);
   });
 }

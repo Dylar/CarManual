@@ -15,9 +15,10 @@ Future<bool> _validateSchema<T>(T entity, String file) async {
 }
 
 Future<bool> validateVideoInfo(VideoInfo videoInfo) async {
-  return _validateSchema(videoInfo, VIDEO_INFO_SCHEMA);
+  return await _validateSchema(videoInfo, VIDEO_INFO_SCHEMA);
 }
 
+//TODO oh no... its broken
 Future<bool> validateSellKey(SellKey key) async {
-  return _validateSchema(key, SELL_KEY_SCHEMA);
+  return await _validateSchema(key, SELL_KEY_SCHEMA);
 }

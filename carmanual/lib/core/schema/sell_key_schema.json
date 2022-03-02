@@ -8,39 +8,21 @@
     "model": {
       "type": "string"
     },
-    "categorie": {
+    "seller": {
       "type": "string"
     },
-    "name": {
+    "carDealer": {
       "type": "string"
     },
-    "description": {
+    "key": {
       "type": "string"
-    },
-    "tags": {
-      "type": "array",
-      "items": [
-        {
-          "type": "string"
-        },
-        {
-          "type": "string"
-        },
-        {
-          "type": "string"
-        },
-        {
-          "type": "string"
-        }
-      ]
     }
   },
   "required": [
     "brand",
     "model",
-    "categorie",
-    "name",
-    "description",
-    "tags"
+    "seller",
+    "carDealer",
+    "key"
   ]
 }

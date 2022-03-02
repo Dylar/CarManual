@@ -148,7 +148,7 @@ class _AppState extends State<App> {
 
   Future<bool> _initApp() async {
     final infra = widget.infrastructure;
-    // await Future.delayed(Duration(seconds: EnvironmentConfig.isDev ? 0 : 3));
+    await Future.delayed(Duration(seconds: EnvironmentConfig.isDev ? 0 : 3));
     await infra.database.init();
 
     final settings = await infra.settings.getSettings();

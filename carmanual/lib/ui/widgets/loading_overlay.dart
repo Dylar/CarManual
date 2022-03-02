@@ -9,21 +9,44 @@ class LoadingOverlay extends StatelessWidget {
     this.backgroundColor = BaseColors.veryLightGrey,
     this.opacity = OPACITY_100,
     this.child,
+    this.loadingUnderChild = false,
   });
 
   final Color backgroundColor;
   final double opacity;
+  final bool loadingUnderChild;
 
   final Widget? child;
 
   @override
   Widget build(BuildContext context) {
+    return loadingUnderChild ? _buildUnder() : _buildOver();
+  }
+
+  Widget _buildOver() {
     return Stack(
       children: [
         if (child != null) child!,
         Container(
+          color: backgroundColor.withOpacity(opacity),
+          child: const Center(child: CircularProgressIndicator()),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildUnder() {
+    return Column(
+      children: [
+        if (child != null) Flexible(flex: 3, child: child!),
+        Flexible(
+          child: Container(
+            alignment: Alignment.topCenter,
             color: backgroundColor.withOpacity(opacity),
-            child: const Center(child: CircularProgressIndicator())),
+            child: Center(child: CircularProgressIndicator()),
+          ),
+        ),
+        // if (child != null) Container(child: child!),
       ],
     );
   }

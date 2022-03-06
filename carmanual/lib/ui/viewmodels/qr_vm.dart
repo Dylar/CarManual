@@ -1,5 +1,5 @@
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
-import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/sell_info.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +19,7 @@ abstract class QrViewModel extends ViewModel {
 
   Barcode? get barcode;
 
-  CarInfo? get carInfo;
+  SellInfo? get sellInfo;
 
   void onScan(Barcode barcode);
 }
@@ -27,7 +27,7 @@ abstract class QrViewModel extends ViewModel {
 class _QrVMState {
   QrScanState qrState = QrScanState.WAITING;
   Barcode? barcode;
-  CarInfo? carInfo;
+  SellInfo? sellInfo;
 }
 
 class QrVM extends QrViewModel {
@@ -44,7 +44,7 @@ class QrVM extends QrViewModel {
   Barcode? get barcode => _state.barcode;
 
   @override
-  CarInfo? get carInfo => _state.carInfo;
+  SellInfo? get sellInfo => _state.sellInfo;
 
   @override
   void onScan(Barcode barcode) {
@@ -53,23 +53,21 @@ class QrVM extends QrViewModel {
     _state.qrState = QrScanState.SCANNING;
     //hint: yea we need a delay to disable the camera/qrscan
     Future.delayed(Duration(milliseconds: 10)).then((value) async {
-      //TODO 1x then weg
-      return await carInfoService.onNewScan(data).then((state) {
-        _state.qrState = state.first!;
-        _state.carInfo = state.second;
-        switch (_state.qrState) {
-          case QrScanState.NEW:
-            navigateTo(CarOverviewPage.popAndPush());
-            break;
-          case QrScanState.OLD:
-          case QrScanState.DAFUQ:
-          case QrScanState.WAITING:
-          case QrScanState.SCANNING:
-            break;
-        }
+      final state = await carInfoService.onNewScan(data);
+      _state.qrState = state.first!;
+      _state.sellInfo = state.second;
+      switch (_state.qrState) {
+        case QrScanState.NEW:
+          navigateTo(CarOverviewPage.popAndPush());
+          break;
+        case QrScanState.OLD:
+        case QrScanState.DAFUQ:
+        case QrScanState.WAITING:
+        case QrScanState.SCANNING:
+          break;
+      }
 
-        notifyListeners();
-      });
+      notifyListeners();
     });
   }
 }

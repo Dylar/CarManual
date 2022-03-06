@@ -40,6 +40,17 @@ void main() {
     expect(find.text(l10n.introPageMessageError), findsOneWidget);
   });
 
+  testWidgets('Load app - scan wrong json - show error',
+      (WidgetTester tester) async {
+    TestUtils.prepareDependency();
+    await initNavigateToIntro(tester);
+
+    final l10n = await getTestL10n();
+    expect(find.text(l10n.introPageMessageError), findsNothing);
+    await scanOnIntroPage(tester, "{}");
+    expect(find.text(l10n.introPageMessageError), findsOneWidget);
+  });
+
   testWidgets('Load app - show intro page - scan key - show home page',
       (WidgetTester tester) async {
     TestUtils.prepareDependency();
@@ -48,7 +59,7 @@ void main() {
     final infra = TestUtils.defaultTestInfra();
     await initNavigateToIntro(tester, infra: infra);
 
-    final key = await buildSellKey();
+    final key = await buildSellInfo();
     await scanOnIntroPage(tester, key.toJson(), settle: false);
     expect(find.text(l10n.introPageMessage), findsNothing);
     expect(find.text(l10n.introPageMessageScanning), findsOneWidget);

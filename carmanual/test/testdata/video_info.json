@@ -1,10 +1,11 @@
 {
   "brand": "Toyota",
   "model": "Corolla",
-  "categorie": "Sicherheit",
   "name": "Verbandskasten",
+  "filePath": "path/to/file.mp4",
+  "imagePath": "Path/to/video/image.jpg",
   "description": "In diesem Video wird dir erklärt, wo du deinen Verbandskasten findest.",
   "tags": [
-    "Verband", "Kofferaum", "Nothilfe", "Unfall"
+    "Verband", "Kofferraum", "Nothilfe", "Unfall"
   ]
 }

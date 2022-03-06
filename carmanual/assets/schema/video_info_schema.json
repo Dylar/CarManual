@@ -8,7 +8,7 @@
     "model": {
       "type": "string"
     },
-    "categorie": {
+    "category": {
       "type": "string"
     },
     "name": {
@@ -38,7 +38,7 @@
   "required": [
     "brand",
     "model",
-    "categorie",
+    "category",
     "name",
     "description",
     "tags"

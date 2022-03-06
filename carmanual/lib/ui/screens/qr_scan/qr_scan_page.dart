@@ -60,7 +60,7 @@ class _QrScanPageState extends ViewState<QrScanPage, QrViewModel> {
   Widget buildScanInfo() {
     final vm = context.watch<QrProvider>().viewModel;
     final state = vm.qrState;
-    final carInfo = vm.carInfo;
+    final carInfo = vm.sellInfo;
     final barcode = vm.barcode;
     String text;
     switch (state) {

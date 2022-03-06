@@ -1,6 +1,5 @@
 import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/core/datasource/SettingsDataSource.dart';
-import 'package:carmanual/core/datasource/VideoInfoDataSource.dart';
 import 'package:carmanual/core/datasource/database.dart';
 import 'package:carmanual/core/network/app_client.dart';
 import 'package:carmanual/service/car_info_service.dart';
@@ -32,8 +31,8 @@ class Services extends InheritedWidget {
     final client = appClient ?? AppClient();
     return Services(
       appClient: client,
-      carInfoService: carInfoService ??
-          CarInfoService(client, CarInfoDS(database), VideoInfoDS(database)),
+      carInfoService:
+          carInfoService ?? CarInfoService(client, CarInfoDS(database)),
       settings: settings ?? SettingsDS(database),
       key: key,
       child: child,

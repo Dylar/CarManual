@@ -77,7 +77,7 @@ class _HomeVideoPageState extends ViewState<HomeVideoPage, HomeViewModel> {
                 return VideoDownload();
               }
               return VideoWidget(
-                url: viewModel.introVideo!.url,
+                url: viewModel.introVideo!.vidUrl,
                 settings: snapshot.data!,
               );
             },

@@ -29,7 +29,7 @@ Future<void> initNavigateToHome(WidgetTester tester,
 
   final carsLoaded = await infra.carInfoService.hasCars();
   if (!carsLoaded) {
-    final key = await buildSellKey();
+    final key = await buildSellInfo();
     await infra.carInfoService.onNewScan(key.toJson());
   }
   await loadApp(tester, infra: infra);

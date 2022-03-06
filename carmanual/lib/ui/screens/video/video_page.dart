@@ -45,7 +45,7 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
                       return VideoDownload();
                     }
                     return VideoWidget(
-                      url: viewModel.videoInfo!.url,
+                      url: viewModel.videoInfo!.vidUrl,
                       settings: snapshot.data!,
                     );
                   })),
@@ -58,7 +58,7 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      "Spannendes Video über das Thema",
+                      viewModel.videoInfo!.description,
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ),

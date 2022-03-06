@@ -7,6 +7,7 @@ import 'package:carmanual/models/settings.dart';
 import 'package:carmanual/models/video_info.dart';
 import 'package:mockito/mockito.dart';
 
+import '../builder/entity_builder.dart';
 import '../ui/screens/intro_test.mocks.dart';
 
 AppClient mockAppClient() {
@@ -15,16 +16,18 @@ AppClient mockAppClient() {
     ..dirs.addAll([
       DirData("toyota/")
         ..files.addAll([
-          FileData("Nie", "Intro.mp4", "mp4", 23, false),
-          FileData("Nie", "WoIsnDerShit.mp4", "mp4", 42, false)
+          FileData("Nie", "Intro.mp4", FileType.VIDEO, 23, false),
+          FileData("Nie", "WoIsnDerShit.mp4", FileType.VIDEO, 42, false)
         ]),
       DirData("nokia/")
         ..files.addAll([
-          FileData("Nie", "Intro.mp4", "mp4", 23, false),
-          FileData("Nie", "WoIsnDerShit.mp4", "mp4", 42, false)
+          FileData("Nie", "Intro.mp4", FileType.VIDEO, 23, false),
+          FileData("Nie", "WoIsnDerShit.mp4", FileType.VIDEO, 42, false)
         ]),
     ]);
   when(client.loadFilesData()).thenAnswer((_) async => fileDir);
+  when(client.loadCarInfo(any, any))
+      .thenAnswer((inv) async => await buildCarInfo());
   return client;
 }
 
@@ -61,13 +64,13 @@ VideoInfoDataSource mockVideoSource() {
   when(source.getVideos(any)).thenAnswer((inv) async {
     final CarInfo car = inv.positionalArguments.first;
     return videos.where((vid) {
-      return vid.path.contains(car.brand) && vid.path.contains(car.model);
+      return vid.vidUrl.contains(car.brand) && vid.vidUrl.contains(car.model);
     }).toList();
   });
   when(source.hasVideosLoaded(any)).thenAnswer((inv) async {
     final CarInfo car = inv.positionalArguments.first;
     return videos.any((vid) {
-      return vid.path.contains(car.brand) && vid.path.contains(car.model);
+      return vid.vidUrl.contains(car.brand) && vid.vidUrl.contains(car.model);
     });
   });
   when(source.upsertVideo(any)).thenAnswer((inv) async {

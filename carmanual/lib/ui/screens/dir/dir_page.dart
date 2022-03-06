@@ -2,11 +2,10 @@ import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/category_info.dart';
 import 'package:carmanual/ui/screens/dir/dir_list_item.dart';
-import 'package:carmanual/ui/widgets/loading_overlay.dart';
 import 'package:carmanual/ui/widgets/scroll_list_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../viewmodels/dir_vm.dart';
 
@@ -31,28 +30,24 @@ class _DirPageState extends ViewState<DirPage, DirViewModel> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(title: Text(viewModel.title)),
-      body: _buildBody(context, l10n),
+      body: _buildBody(context),
       bottomNavigationBar: AppNavigation(DirPage.routeName),
     );
   }
 
-  Widget _buildBody(BuildContext context, AppLocalizations l10n) {
-    final dirs = viewModel.getDirs();
-    if (dirs.isEmpty) {
-      //TODO make anders
-      return LoadingOverlay();
-    }
-    return ScrollListView<String>(
-      items: dirs,
+  Widget _buildBody(BuildContext context) {
+    return ScrollListView<CategoryInfo>(
+      items: viewModel.getDirs(),
       buildItemWidget: buildItemWidget,
     );
   }
 
-  Widget buildItemWidget(int index, String item) => GestureDetector(
-        child: DirListItem(item),
-        onTap: () => viewModel.selectDir(item),
-      );
+  Widget buildItemWidget(int index, CategoryInfo item) {
+    return GestureDetector(
+      child: DirListItem(item),
+      onTap: () => viewModel.selectDir(item),
+    );
+  }
 }

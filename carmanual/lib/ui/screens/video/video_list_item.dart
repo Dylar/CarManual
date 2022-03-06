@@ -1,4 +1,4 @@
-import 'package:carmanual/core/constants/debug.dart';
+import 'package:carmanual/core/tracking.dart';
 import 'package:carmanual/models/video_info.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +20,13 @@ class VideoInfoListItem extends StatelessWidget {
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.all(4.0),
-              child: CarInfoPic(DEBUG_PIC_URL),
+              child: CarInfoPic(video.picUrl),
             ),
             Spacer(flex: 5),
             Expanded(
               flex: 95,
               child: Text(
-                'Name: ${video.name}',
+                '${video.name}',
                 style: Theme.of(context).textTheme.subtitle1,
               ),
             ),
@@ -44,6 +44,7 @@ class CarInfoPic extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Logger.logD("URL: $url");
     return Container(
       width: 60,
       height: 80,

@@ -54,7 +54,7 @@ class AppInfrastructure {
       settings: settingsSource,
       carInfoDataSource: carSource,
       videoInfoDataSource: videoSource,
-      carInfoService: CarInfoService(appClient, carSource, videoSource),
+      carInfoService: CarInfoService(appClient, carSource),
     );
   }
 
@@ -114,7 +114,7 @@ class _AppState extends State<App> {
                 HomeViewModelProvider(infra.settings, infra.carInfoService),
                 QrViewModelProvider(infra.carInfoService),
                 CarOverViewModelProvider(infra.carInfoService),
-                VideoOverViewModelProvider(infra.videoInfoDataSource),
+                VideoOverViewModelProvider(),
                 DirViewModelProvider(infra.videoInfoDataSource),
                 VideoViewModelProvider(infra.settings),
               ],

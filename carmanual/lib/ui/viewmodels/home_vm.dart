@@ -39,7 +39,7 @@ class HomeVM extends HomeViewModel {
 
   Future<void> initVideo() async {
     introVideo = await carInfoService.getIntroVideo();
-    Logger.logI("Intro: ${introVideo!.url}");
+    Logger.logI("Intro: ${introVideo!.vidUrl}");
     notifyListeners();
   }
 

@@ -2,6 +2,7 @@ import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/category_info.dart';
 import 'package:carmanual/models/video_info.dart';
 import 'package:carmanual/ui/screens/video/video_list_item.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
@@ -17,7 +18,7 @@ class VideoOverviewPage extends View<VideoOverViewModel> {
   static const ARG_CAR = "cardInfo";
   static const ARG_DIR = "dir";
 
-  static AppRouteSpec pushIt(CarInfo carInfo, String dir) => AppRouteSpec(
+  static AppRouteSpec pushIt(CarInfo carInfo, CategoryInfo dir) => AppRouteSpec(
         name: routeName,
         action: AppRouteAction.pushTo,
         arguments: {

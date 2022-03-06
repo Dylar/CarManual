@@ -1,4 +1,4 @@
-import 'package:carmanual/core/schema/schema_validater.dart';
+import 'package:carmanual/models/schema_validater.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'builder/entity_builder.dart';
@@ -6,13 +6,13 @@ import 'builder/entity_builder.dart';
 void main() {
   test('validate video info schema', () async {
     final videoInfo = await buildVideoInfo();
-    final isValid = await validateVideoInfo(videoInfo);
-    expect(isValid, false);
+    final isValid = await validateVideoInfo(videoInfo.toMap());
+    expect(isValid, true);
   });
 
-  test('validate sell key schema', () async {
-    final key = await buildSellKey();
-    final isValid = await validateSellKey(key);
-    expect(isValid, false);
+  test('validate sell info schema', () async {
+    final sellInfo = await buildSellInfo();
+    final isValid = await validateSellInfo(sellInfo.toMap());
+    expect(isValid, true);
   });
 }

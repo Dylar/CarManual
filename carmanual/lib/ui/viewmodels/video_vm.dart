@@ -49,9 +49,4 @@ class VideoVM extends VideoViewModel {
     // }
     super.routingDidPop();
   }
-
-  @override
-  void onVideoEnd() {
-    // _controller.seekTo(VIDEO_START).then((_) => _controller.pause());
-  }
 }

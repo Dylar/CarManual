@@ -1,4 +1,3 @@
-import 'package:carmanual/core/asset_paths.dart';
 import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
@@ -58,36 +57,38 @@ class _HomeVideoPageState extends ViewState<HomeVideoPage, HomeViewModel> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            color: Colors.black,
-            image: DecorationImage(
-              fit: BoxFit.fitWidth,
-              image: AssetImage(homePageCarLogoImagePath),
-            ),
+    return SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          // Container(
+          //   decoration: BoxDecoration(
+          //     color: Colors.black,
+          //     image: DecorationImage(
+          //       fit: BoxFit.fitWidth,
+          //       image: AssetImage(homePageCarLogoImagePath),
+          //     ),
+          //   ),
+          // ),
+          StreamBuilder<Settings>(
+            stream: viewModel.watchSettings(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData || viewModel.introVideo == null) {
+                return VideoDownload();
+              }
+              return VideoWidget(
+                url: viewModel.introVideo!.url,
+                settings: snapshot.data!,
+              );
+            },
           ),
-        ),
-        StreamBuilder<Settings>(
-          stream: viewModel.watchSettings(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData || viewModel.introVideo == null) {
-              return VideoDownload();
-            }
-            return VideoWidget(
-              url: viewModel.introVideo!.url,
-              settings: snapshot.data!,
-            );
-          },
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: InfoWidget(
-              l10n.homoPageSubGreetings + "\n\n" + l10n.homoPageMessage),
-        ),
-      ],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: InfoWidget(
+                l10n.homoPageSubGreetings + "\n\n" + l10n.homoPageMessage),
+          ),
+        ],
+      ),
     );
   }
 }

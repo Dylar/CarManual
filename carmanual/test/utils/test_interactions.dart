@@ -20,7 +20,8 @@ Future<void> scanOnIntroPage(WidgetTester tester, String scan,
 
 Future<void> tapNaviIcon(WidgetTester tester, String route) async {
   final naviFinder = find.byType(AppNavigation);
-  final data = naviBarData.firstWhere((data) => data.first == route);
+  final data =
+      naviBarData.firstWhere((data) => data.firstOrThrow.contains(route));
 
   await tester.tap(find.descendant(
     of: naviFinder,

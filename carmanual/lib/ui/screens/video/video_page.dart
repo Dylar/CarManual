@@ -1,3 +1,4 @@
+import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/models/settings.dart';
@@ -67,6 +68,7 @@ class _VideoPageState extends ViewState<VideoPage, VideoViewModel> {
           ),
         ],
       ),
+      bottomNavigationBar: AppNavigation(VideoPage.routeName),
     );
   }
 }

@@ -1,8 +1,10 @@
+import 'package:carmanual/core/asset_paths.dart';
 import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/models/settings.dart';
 import 'package:carmanual/ui/viewmodels/home_vm.dart';
+import 'package:carmanual/ui/widgets/info_widget.dart';
 import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -55,37 +57,35 @@ class _HomeVideoPageState extends ViewState<HomeVideoPage, HomeViewModel> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        Flexible(
-            child: StreamBuilder<Settings>(
-                stream: viewModel.watchSettings(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData || viewModel.introVideo == null) {
-                    return VideoDownload();
-                  }
-                  return VideoWidget(
-                    url: viewModel.introVideo!.url,
-                    settings: snapshot.data!,
-                  );
-                })),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Card(
-              elevation: 4,
-              child: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    "Hier steht ein Willkommenstext, der den Käufer Willkommen heißt. Natürlich sagt dieser noch nix aus und ist nur ein Platzhalter. Aber freut mich trotzdem, dass Sie das Auto gekauft haben.",
-                    style: Theme.of(context).textTheme.subtitle1,
-                  ),
-                ),
-              ),
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.black,
+            image: DecorationImage(
+              fit: BoxFit.fitWidth,
+              image: AssetImage(homePageCarLogoImagePath),
             ),
           ),
+        ),
+        StreamBuilder<Settings>(
+          stream: viewModel.watchSettings(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData || viewModel.introVideo == null) {
+              return VideoDownload();
+            }
+            return VideoWidget(
+              url: viewModel.introVideo!.url,
+              settings: snapshot.data!,
+            );
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: InfoWidget(
+              l10n.homoPageSubGreetings + "\n\n" + l10n.homoPageMessage),
         ),
       ],
     );

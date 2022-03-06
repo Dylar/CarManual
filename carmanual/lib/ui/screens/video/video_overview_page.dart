@@ -1,3 +1,4 @@
+import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/models/car_info.dart';
@@ -42,6 +43,7 @@ class _VideoOverviewPageState
     return Scaffold(
       appBar: AppBar(title: Text(l10n.videoOverviewPageTitle)),
       body: _buildBody(context, l10n),
+      bottomNavigationBar: AppNavigation(VideoOverviewPage.routeName),
     );
   }
 

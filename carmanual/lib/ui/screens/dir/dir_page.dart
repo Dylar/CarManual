@@ -1,3 +1,4 @@
+import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/models/car_info.dart';
@@ -34,6 +35,7 @@ class _DirPageState extends ViewState<DirPage, DirViewModel> {
     return Scaffold(
       appBar: AppBar(title: Text(viewModel.title)),
       body: _buildBody(context, l10n),
+      bottomNavigationBar: AppNavigation(DirPage.routeName),
     );
   }
 

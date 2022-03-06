@@ -48,14 +48,20 @@ class _VideoWidgetState extends State<VideoWidget> {
 
   @override
   void dispose() {
-    controller.videoPlayerController?.addListener(checkVideo);
+    controller.videoPlayerController?.removeListener(checkVideo);
     controller.videoPlayerController?.dispose();
     controller.dispose();
     super.dispose();
   }
 
   @override
-  Widget build(BuildContext context) => BetterPlayer(controller: controller);
+  Widget build(BuildContext context) => Container(
+        margin: const EdgeInsets.all(4.0),
+        padding: const EdgeInsets.all(8.0),
+        child: BetterPlayer(
+          controller: controller,
+        ),
+      );
 
   void checkVideo() {
     if (!controller.isVideoInitialized()! && !controller.isPlaying()!) {
@@ -84,7 +90,10 @@ class VideoDownload extends StatelessWidget {
   Widget build(BuildContext context) {
     return LoadingOverlay(
       opacity: OPACITY_20,
-      child: Container(child: Center(child: Icon(Icons.cloud_download))),
+      child: Container(
+        height: MediaQuery.of(context).size.height * 0.35,
+        child: Center(child: Icon(Icons.cloud_download)),
+      ),
     );
   }
 }

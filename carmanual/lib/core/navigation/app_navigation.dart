@@ -1,21 +1,34 @@
+import 'package:carmanual/core/app_theme.dart';
 import 'package:carmanual/core/helper/tuple.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/overview/car_overview_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
 import 'package:carmanual/ui/screens/settings/settings_page.dart';
+import 'package:carmanual/ui/screens/video/video_overview_page.dart';
+import 'package:carmanual/ui/screens/video/video_page.dart';
 import 'package:carmanual/ui/snackbars/snackbars.dart';
+import 'package:carmanual/ui/widgets/loading_overlay.dart';
 import 'package:flutter/material.dart';
 
 import '../../service/services.dart';
 import '../../ui/screens/dir/dir_page.dart';
 import '../tracking.dart';
 
-final naviBarData = <Triple<String, String, IconData>>[
-  Triple(HomePage.routeName, "Home", Icons.home_outlined),
-  Triple(CarOverviewPage.routeName, "Videos", Icons.ondemand_video_sharp),
-  Triple(QrScanPage.routeName, "QR", Icons.qr_code_scanner),
-  Triple(SettingsPage.routeName, "Settings", Icons.settings),
+final naviBarData = <Triple<List<String>, String, IconData>>[
+  Triple([HomePage.routeName], "Home", Icons.home_outlined),
+  Triple(
+    [
+      CarOverviewPage.routeName,
+      DirPage.routeName,
+      VideoOverviewPage.routeName,
+      VideoPage.routeName,
+    ],
+    "Videos",
+    Icons.ondemand_video_sharp,
+  ),
+  Triple([QrScanPage.routeName], "QR", Icons.qr_code_scanner),
+  Triple([SettingsPage.routeName], "Settings", Icons.settings),
 ];
 
 class AppNavigation extends StatefulWidget {
@@ -33,35 +46,68 @@ class _AppNavigationState extends State<AppNavigation> {
   @override
   void initState() {
     super.initState();
-    _pageIndex =
-        naviBarData.indexWhere((data) => data.firstOrThrow == widget.routeName);
+    _pageIndex = naviBarData
+        .indexWhere((data) => data.firstOrThrow.contains(widget.routeName));
     if (_pageIndex == -1) {
-      throw Exception("Route not in list");
+      throw Exception("Route (${widget.routeName}) not in list");
     }
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final selectedColor = theme.tabBarTheme.labelColor;
+    final unselectedColor = theme.tabBarTheme.unselectedLabelColor;
     return BottomNavigationBar(
       type: BottomNavigationBarType.fixed,
       backgroundColor: theme.bottomAppBarTheme.color,
-      selectedItemColor: theme.tabBarTheme.labelColor,
-      unselectedItemColor: theme.tabBarTheme.unselectedLabelColor,
+      selectedItemColor: selectedColor,
+      unselectedItemColor: unselectedColor,
       currentIndex: _pageIndex,
-      items: _buildIcons(),
+      items: _buildIcons(
+        selectedColor?.withOpacity(OPACITY_20),
+        unselectedColor?.withOpacity(OPACITY_2),
+      ),
       onTap: (index) => _onItemTapped(context, index),
     );
   }
 
-  List<BottomNavigationBarItem> _buildIcons() {
+  List<BottomNavigationBarItem> _buildIcons(
+    Color? selectedColor,
+    Color? unselectedColor,
+  ) {
     return naviBarData
-        .map<BottomNavigationBarItem>(
-          (data) => BottomNavigationBarItem(
-            icon: Icon(data.lastOrThrow),
-            label: data.middleOrThrow,
+        .asMap()
+        .map<int, BottomNavigationBarItem>(
+          (i, data) => MapEntry(
+            i,
+            BottomNavigationBarItem(
+              icon: Container(
+                decoration: BoxDecoration(
+                  gradient: _pageIndex == i
+                      ? LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: <Color>[
+                            BaseColors.babyBlue,
+                            BaseColors.zergPurple,
+                          ],
+                          tileMode: TileMode.clamp,
+                        )
+                      : null,
+                  color: _pageIndex == i ? null : unselectedColor,
+                  shape: BoxShape.circle,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Icon(data.lastOrThrow),
+                ),
+              ),
+              label: data.middleOrThrow,
+            ),
           ),
         )
+        .values
         .toList();
   }
 
@@ -74,7 +120,7 @@ class _AppNavigationState extends State<AppNavigation> {
     final routeName = naviBarData[index];
     final thisIsHome = _pageIndex == 0;
     AppRouteSpec routeSpec;
-    switch (routeName.firstOrThrow) {
+    switch (routeName.firstOrThrow.first) {
       case HomePage.routeName:
         Logger.logI("Home tapped");
         routeSpec = HomePage.poopToRoot();

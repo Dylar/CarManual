@@ -1,6 +1,8 @@
 {
   "@_HOME_PAGE": {},
   "homoPageTitle": "Home",
+  "homoPageSubGreetings": "Herzlich Willkommen in der Digitalen Auslieferung (Fahrzeugtutorial) für dein neues Auto!",
+  "homoPageMessage": "Diese App dient dazu dich in deinem Fahrzeug digital zu Orientieren, finde alles wichtige was du brauchst um sicher durch den Alltag zu kommen.",
 
   "@_INTRO_PAGE": {},
   "introPageTitle": "Willkommen",

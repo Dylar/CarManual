@@ -8,8 +8,8 @@ class BaseColors {
   static const Color yellow = Color.fromRGBO(252, 229, 49, 1);
   static const Color red = Color.fromRGBO(222, 30, 30, 1);
   static const Color blue = Color.fromRGBO(30, 30, 222, 1);
-  static const Color babyBlue = Color.fromRGBO(111, 205, 255, 1.0);
-  static const Color zergPurple = Color.fromRGBO(188, 19, 254, 1);
+  static const Color babyBlue = Color.fromRGBO(0, 255, 255, 1.0);
+  static const Color zergPurple = Color.fromRGBO(254, 46, 247, 1);
 
   static const Color black = Color.fromRGBO(0, 0, 0, 1);
   static const Color darkGrey = Color.fromRGBO(0, 0, 0, 0.4);

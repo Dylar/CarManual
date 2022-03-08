@@ -7,24 +7,26 @@ import 'package:carmanual/models/settings.dart';
 import 'package:carmanual/models/video_info.dart';
 import 'package:mockito/mockito.dart';
 
+import '../builder/entity_builder.dart';
 import '../ui/screens/intro_test.mocks.dart';
 
 AppClient mockAppClient() {
   final client = MockAppClient();
-  final fileDir = DirData("/")
-    ..dirs.addAll([
-      DirData("toyota/")
-        ..files.addAll([
-          FileData("Nie", "Intro.mp4", "mp4", 23, false),
-          FileData("Nie", "WoIsnDerShit.mp4", "mp4", 42, false)
-        ]),
-      DirData("nokia/")
-        ..files.addAll([
-          FileData("Nie", "Intro.mp4", "mp4", 23, false),
-          FileData("Nie", "WoIsnDerShit.mp4", "mp4", 42, false)
-        ]),
-    ]);
-  when(client.loadFilesData()).thenAnswer((_) async => fileDir);
+  when(client.loadCarInfo(any, any)).thenAnswer((inv) async {
+    final brand = inv.positionalArguments[0];
+    final model = inv.positionalArguments[1];
+    final car = await buildCarInfo();
+    car.brand = brand;
+    car.model = model;
+    //TODO maybe delete me if we got the urls right
+    car.categories.forEach((category) {
+      category.videos.forEach((vid) {
+        vid.brand = car.brand;
+        vid.model = car.model;
+      });
+    });
+    return car;
+  });
   return client;
 }
 
@@ -50,7 +52,10 @@ CarInfoDataSource mockCarSource() {
     yield cars;
   });
   when(source.addCarInfo(any)).thenAnswer((inv) async {
-    cars.add(inv.positionalArguments.first);
+    final car = inv.positionalArguments.first;
+    if (!cars.any((e) => e.brand == car.brand && e.model == car.model)) {
+      cars.add(car);
+    }
   });
   return source;
 }
@@ -61,13 +66,13 @@ VideoInfoDataSource mockVideoSource() {
   when(source.getVideos(any)).thenAnswer((inv) async {
     final CarInfo car = inv.positionalArguments.first;
     return videos.where((vid) {
-      return vid.path.contains(car.brand) && vid.path.contains(car.model);
+      return vid.vidUrl.contains(car.brand) && vid.vidUrl.contains(car.model);
     }).toList();
   });
   when(source.hasVideosLoaded(any)).thenAnswer((inv) async {
     final CarInfo car = inv.positionalArguments.first;
     return videos.any((vid) {
-      return vid.path.contains(car.brand) && vid.path.contains(car.model);
+      return vid.vidUrl.contains(car.brand) && vid.vidUrl.contains(car.model);
     });
   });
   when(source.upsertVideo(any)).thenAnswer((inv) async {

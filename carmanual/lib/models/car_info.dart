@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:carmanual/models/category_info.dart';
 import 'package:hive/hive.dart';
 
 import 'model_data.dart';
@@ -9,21 +10,25 @@ part 'car_info.g.dart';
 @HiveType(typeId: CAR_INFO_TYPE_ID)
 class CarInfo extends HiveObject {
   CarInfo({
-    required this.seller,
     required this.brand,
     required this.model,
+    required this.imagePath,
+    required this.categories,
   });
 
   static CarInfo fromMap(Map<String, dynamic> map) => CarInfo(
         brand: map[FIELD_BRAND] ?? "",
         model: map[FIELD_MODEL] ?? "",
-        seller: map[FIELD_SELLER] ?? "",
+        imagePath: map[FIELD_IMAGE_PATH] ?? "",
+        categories: CategoryInfo.fromList(
+            map[FIELD_CATEGORIES] ?? <Map<String, dynamic>>[]),
       );
 
   Map<String, dynamic> toMap() => {
         FIELD_BRAND: brand,
         FIELD_MODEL: model,
-        FIELD_SELLER: seller,
+        FIELD_IMAGE_PATH: imagePath,
+        FIELD_CATEGORIES: categories,
       };
 
   String toJson() => jsonEncode(toMap());
@@ -33,5 +38,7 @@ class CarInfo extends HiveObject {
   @HiveField(1)
   String model = "";
   @HiveField(2)
-  String seller = "";
+  String imagePath = "";
+  @HiveField(3)
+  List<CategoryInfo> categories = [];
 }

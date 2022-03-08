@@ -18,8 +18,6 @@ class DebugPage extends StatefulWidget {
 }
 
 class _DebugPageState extends State<DebugPage> {
-  DirData? dir;
-
   @override
   Widget build(BuildContext context) {
     final appClient = Services.of(context)!.appClient;
@@ -32,16 +30,15 @@ class _DebugPageState extends State<DebugPage> {
           wrapWidget(_DebugInfoText("Domain:", "${EnvironmentConfig.domain}")),
           wrapWidget(_DebugInfoText("Host:", "${EnvironmentConfig.host}")),
           wrapWidget(_DebugInfoText("Port:", "${EnvironmentConfig.port}")),
-          if (dir != null) _buildDir(dir!),
         ],
       ),
       persistentFooterButtons: [
-        _DebugButton(
-          "Load files",
-          () => appClient
-              .loadFilesData()
-              .then((value) => setState(() => dir = value)),
-        ),
+        // _DebugButton(
+        //   "Load files",
+        //   () => appClient
+        //       .loadCarInfo("Toyota", "Corolla")
+        //       .then((value) => setState(() => dir = value)),
+        // ),
       ],
     );
   }

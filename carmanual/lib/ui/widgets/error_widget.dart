@@ -10,7 +10,7 @@ class ErrorInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Logger.logE(error);
+    Logger.logE("ErrorInfoWidget: $error");
     return Container(
       decoration: BoxDecoration(
         border: Border.all(color: Colors.red, width: 2),

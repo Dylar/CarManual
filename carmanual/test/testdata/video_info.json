@@ -1,10 +1,12 @@
 {
   "brand": "Toyota",
   "model": "Corolla",
-  "categorie": "Sicherheit",
-  "name": "Verbandskasten",
-  "description": "In diesem Video wird dir erklärt, wo du deinen Verbandskasten findest.",
+  "category": "Komfort",
+  "filePath": "2-Zonen Klimaautomatik.mp4",
+  "imagePath": "2-Zonen Klimaautomatik.jpg",
+  "name": "2-Zonen Klimaautomatik",
+  "description": "Für gute Luft, sorgt die Klimaautomatik.",
   "tags": [
-    "Verband", "Kofferaum", "Nothilfe", "Unfall"
+    "Luft", "Zone", "Klima", "Automatisch", "Scheibe", "2"
   ]
 }

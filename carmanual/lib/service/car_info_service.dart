@@ -1,77 +1,28 @@
 import 'dart:convert';
 
 import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
-import 'package:carmanual/core/datasource/VideoInfoDataSource.dart';
 import 'package:carmanual/core/helper/tuple.dart';
 import 'package:carmanual/core/network/app_client.dart';
 import 'package:carmanual/core/tracking.dart';
 import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/schema_validater.dart';
+import 'package:carmanual/models/sell_info.dart';
 import 'package:carmanual/models/video_info.dart';
 
 enum QrScanState { NEW, OLD, DAFUQ, WAITING, SCANNING }
 
 class CarInfoService {
   CarInfoService(
-      this._appClient, this.carInfoDataSource, this._videoInfoDataSource);
+    this._appClient,
+    this.carInfoDataSource,
+  );
 
   final AppClient _appClient;
   final CarInfoDataSource carInfoDataSource; //TODO private
-  final VideoInfoDataSource _videoInfoDataSource;
 
-  Future<Tuple<QrScanState, CarInfo>> onNewScan(String scan) async {
-    Logger.logI("scan: $scan");
-    try {
-      Map<String, dynamic> infoMap = jsonDecode(scan);
-      final carInfo = CarInfo.fromMap(infoMap);
-      final isOldCar = await _isOldCar(carInfo);
-      if (isOldCar) {
-        return Tuple(QrScanState.OLD, carInfo);
-      } else {
-        carInfoDataSource.addCarInfo(carInfo);
-        await loadVideoInfo(carInfo);
-        return Tuple(QrScanState.NEW, carInfo);
-      }
-    } on Exception catch (e) {
-      Logger.logE("scan: ${e.toString()}");
-    }
-    return Tuple(QrScanState.DAFUQ, null);
-  }
-
-  Future<bool> _isOldCar(CarInfo carInfo) async {
+  Future<bool> _isOldCar(String brand, model) async {
     final allCars = await carInfoDataSource.getAllCars();
-    return allCars
-        .any((car) => car.brand == carInfo.brand && car.model == carInfo.model);
-  }
-
-  Future<bool> loadVideoInfo(CarInfo carInfo) async {
-    final isLoaded = await _videoInfoDataSource.hasVideosLoaded(carInfo);
-    if (isLoaded) {
-      return true;
-    }
-
-    final dir = await _appClient.loadFilesData();
-    final list = <Future<void>>[];
-    _loadDir(list, dir);
-    return Future.wait([...list]).then((value) => true);
-  }
-
-  Future<void> _loadDir(List<Future<void>> list, DirData data) async {
-    list.addAll(data.files.map<Future<bool>>(
-      (video) {
-        final vid = VideoInfo(name: video.name, path: data.path);
-        return _videoInfoDataSource.upsertVideo(vid);
-      },
-    ));
-    data.dirs.forEach((dir) => _loadDir(list, dir));
-  }
-
-  Future<VideoInfo> getIntroVideo() async {
-    final cars = await carInfoDataSource.getAllCars();
-    final videos = await _videoInfoDataSource
-        .getVideos(cars.last); //TODO make for many cars
-    return videos.firstWhere(
-        (video) => video.name.toLowerCase().contains("intro"),
-        orElse: () => VideoInfo(name: "empty", path: "No path"));
+    return allCars.any((car) => car.brand == brand && car.model == model);
   }
 
   Future<bool> hasCars() async {
@@ -79,7 +30,43 @@ class CarInfoService {
     if (cars.isEmpty) {
       return false;
     }
-    await Future.forEach<CarInfo>(cars, (car) async => loadVideoInfo(car));
+    await Future.forEach<CarInfo>(
+      cars,
+      (car) async => await _loadCarInfo(car.brand, car.model),
+    );
     return true;
+  }
+
+  Future<VideoInfo> getIntroVideo() async {
+    final cars = await carInfoDataSource.getAllCars();
+    //TODO we need seller intro video
+    return cars.first.categories.first.videos.first;
+  }
+
+  Future<Tuple<QrScanState, SellInfo>> onNewScan(String scan) async {
+    Logger.logI("scan: $scan");
+    try {
+      Map<String, dynamic> scanJson = jsonDecode(scan);
+      if (!await validateSellInfo(scanJson)) {
+        throw Exception("sell key invalid");
+      }
+
+      final sellInfo = SellInfo.fromMap(scanJson);
+      final isOldCar = await _isOldCar(sellInfo.brand, sellInfo.model);
+      if (isOldCar) {
+        return Tuple(QrScanState.OLD, sellInfo);
+      } else {
+        await _loadCarInfo(sellInfo.brand, sellInfo.model);
+        return Tuple(QrScanState.NEW, sellInfo);
+      }
+    } on Exception catch (e) {
+      Logger.logE("scan: ${e.toString()}");
+    }
+    return Tuple(QrScanState.DAFUQ, null);
+  }
+
+  Future _loadCarInfo(String brand, String model) async {
+    final car = await _appClient.loadCarInfo(brand, model);
+    await carInfoDataSource.addCarInfo(car);
   }
 }

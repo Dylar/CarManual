@@ -1,5 +1,5 @@
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
-import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/sell_info.dart';
 import 'package:carmanual/service/car_info_service.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -20,7 +20,7 @@ abstract class IntroViewModel extends ViewModel {
 
   Barcode? get barcode;
 
-  CarInfo? get carInfo;
+  SellInfo? get sellInfo;
 
   void onScan(String scan);
 }
@@ -28,7 +28,7 @@ abstract class IntroViewModel extends ViewModel {
 class _IntroVMState {
   QrScanState qrState = QrScanState.WAITING;
   Barcode? barcode;
-  CarInfo? carInfo;
+  SellInfo? carInfo;
 }
 
 class IntroVM extends IntroViewModel {
@@ -45,7 +45,7 @@ class IntroVM extends IntroViewModel {
   Barcode? get barcode => _state.barcode;
 
   @override
-  CarInfo? get carInfo => _state.carInfo;
+  SellInfo? get sellInfo => _state.carInfo;
 
   @override
   void onScan(String scan) {

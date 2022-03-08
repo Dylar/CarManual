@@ -12,14 +12,12 @@
 
   "@_CAR_OVERVIEW_PAGE": {},
   "carOverViewPageTitle": "Übersicht",
-  "videoOverviewPageTitle": "Videos",
 
   "@_CATEGORY_PAGE": {},
   "sicherheit": "Erfahre in diesen Rubriken alles über die Sicherheit deines Fahrzeugs.",
   "multimedia": "Hier findest du alles zum Thema Multimedia.",
   "komfort": "Alles zum Thema Komfort in deinem Auto findest du hier",
-  "sicherheit": "Umklappen, schieben, Halterungen, hier findest du alles was deinen Transport vereinfacht.",
-  "transport": "Erfahre in diesen Rubriken alles über die Sicherheit deines Fahrzeugs.",
+  "transport": "Umklappen, schieben, Halterungen, hier findest du alles was deinen Transport vereinfacht.",
 
   "@_QR_SCAN_PAGE": {},
   "qrScanPageTitle": "Bitte scannen",

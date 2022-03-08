@@ -4,7 +4,6 @@ import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/core/helper/etag.dart';
 import 'package:hive/hive.dart';
 
-import '../core/constants/debug.dart';
 import 'model_data.dart';
 
 part 'video_info.g.dart';
@@ -12,34 +11,64 @@ part 'video_info.g.dart';
 @HiveType(typeId: VIDEO_INFO_TYPE_ID)
 class VideoInfo extends HiveObject {
   VideoInfo({
+    required this.brand,
+    required this.model,
+    required this.category,
     required this.name,
-    required this.path,
+    required this.filePath,
+    required this.imagePath,
+    required this.description,
+    required this.tags,
   });
 
-  @HiveField(0)
-  String name = "";
-  @HiveField(1)
-  String path = "";
+  static List<VideoInfo> fromList(List<dynamic> list) =>
+      List<Map<String, dynamic>>.from(list)
+          .map<VideoInfo>((e) => VideoInfo.fromMap(e))
+          .toList();
 
   static VideoInfo fromMap(Map<String, dynamic> map) => VideoInfo(
-        name: map["name"] ?? "Unbekannt",
-        path: map["path"] ?? "haha",
+        brand: map[FIELD_BRAND] ?? "",
+        model: map[FIELD_MODEL] ?? "",
+        category: map[FIELD_CATEGORY] ?? "",
+        name: map[FIELD_NAME] ?? "",
+        filePath: map[FIELD_FILE_PATH] ?? "",
+        imagePath: map[FIELD_IMAGE_PATH] ?? "",
+        description: map[FIELD_DESC] ?? "",
+        tags: List<String>.from(map[FIELD_TAGS] ?? <String>[]),
       );
 
   Map<String, dynamic> toMap() => {
-        "name": name,
-        "path": path,
+        FIELD_BRAND: brand,
+        FIELD_MODEL: model,
+        FIELD_CATEGORY: category,
+        FIELD_NAME: name,
+        FIELD_FILE_PATH: filePath,
+        FIELD_IMAGE_PATH: imagePath,
+        FIELD_DESC: description,
+        FIELD_TAGS: tags,
       };
 
   String toJson() => jsonEncode(toMap());
 
-  String get url {
-    //TODO just for bugs
-    if (name == "" && path == "") {
-      return DEBUG_INTRO_VID_URL;
-    }
-    return "https://${EnvironmentConfig.domain}$path$name";
-  }
+  String get vidUrl => "https://${EnvironmentConfig.domain}/videos/$filePath";
+  String get picUrl => "https://${EnvironmentConfig.domain}/videos/$imagePath";
 
-  String get asEtag => etag(url);
+  String get asEtag => etag(vidUrl);
+
+  @HiveField(0)
+  String brand = "";
+  @HiveField(1)
+  String model = "";
+  @HiveField(2)
+  String category = "";
+  @HiveField(3)
+  String name = "";
+  @HiveField(4)
+  String filePath = "";
+  @HiveField(5)
+  String imagePath = "";
+  @HiveField(6)
+  String description = "";
+  @HiveField(7)
+  List<String> tags = [];
 }

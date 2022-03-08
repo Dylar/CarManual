@@ -4,11 +4,11 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 import 'model_data.dart';
 
-part 'sell_key.g.dart';
+part 'sell_info.g.dart';
 
-@HiveType(typeId: SELL_KEY_TYPE_ID)
-class SellKey extends HiveObject {
-  SellKey({
+@HiveType(typeId: SELL_INFO_TYPE_ID)
+class SellInfo extends HiveObject {
+  SellInfo({
     required this.seller,
     required this.brand,
     required this.model,
@@ -16,7 +16,7 @@ class SellKey extends HiveObject {
     required this.key,
   });
 
-  static SellKey fromMap(Map<String, dynamic> map) => SellKey(
+  static SellInfo fromMap(Map<String, dynamic> map) => SellInfo(
         brand: map[FIELD_BRAND] ?? "",
         model: map[FIELD_MODEL] ?? "",
         seller: map[FIELD_SELLER] ?? "",

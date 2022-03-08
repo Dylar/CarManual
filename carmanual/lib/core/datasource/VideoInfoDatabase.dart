@@ -26,8 +26,8 @@ mixin VideoInfoDB implements VideoInfoDatabase {
   Future<List<VideoInfo>> getVideoInfos(CarInfo carInfo) async {
     return videoInfoBox.values
         .where((vid) =>
-            vid.path.contains(carInfo.brand) &&
-            vid.path.contains(carInfo.model))
+            vid.vidUrl.contains(carInfo.brand) &&
+            vid.vidUrl.contains(carInfo.model))
         .toList();
   }
 

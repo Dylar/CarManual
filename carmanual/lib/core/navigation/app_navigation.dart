@@ -75,41 +75,47 @@ class _AppNavigationState extends State<AppNavigation> {
   List<BottomNavigationBarItem> _buildIcons(
     Color? selectedColor,
     Color? unselectedColor,
-  ) {
-    return naviBarData
-        .asMap()
-        .map<int, BottomNavigationBarItem>(
-          (i, data) => MapEntry(
-            i,
-            BottomNavigationBarItem(
-              icon: Container(
-                decoration: BoxDecoration(
-                  gradient: _pageIndex == i
-                      ? LinearGradient(
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                          colors: <Color>[
-                            BaseColors.babyBlue,
-                            BaseColors.zergPurple,
-                          ],
-                          tileMode: TileMode.clamp,
-                        )
-                      : null,
-                  color: _pageIndex == i ? null : unselectedColor,
-                  shape: BoxShape.circle,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Icon(data.lastOrThrow),
-                ),
+  ) =>
+      naviBarData
+          .asMap()
+          .map<int, BottomNavigationBarItem>(
+            (i, data) => MapEntry(
+              i,
+              BottomNavigationBarItem(
+                icon: _buildIcon(i, unselectedColor, data),
+                label: data.middleOrThrow,
               ),
-              label: data.middleOrThrow,
             ),
-          ),
-        )
-        .values
-        .toList();
-  }
+          )
+          .values
+          .toList();
+
+  Widget _buildIcon(
+    int i,
+    Color? unselectedColor,
+    Triple<List<String>, String, IconData> data,
+  ) =>
+      Container(
+        decoration: BoxDecoration(
+          gradient: _pageIndex == i
+              ? LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: <Color>[
+                    BaseColors.babyBlue,
+                    BaseColors.zergPurple,
+                  ],
+                  tileMode: TileMode.clamp,
+                )
+              : null,
+          color: _pageIndex == i ? null : unselectedColor,
+          shape: BoxShape.circle,
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Icon(data.lastOrThrow),
+        ),
+      );
 
   Future<void> _onItemTapped(BuildContext context, int index) async {
     final isSame = index == _pageIndex;

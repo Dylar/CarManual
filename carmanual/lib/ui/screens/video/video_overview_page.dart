@@ -2,6 +2,7 @@ import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
 import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/category_info.dart';
 import 'package:carmanual/models/video_info.dart';
 import 'package:carmanual/ui/screens/video/video_list_item.dart';
 import 'package:carmanual/ui/screens/video/video_page.dart';
@@ -17,7 +18,7 @@ class VideoOverviewPage extends View<VideoOverViewModel> {
   static const ARG_CAR = "cardInfo";
   static const ARG_DIR = "dir";
 
-  static AppRouteSpec pushIt(CarInfo carInfo, String dir) => AppRouteSpec(
+  static AppRouteSpec pushIt(CarInfo carInfo, CategoryInfo dir) => AppRouteSpec(
         name: routeName,
         action: AppRouteAction.pushTo,
         arguments: {
@@ -41,7 +42,7 @@ class _VideoOverviewPageState
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(l10n.videoOverviewPageTitle)),
+      appBar: AppBar(title: Text(viewModel.selectedDir.name)),
       body: _buildBody(context, l10n),
       bottomNavigationBar: AppNavigation(VideoOverviewPage.routeName),
     );
@@ -57,7 +58,7 @@ class _VideoOverviewPageState
           }
 
           return ScrollListView<VideoInfo>(
-            items: snapshot.data,
+            items: snapshot.data?..sort((a, b) => a.name.compareTo(b.name)),
             buildItemWidget: buildItemWidget,
           );
         });

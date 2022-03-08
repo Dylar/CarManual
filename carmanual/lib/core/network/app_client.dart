@@ -1,4 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:carmanual/core/environment_config.dart';
+import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/category_info.dart';
+import 'package:carmanual/models/schema_validater.dart';
+import 'package:carmanual/models/video_info.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:ssh2/ssh2.dart';
 
@@ -6,6 +14,8 @@ import '../tracking.dart';
 
 const String CLIENT_CONNECTED = "sftp_connected";
 const String CLIENT_DISCONNECTED = "sftp_disconnected";
+
+enum FileType { UNKNOWN, JSON, VIDEO, IMAGE }
 
 class AppClient {
   SSHClient? _client;
@@ -69,8 +79,10 @@ class AppClient {
       List<FileData> initialFiles = await _getFileList(path: dir.path);
       initialFiles.forEach((file) {
         if (file.isDir) {
-          final path = dir.path + file.name + "/";
-          dir.dirs.add(DirData(path));
+          if (!isForbidden(file.name)) {
+            final path = dir.path + file.name + "/";
+            dir.dirs.add(DirData(path));
+          }
         } else {
           dir.files.add(file);
         }
@@ -86,35 +98,129 @@ class AppClient {
     return dir;
   }
 
-  Future<DirData> loadFilesData() async {
+  Future<DirData> _loadFilesData({String path = "/"}) async {
     _initClient();
-    await _connect();
-    final dirs = await _loadFileDir(DirData("/"));
+    final result = await _connect();
+    if (result == "") {
+      //TODO fix me DAFUQ
+      await _disconnect();
+      return _loadFilesData(path: path);
+    }
+    final dirs = await _loadFileDir(DirData(path));
     _disconnect();
     return dirs;
   }
 
-//TODO download for demand
-// Future<String> downloadFile(Callback callback) async {
-//   final document = await getApplicationDocumentsDirectory();
-//   final path = document.path;
-//   print("Log: path: $path");
-//
-//   final filePath = await client?.sftpDownload(
-//     path: "testfile",
-//     toPath: path,
-//     callback: (progress) {
-//       print("Log: progress: " + progress); // read download progress
-//       callback(progress);
-//     },
-//   );
-//   print("Log: filePath: $filePath");
-//   return filePath ?? "empty";
-// }
-//
-// Future<void> cancelDownload() async {
-//   await client?.sftpCancelDownload();
-// }
+  Future<CarInfo> loadCarInfo(String? brand, String? model) async {
+    Logger.logI("Load car: $brand, $model");
+    final carPath = "/Videos/$brand/$model/";
+    final rootDir = await _loadFilesData(path: carPath);
+    final jsonFile =
+        rootDir.files.firstWhere((file) => file.type == FileType.JSON);
+    final json = await _loadJsonFile(rootDir.path, jsonFile.name);
+    final valid = await validateCarInfo(json);
+    if (!valid) {
+      throw Exception("Json invalid: $json");
+    }
+    final car = CarInfo.fromMap(json);
+    car.categories.addAll(await _loadCategories(rootDir));
+    _addDataPath(car.brand, car.model, "", car.categories);
+    return car;
+  }
+
+  Future<List<CategoryInfo>> _loadCategories(DirData data) async {
+    final allDirs = data.dirs
+        .where((dir) => dir.files.any((file) => file.type == FileType.JSON));
+    return await Future.wait(allDirs.map((dir) async {
+      final jsonFile = dir.files.firstWhere(
+        (file) => file.type == FileType.JSON,
+      );
+      final json = await _loadJsonFile(dir.path, jsonFile.name);
+      final valid = await validateCategoryInfo(json);
+      if (!valid) {
+        throw Exception("Category(${jsonFile.name}) json invalid: $json");
+      }
+      final category = CategoryInfo.fromMap(json);
+      category.videos.addAll(await _loadVideos(dir));
+      // category.categories.addAll(await _loadCategories(dir));
+      return category;
+    }));
+  }
+
+  Future<List<VideoInfo>> _loadVideos(DirData data) async {
+    final allDirs = data.dirs
+        .where((dir) => dir.files.any((file) => file.type == FileType.JSON));
+    return Future.wait(allDirs.map((dir) async {
+      final jsonFile =
+          dir.files.firstWhere((file) => file.type == FileType.JSON);
+      final json = await _loadJsonFile(dir.path, jsonFile.name);
+      final valid = await validateVideoInfo(json);
+      if (!valid) {
+        throw Exception("Video(${jsonFile.name}) json invalid: $json");
+      }
+      return VideoInfo.fromMap(json);
+    }));
+  }
+
+  // void _printDirStruct(DirData dir) {
+  //   print("DirPath: ${dir.path}");
+  //   dir.dirs.forEach((dir) => _printDirStruct(dir));
+  // }
+
+  Future<Map<String, dynamic>> _loadJsonFile(
+      String path, String fileName) async {
+    HttpClient httpClient = new HttpClient();
+    Map<String, dynamic> result = {};
+
+    String theUrl = "";
+    String rawJson = "";
+    try {
+      final url = "https://${EnvironmentConfig.domain}";
+      theUrl = url + path + fileName;
+      var request = await httpClient.getUrl(Uri.parse(theUrl));
+      var response = await request.close();
+      if (response.statusCode == 200) {
+        final bytes = await consolidateHttpClientResponseBytes(response);
+        rawJson = Utf8Decoder().convert(bytes);
+        result = jsonDecode(rawJson);
+      } else {
+        throw Exception("Error code: " + response.statusCode.toString());
+      }
+    } catch (ex) {
+      Logger.logE("Can not fetch url: $theUrl");
+      Logger.logE(ex.toString());
+      // throw Exception("Can not fetch url: $theUrl");
+    }
+    return result;
+  }
+
+  void _addDataPath(
+      String brand, String model, String path, List<CategoryInfo> categories) {
+    //TODO delete me if we got the urls right
+    if (path == "") {
+      path = "$brand/$model";
+    }
+    categories.forEach((category) {
+      final catBasePath = "$path/${category.name}";
+      category.imagePath = "$catBasePath/${category.imagePath}";
+      category.videos.forEach((vid) {
+        final vidBasePath = "$catBasePath/${vid.name}";
+        vid.brand = brand;
+        vid.model = model;
+        vid.imagePath = "$vidBasePath/${vid.imagePath}";
+        vid.filePath = "$vidBasePath/${vid.filePath}";
+      });
+    });
+  }
+
+  bool isForbidden(String name) {
+    final forbidden = [
+      "Fahrzeugdaten",
+      "Kraftstoff_Umwelt",
+      "ZentralverriegelungmitschlüsselintegrierterFunkfernbedienungundBlinkderbestätigung/ZentralverriegelungmitschlüsselintegrierterFunkfernbedienungundBlinkderbestätigung"
+    ].where((e) => e.toLowerCase().contains(name.toLowerCase())).isNotEmpty;
+    return forbidden;
+  }
 }
 
 class FileData {
@@ -126,13 +232,22 @@ class FileData {
     this.isDir,
   );
 
-  final String modificationDate, name, type;
+  final String modificationDate, name;
+  final FileType type;
   final int fileSize;
   final bool isDir;
 
   static FileData fromMap(Map<String, dynamic> map) {
     final String name = map["filename"] ?? "";
-    final type = name.split(".").last;
+    final ext = name.split(".").last.toLowerCase();
+    FileType type = FileType.UNKNOWN;
+    if (["json", "txt"].contains(ext)) {
+      type = FileType.JSON;
+    } else if (["mp4"].contains(ext)) {
+      type = FileType.VIDEO;
+    } else if (["jpg", "jpeg", "png"].contains(ext)) {
+      type = FileType.IMAGE;
+    }
     return FileData(
       map["modificationDate"] ?? "",
       name,

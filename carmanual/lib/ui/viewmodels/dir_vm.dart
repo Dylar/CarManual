@@ -1,6 +1,7 @@
 import 'package:carmanual/core/datasource/VideoInfoDataSource.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/models/car_info.dart';
+import 'package:carmanual/models/category_info.dart';
 import 'package:carmanual/models/video_info.dart';
 import 'package:carmanual/ui/screens/video/video_overview_page.dart';
 import 'package:provider/provider.dart';
@@ -19,9 +20,9 @@ abstract class DirViewModel extends ViewModel {
 
   late CarInfo selectedCar;
 
-  List<String> getDirs();
+  List<CategoryInfo> getDirs();
 
-  void selectDir(String dir);
+  void selectDir(CategoryInfo dir);
 }
 
 class DirVM extends DirViewModel {
@@ -32,38 +33,17 @@ class DirVM extends DirViewModel {
   late CarInfo selectedCar;
 
   List<VideoInfo> videos = [];
-  List<String> dirs = [];
 
   @override
   String get title => "${selectedCar.brand} ${selectedCar.model}";
 
   @override
-  void init() {
-    super.init();
-    _videoSource.getVideos(selectedCar).then((value) {
-      print("ALL VIDEOS: ${value.length}");
-      dirs = value
-          .map<String>((vid) {
-            //TODO make this anders
-            return vid.path.replaceAll(
-                "Videos/${selectedCar.brand}/${selectedCar.model}/", "");
-          })
-          .toSet()
-          .toList();
-      dirs.forEach((element) {
-        print(element);
-      });
-      notifyListeners();
-    });
+  List<CategoryInfo> getDirs() {
+    return selectedCar.categories..sort((a, b) => a.order.compareTo(b.order));
   }
 
   @override
-  List<String> getDirs() {
-    return dirs;
-  }
-
-  @override
-  void selectDir(String dir) {
+  void selectDir(CategoryInfo dir) {
     navigateTo(VideoOverviewPage.pushIt(selectedCar, dir));
   }
 }

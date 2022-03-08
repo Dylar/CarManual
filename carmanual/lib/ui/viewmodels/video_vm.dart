@@ -27,7 +27,7 @@ class VideoVM extends VideoViewModel {
   SettingsDataSource settings;
 
   @override
-  String get title => videoInfo?.name.replaceAll(".mp4", "") ?? "";
+  String get title => videoInfo?.name ?? "";
 
   @override
   Stream<Settings> watchSettings() {

@@ -1,6 +1,8 @@
+import 'package:carmanual/core/helper/tuple.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/models/sell_info.dart';
 import 'package:carmanual/service/car_info_service.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -16,6 +18,8 @@ class IntroProvider extends ViewModelProvider<IntroViewModel> {
 }
 
 abstract class IntroViewModel extends ViewModel {
+  ValueNotifier<Tuple<double, double>> get progressValue;
+
   QrScanState get qrState;
 
   Barcode? get barcode;
@@ -37,6 +41,10 @@ class IntroVM extends IntroViewModel {
   IntroVM(this.carInfoService);
 
   final _IntroVMState _state = _IntroVMState();
+
+  @override
+  ValueNotifier<Tuple<double, double>> get progressValue =>
+      carInfoService.progressValue;
 
   @override
   QrScanState get qrState => _state.qrState;

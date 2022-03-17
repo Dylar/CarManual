@@ -1,10 +1,10 @@
 import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/service/car_info_service.dart';
+import 'package:carmanual/ui/screens/intro/loading_page.dart';
 import 'package:carmanual/ui/viewmodels/intro_vm.dart';
 import 'package:carmanual/ui/widgets/debug/debug_skip_button.dart';
 import 'package:carmanual/ui/widgets/qr_camera_view.dart';
-import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -55,7 +55,7 @@ class _IntroScanPageState extends ViewState<IntroPage, IntroViewModel> {
         Expanded(
           flex: 7,
           child: viewModel.qrState == QrScanState.SCANNING
-              ? VideoDownload()
+              ? AppLoadingIndicator(viewModel.progressValue)
               : QRCameraView(
                   (barcode) {
                     setState(() {

@@ -2,17 +2,19 @@
 // in carmanual/test/ui/screens/intro_test.dart.
 // Do not manually edit this file.
 
-import 'dart:async' as _i6;
+import 'dart:async' as _i8;
 
-import 'package:carmanual/core/datasource/CarInfoDataSource.dart' as _i10;
-import 'package:carmanual/core/datasource/database.dart' as _i7;
-import 'package:carmanual/core/datasource/SettingsDataSource.dart' as _i9;
-import 'package:carmanual/core/datasource/VideoInfoDataSource.dart' as _i11;
-import 'package:carmanual/core/network/app_client.dart' as _i5;
-import 'package:carmanual/models/car_info.dart' as _i2;
-import 'package:carmanual/models/settings.dart' as _i4;
-import 'package:carmanual/models/video_info.dart' as _i8;
-import 'package:hive_flutter/hive_flutter.dart' as _i3;
+import 'package:carmanual/core/datasource/CarInfoDataSource.dart' as _i12;
+import 'package:carmanual/core/datasource/database.dart' as _i9;
+import 'package:carmanual/core/datasource/SettingsDataSource.dart' as _i11;
+import 'package:carmanual/core/datasource/VideoInfoDataSource.dart' as _i13;
+import 'package:carmanual/core/helper/tuple.dart' as _i7;
+import 'package:carmanual/core/network/app_client.dart' as _i6;
+import 'package:carmanual/models/car_info.dart' as _i3;
+import 'package:carmanual/models/settings.dart' as _i5;
+import 'package:carmanual/models/video_info.dart' as _i10;
+import 'package:flutter/foundation.dart' as _i2;
+import 'package:hive_flutter/hive_flutter.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: avoid_redundant_argument_values
@@ -24,169 +26,183 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: unnecessary_parenthesis
 // ignore_for_file: camel_case_types
 
-class _FakeCarInfo_0 extends _i1.Fake implements _i2.CarInfo {}
+class _FakeValueNotifier_0<T> extends _i1.Fake implements _i2.ValueNotifier<T> {
+}
 
-class _FakeBox_1<E> extends _i1.Fake implements _i3.Box<E> {}
+class _FakeCarInfo_1 extends _i1.Fake implements _i3.CarInfo {}
 
-class _FakeSettings_2 extends _i1.Fake implements _i4.Settings {}
+class _FakeBox_2<E> extends _i1.Fake implements _i4.Box<E> {}
+
+class _FakeSettings_3 extends _i1.Fake implements _i5.Settings {}
 
 /// A class which mocks [AppClient].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAppClient extends _i1.Mock implements _i5.AppClient {
+class MockAppClient extends _i1.Mock implements _i6.AppClient {
   MockAppClient() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.Future<_i2.CarInfo> loadCarInfo(String? brand, String? model) =>
+  _i2.ValueNotifier<_i7.Tuple<double, double>> get progressValue =>
+      (super.noSuchMethod(Invocation.getter(#progressValue),
+              returnValue: _FakeValueNotifier_0<_i7.Tuple<double, double>>())
+          as _i2.ValueNotifier<_i7.Tuple<double, double>>);
+  @override
+  _i8.Future<_i3.CarInfo> loadCarInfo(String? brand, String? model) =>
       (super.noSuchMethod(Invocation.method(#loadCarInfo, [brand, model]),
-              returnValue: Future<_i2.CarInfo>.value(_FakeCarInfo_0()))
-          as _i6.Future<_i2.CarInfo>);
+              returnValue: Future<_i3.CarInfo>.value(_FakeCarInfo_1()))
+          as _i8.Future<_i3.CarInfo>);
+  @override
+  bool isForbidden(String? name) =>
+      (super.noSuchMethod(Invocation.method(#isForbidden, [name]),
+          returnValue: false) as bool);
 }
 
 /// A class which mocks [AppDatabase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAppDatabase extends _i1.Mock implements _i7.AppDatabase {
+class MockAppDatabase extends _i1.Mock implements _i9.AppDatabase {
   MockAppDatabase() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i3.Box<_i4.Settings> get box => (super.noSuchMethod(Invocation.getter(#box),
-      returnValue: _FakeBox_1<_i4.Settings>()) as _i3.Box<_i4.Settings>);
+  _i4.Box<_i5.Settings> get box => (super.noSuchMethod(Invocation.getter(#box),
+      returnValue: _FakeBox_2<_i5.Settings>()) as _i4.Box<_i5.Settings>);
   @override
-  _i3.Box<_i2.CarInfo> get carInfoBox =>
+  _i4.Box<_i3.CarInfo> get carInfoBox =>
       (super.noSuchMethod(Invocation.getter(#carInfoBox),
-          returnValue: _FakeBox_1<_i2.CarInfo>()) as _i3.Box<_i2.CarInfo>);
+          returnValue: _FakeBox_2<_i3.CarInfo>()) as _i4.Box<_i3.CarInfo>);
   @override
-  _i3.Box<_i8.VideoInfo> get videoInfoBox =>
-      (super.noSuchMethod(Invocation.getter(#videoInfoBox),
-          returnValue: _FakeBox_1<_i8.VideoInfo>()) as _i3.Box<_i8.VideoInfo>);
+  _i4.Box<_i10.VideoInfo> get videoInfoBox => (super.noSuchMethod(
+      Invocation.getter(#videoInfoBox),
+      returnValue: _FakeBox_2<_i10.VideoInfo>()) as _i4.Box<_i10.VideoInfo>);
   @override
-  _i6.Future<void> init() => (super.noSuchMethod(Invocation.method(#init, []),
+  _i8.Future<void> init() => (super.noSuchMethod(Invocation.method(#init, []),
       returnValue: Future<void>.value(),
-      returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+      returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
   @override
-  _i6.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
+  _i8.Future<void> close() => (super.noSuchMethod(Invocation.method(#close, []),
       returnValue: Future<void>.value(),
-      returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+      returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
   @override
-  _i6.Future<void> upsertSettings(_i4.Settings? settings) =>
+  _i8.Future<void> upsertSettings(_i5.Settings? settings) =>
       (super.noSuchMethod(Invocation.method(#upsertSettings, [settings]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
   @override
-  _i6.Future<_i4.Settings> getSettings() =>
+  _i8.Future<_i5.Settings> getSettings() =>
       (super.noSuchMethod(Invocation.method(#getSettings, []),
-              returnValue: Future<_i4.Settings>.value(_FakeSettings_2()))
-          as _i6.Future<_i4.Settings>);
+              returnValue: Future<_i5.Settings>.value(_FakeSettings_3()))
+          as _i8.Future<_i5.Settings>);
   @override
-  _i6.Future<void> upsertCarInfo(_i2.CarInfo? carInfo) =>
+  _i8.Future<void> upsertCarInfo(_i3.CarInfo? carInfo) =>
       (super.noSuchMethod(Invocation.method(#upsertCarInfo, [carInfo]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
   @override
-  _i6.Future<List<_i2.CarInfo>> getCarInfos() =>
+  _i8.Future<List<_i3.CarInfo>> getCarInfos() =>
       (super.noSuchMethod(Invocation.method(#getCarInfos, []),
-              returnValue: Future<List<_i2.CarInfo>>.value(<_i2.CarInfo>[]))
-          as _i6.Future<List<_i2.CarInfo>>);
+              returnValue: Future<List<_i3.CarInfo>>.value(<_i3.CarInfo>[]))
+          as _i8.Future<List<_i3.CarInfo>>);
   @override
-  _i6.Future<_i2.CarInfo?> getCarInfo(String? name) => (super.noSuchMethod(
+  _i8.Future<_i3.CarInfo?> getCarInfo(String? name) => (super.noSuchMethod(
       Invocation.method(#getCarInfo, [name]),
-      returnValue: Future<_i2.CarInfo?>.value()) as _i6.Future<_i2.CarInfo?>);
+      returnValue: Future<_i3.CarInfo?>.value()) as _i8.Future<_i3.CarInfo?>);
   @override
-  _i6.Future<void> upsertVideoInfo(_i8.VideoInfo? videoInfo) =>
+  _i8.Future<void> upsertVideoInfo(_i10.VideoInfo? videoInfo) =>
       (super.noSuchMethod(Invocation.method(#upsertVideoInfo, [videoInfo]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
   @override
-  _i6.Future<List<_i8.VideoInfo>> getVideoInfos(_i2.CarInfo? carInfo) =>
+  _i8.Future<List<_i10.VideoInfo>> getVideoInfos(_i3.CarInfo? carInfo) =>
       (super.noSuchMethod(Invocation.method(#getVideoInfos, [carInfo]),
-              returnValue: Future<List<_i8.VideoInfo>>.value(<_i8.VideoInfo>[]))
-          as _i6.Future<List<_i8.VideoInfo>>);
+              returnValue:
+                  Future<List<_i10.VideoInfo>>.value(<_i10.VideoInfo>[]))
+          as _i8.Future<List<_i10.VideoInfo>>);
   @override
-  _i6.Future<_i8.VideoInfo?> getVideoInfo(String? etag) =>
+  _i8.Future<_i10.VideoInfo?> getVideoInfo(String? etag) =>
       (super.noSuchMethod(Invocation.method(#getVideoInfo, [etag]),
-              returnValue: Future<_i8.VideoInfo?>.value())
-          as _i6.Future<_i8.VideoInfo?>);
+              returnValue: Future<_i10.VideoInfo?>.value())
+          as _i8.Future<_i10.VideoInfo?>);
 }
 
 /// A class which mocks [SettingsDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockSettingsDataSource extends _i1.Mock
-    implements _i9.SettingsDataSource {
+    implements _i11.SettingsDataSource {
   MockSettingsDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.Future<bool> saveSettings(_i4.Settings? settings) =>
+  _i8.Future<bool> saveSettings(_i5.Settings? settings) =>
       (super.noSuchMethod(Invocation.method(#saveSettings, [settings]),
-          returnValue: Future<bool>.value(false)) as _i6.Future<bool>);
+          returnValue: Future<bool>.value(false)) as _i8.Future<bool>);
   @override
-  _i6.Future<_i4.Settings> getSettings() =>
+  _i8.Future<_i5.Settings> getSettings() =>
       (super.noSuchMethod(Invocation.method(#getSettings, []),
-              returnValue: Future<_i4.Settings>.value(_FakeSettings_2()))
-          as _i6.Future<_i4.Settings>);
+              returnValue: Future<_i5.Settings>.value(_FakeSettings_3()))
+          as _i8.Future<_i5.Settings>);
   @override
-  _i6.Future<Map<String, bool>> getVideoSettings() =>
+  _i8.Future<Map<String, bool>> getVideoSettings() =>
       (super.noSuchMethod(Invocation.method(#getVideoSettings, []),
               returnValue: Future<Map<String, bool>>.value(<String, bool>{}))
-          as _i6.Future<Map<String, bool>>);
+          as _i8.Future<Map<String, bool>>);
   @override
-  _i6.Stream<_i4.Settings> watchSettings() => (super.noSuchMethod(
+  _i8.Stream<_i5.Settings> watchSettings() => (super.noSuchMethod(
       Invocation.method(#watchSettings, []),
-      returnValue: Stream<_i4.Settings>.empty()) as _i6.Stream<_i4.Settings>);
+      returnValue: Stream<_i5.Settings>.empty()) as _i8.Stream<_i5.Settings>);
 }
 
 /// A class which mocks [CarInfoDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockCarInfoDataSource extends _i1.Mock implements _i10.CarInfoDataSource {
+class MockCarInfoDataSource extends _i1.Mock implements _i12.CarInfoDataSource {
   MockCarInfoDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.Stream<List<_i2.CarInfo>> watchCarInfo() =>
+  _i8.Stream<List<_i3.CarInfo>> watchCarInfo() =>
       (super.noSuchMethod(Invocation.method(#watchCarInfo, []),
-              returnValue: Stream<List<_i2.CarInfo>>.empty())
-          as _i6.Stream<List<_i2.CarInfo>>);
+              returnValue: Stream<List<_i3.CarInfo>>.empty())
+          as _i8.Stream<List<_i3.CarInfo>>);
   @override
-  _i6.Future<void> addCarInfo(_i2.CarInfo? info) =>
+  _i8.Future<void> addCarInfo(_i3.CarInfo? info) =>
       (super.noSuchMethod(Invocation.method(#addCarInfo, [info]),
           returnValue: Future<void>.value(),
-          returnValueForMissingStub: Future<void>.value()) as _i6.Future<void>);
+          returnValueForMissingStub: Future<void>.value()) as _i8.Future<void>);
   @override
-  _i6.Future<List<_i2.CarInfo>> getAllCars() =>
+  _i8.Future<List<_i3.CarInfo>> getAllCars() =>
       (super.noSuchMethod(Invocation.method(#getAllCars, []),
-              returnValue: Future<List<_i2.CarInfo>>.value(<_i2.CarInfo>[]))
-          as _i6.Future<List<_i2.CarInfo>>);
+              returnValue: Future<List<_i3.CarInfo>>.value(<_i3.CarInfo>[]))
+          as _i8.Future<List<_i3.CarInfo>>);
 }
 
 /// A class which mocks [VideoInfoDataSource].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockVideoInfoDataSource extends _i1.Mock
-    implements _i11.VideoInfoDataSource {
+    implements _i13.VideoInfoDataSource {
   MockVideoInfoDataSource() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  _i6.Future<List<_i8.VideoInfo>> getVideos(_i2.CarInfo? carInfo) =>
+  _i8.Future<List<_i10.VideoInfo>> getVideos(_i3.CarInfo? carInfo) =>
       (super.noSuchMethod(Invocation.method(#getVideos, [carInfo]),
-              returnValue: Future<List<_i8.VideoInfo>>.value(<_i8.VideoInfo>[]))
-          as _i6.Future<List<_i8.VideoInfo>>);
+              returnValue:
+                  Future<List<_i10.VideoInfo>>.value(<_i10.VideoInfo>[]))
+          as _i8.Future<List<_i10.VideoInfo>>);
   @override
-  _i6.Future<bool> upsertVideo(_i8.VideoInfo? video) =>
+  _i8.Future<bool> upsertVideo(_i10.VideoInfo? video) =>
       (super.noSuchMethod(Invocation.method(#upsertVideo, [video]),
-          returnValue: Future<bool>.value(false)) as _i6.Future<bool>);
+          returnValue: Future<bool>.value(false)) as _i8.Future<bool>);
   @override
-  _i6.Future<bool> hasVideosLoaded(_i2.CarInfo? carInfo) =>
+  _i8.Future<bool> hasVideosLoaded(_i3.CarInfo? carInfo) =>
       (super.noSuchMethod(Invocation.method(#hasVideosLoaded, [carInfo]),
-          returnValue: Future<bool>.value(false)) as _i6.Future<bool>);
+          returnValue: Future<bool>.value(false)) as _i8.Future<bool>);
 }

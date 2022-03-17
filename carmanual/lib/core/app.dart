@@ -78,18 +78,28 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
+  late Future<bool> _loadApp;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadApp = _initApp();
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<bool>(
         initialData: false,
-        future: _initApp(),
+        future: _loadApp,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return fixView(ErrorInfoWidget(snapshot.error.toString()));
           }
 
           if (snapshot.connectionState != ConnectionState.done) {
-            return fixView(LoadingStartPage());
+            return fixView(LoadingStartPage(
+              widget.infrastructure.carInfoService.progressValue,
+            ));
           }
 
           final env = EnvironmentConfig.ENV == Env.PROD.name
@@ -115,7 +125,7 @@ class _AppState extends State<App> {
                 QrViewModelProvider(infra.carInfoService),
                 CarOverViewModelProvider(infra.carInfoService),
                 VideoOverViewModelProvider(),
-                DirViewModelProvider(infra.videoInfoDataSource),
+                DirViewModelProvider(),
                 VideoViewModelProvider(infra.settings),
               ],
               child: MaterialApp(
@@ -148,7 +158,6 @@ class _AppState extends State<App> {
 
   Future<bool> _initApp() async {
     final infra = widget.infrastructure;
-    await Future.delayed(Duration(seconds: EnvironmentConfig.isDev ? 0 : 3));
     await infra.database.init();
 
     final settings = await infra.settings.getSettings();
@@ -160,6 +169,10 @@ class _AppState extends State<App> {
       infra.settings.saveSettings(settings);
     }
 
-    return await infra.carInfoService.hasCars();
+    final hasCars = await infra.carInfoService.hasCars();
+    if (hasCars) {
+      await infra.carInfoService.updateCarInfo();
+    }
+    return hasCars;
   }
 }

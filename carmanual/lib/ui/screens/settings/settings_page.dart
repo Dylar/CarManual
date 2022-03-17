@@ -7,7 +7,7 @@ import 'package:carmanual/ui/snackbars/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SettingsPage extends StatelessWidget {
+class SettingsPage extends StatefulWidget {
   static const String routeName = "/settingsPage";
 
   static AppRouteSpec pushIt() => AppRouteSpec(
@@ -19,6 +19,13 @@ class SettingsPage extends StatelessWidget {
         name: routeName,
         action: AppRouteAction.popAndPushTo,
       );
+
+  @override
+  State<SettingsPage> createState() => _SettingsPageState();
+}
+
+class _SettingsPageState extends State<SettingsPage> {
+  bool showDebug = false;
 
   @override
   Widget build(BuildContext context) {
@@ -37,11 +44,17 @@ class SettingsPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         verticalDirection: VerticalDirection.up,
         children: [
-          if (EnvironmentConfig.isDev)
+          if (EnvironmentConfig.isDev || showDebug)
             Flexible(child: SettingsButton("Debug", DebugPage.pushIt())),
           Flexible(
+            child: GestureDetector(
+              onLongPress: () => setState(() => showDebug = true),
               child: SettingsButton(
-                  "Video Einstellungen", VideoSettingsPage.pushIt())),
+                "Video Einstellungen",
+                VideoSettingsPage.pushIt(),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -62,7 +75,7 @@ class SettingsButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () async {
           final result = await Navigate.to(context, route);
-          if (result) {
+          if (result == true) {
             showSettingsSavedSnackBar(context);
           }
         },

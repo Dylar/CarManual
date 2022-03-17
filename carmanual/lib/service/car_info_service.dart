@@ -8,6 +8,7 @@ import 'package:carmanual/models/car_info.dart';
 import 'package:carmanual/models/schema_validater.dart';
 import 'package:carmanual/models/sell_info.dart';
 import 'package:carmanual/models/video_info.dart';
+import 'package:flutter/src/foundation/change_notifier.dart';
 
 enum QrScanState { NEW, OLD, DAFUQ, WAITING, SCANNING }
 
@@ -20,6 +21,9 @@ class CarInfoService {
   final AppClient _appClient;
   final CarInfoDataSource carInfoDataSource; //TODO private
 
+  ValueNotifier<Tuple<double, double>> get progressValue =>
+      _appClient.progressValue;
+
   Future<bool> _isOldCar(String brand, model) async {
     final allCars = await carInfoDataSource.getAllCars();
     return allCars.any((car) => car.brand == brand && car.model == model);
@@ -30,17 +34,12 @@ class CarInfoService {
     if (cars.isEmpty) {
       return false;
     }
-    await Future.forEach<CarInfo>(
-      cars,
-      (car) async => await _loadCarInfo(car.brand, car.model),
-    );
     return true;
   }
 
   Future<VideoInfo> getIntroVideo() async {
     final cars = await carInfoDataSource.getAllCars();
-    //TODO we need seller intro video
-    return cars.first.categories.first.videos.first;
+    return cars.first.introVideoUrl;
   }
 
   Future<Tuple<QrScanState, SellInfo>> onNewScan(String scan) async {
@@ -68,5 +67,16 @@ class CarInfoService {
   Future _loadCarInfo(String brand, String model) async {
     final car = await _appClient.loadCarInfo(brand, model);
     await carInfoDataSource.addCarInfo(car);
+  }
+
+  Future updateCarInfo() async {
+    final List<CarInfo> cars = await carInfoDataSource.getAllCars();
+    await Future.forEach<CarInfo>(
+      cars,
+      (car) async {
+        Logger.logI("Update Car: ${car.brand} ${car.model}");
+        return await _loadCarInfo(car.brand, car.model);
+      },
+    );
   }
 }

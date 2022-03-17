@@ -1,10 +1,12 @@
 import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/datasource/VideoInfoDataSource.dart';
+import 'package:carmanual/core/helper/tuple.dart';
 import 'package:carmanual/core/network/app_client.dart';
 import 'package:carmanual/models/car_info.dart';
 import 'package:carmanual/models/settings.dart';
 import 'package:carmanual/models/video_info.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mockito/mockito.dart';
 
 import '../builder/entity_builder.dart';
@@ -27,6 +29,8 @@ AppClient mockAppClient() {
     });
     return car;
   });
+
+  when(client.progressValue).thenReturn(ValueNotifier(Tuple(1, 1)));
   return client;
 }
 

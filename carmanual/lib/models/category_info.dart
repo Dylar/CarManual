@@ -16,7 +16,6 @@ class CategoryInfo extends HiveObject {
     required this.description,
     required this.imagePath,
     required this.videos,
-    required this.categories,
   });
 
   static List<CategoryInfo> fromList(List<dynamic> list) =>
@@ -32,9 +31,6 @@ class CategoryInfo extends HiveObject {
         videos: VideoInfo.fromList(
           map[FIELD_VIDEOS] ?? <VideoInfo>[],
         ),
-        categories: CategoryInfo.fromList(
-          map[FIELD_CATEGORIES] ?? <CategoryInfo>[],
-        ),
       );
 
   Map<String, dynamic> toMap() => {
@@ -43,7 +39,6 @@ class CategoryInfo extends HiveObject {
         FIELD_DESC: description,
         FIELD_IMAGE_PATH: imagePath,
         FIELD_VIDEOS: videos,
-        FIELD_CATEGORIES: categories,
       };
 
   String toJson() => jsonEncode(toMap());
@@ -60,6 +55,4 @@ class CategoryInfo extends HiveObject {
   String imagePath = "";
   @HiveField(5)
   List<VideoInfo> videos = [];
-  @HiveField(6)
-  List<CategoryInfo> categories = [];
 }

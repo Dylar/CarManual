@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:carmanual/core/environment_config.dart';
+import 'package:carmanual/core/helper/tuple.dart';
 import 'package:carmanual/models/car_info.dart';
 import 'package:carmanual/models/category_info.dart';
 import 'package:carmanual/models/schema_validater.dart';
@@ -18,6 +19,9 @@ const String CLIENT_DISCONNECTED = "sftp_disconnected";
 enum FileType { UNKNOWN, JSON, VIDEO, IMAGE }
 
 class AppClient {
+  final ValueNotifier<Tuple<double, double>> progressValue =
+      ValueNotifier(Tuple(0, 0));
+
   SSHClient? _client;
 
   String? _state;
@@ -87,12 +91,24 @@ class AppClient {
           dir.files.add(file);
         }
       });
+
+      //Hint: igitt - this is mäh
+      if (dir.path.split("/").length == 5) {
+        progressValue.value = Tuple(dir.dirs.length.toDouble(), 1);
+      }
+
       if (dir.dirs.isNotEmpty) {
         await Future.forEach<DirData>(dir.dirs, (e) => _loadFileDir(e));
       }
     } catch (e) {
       Logger.logE("Path: ${dir.path}");
-      Logger.logE("error - ${e.toString()}");
+      Logger.logE("${e.toString()}");
+    }
+
+    //Hint: igitt - this is mäh
+    if (dir.path.split("/").length == 6) {
+      final oldValue = progressValue.value;
+      progressValue.value = Tuple(oldValue.first, oldValue.secondOrThrow + 1);
     }
 
     return dir;
@@ -100,12 +116,7 @@ class AppClient {
 
   Future<DirData> _loadFilesData({String path = "/"}) async {
     _initClient();
-    final result = await _connect();
-    if (result == "") {
-      //TODO fix me DAFUQ
-      await _disconnect();
-      return _loadFilesData(path: path);
-    }
+    await _connect();
     final dirs = await _loadFileDir(DirData(path));
     _disconnect();
     return dirs;
@@ -115,8 +126,9 @@ class AppClient {
     Logger.logI("Load car: $brand, $model");
     final carPath = "/Videos/$brand/$model/";
     final rootDir = await _loadFilesData(path: carPath);
-    final jsonFile =
-        rootDir.files.firstWhere((file) => file.type == FileType.JSON);
+    final jsonFile = rootDir.files.firstWhere(
+      (file) => file.type == FileType.JSON,
+    );
     final json = await _loadJsonFile(rootDir.path, jsonFile.name);
     final valid = await validateCarInfo(json);
     if (!valid) {
@@ -129,8 +141,9 @@ class AppClient {
   }
 
   Future<List<CategoryInfo>> _loadCategories(DirData data) async {
-    final allDirs = data.dirs
-        .where((dir) => dir.files.any((file) => file.type == FileType.JSON));
+    final allDirs = data.dirs.where((dir) => dir.files.any(
+          (file) => file.type == FileType.JSON,
+        ));
     return await Future.wait(allDirs.map((dir) async {
       final jsonFile = dir.files.firstWhere(
         (file) => file.type == FileType.JSON,
@@ -142,7 +155,6 @@ class AppClient {
       }
       final category = CategoryInfo.fromMap(json);
       category.videos.addAll(await _loadVideos(dir));
-      // category.categories.addAll(await _loadCategories(dir));
       return category;
     }));
   }
@@ -214,6 +226,7 @@ class AppClient {
   }
 
   bool isForbidden(String name) {
+    //TODO make new json struct
     final forbidden = [
       "Fahrzeugdaten",
       "Kraftstoff_Umwelt",

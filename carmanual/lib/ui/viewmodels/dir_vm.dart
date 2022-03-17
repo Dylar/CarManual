@@ -1,4 +1,3 @@
-import 'package:carmanual/core/datasource/VideoInfoDataSource.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/models/car_info.dart';
 import 'package:carmanual/models/category_info.dart';
@@ -7,8 +6,7 @@ import 'package:carmanual/ui/screens/video/video_overview_page.dart';
 import 'package:provider/provider.dart';
 
 class DirViewModelProvider extends ChangeNotifierProvider<DirViewProvider> {
-  DirViewModelProvider(VideoInfoDataSource source)
-      : super(create: (_) => DirViewProvider(DirVM(source)));
+  DirViewModelProvider() : super(create: (_) => DirViewProvider(DirVM()));
 }
 
 class DirViewProvider extends ViewModelProvider<DirViewModel> {
@@ -26,9 +24,9 @@ abstract class DirViewModel extends ViewModel {
 }
 
 class DirVM extends DirViewModel {
-  DirVM(this._videoSource);
+  DirVM();
 
-  final VideoInfoDataSource _videoSource;
+  // final VideoInfoDataSource _videoSource;
 
   late CarInfo selectedCar;
 

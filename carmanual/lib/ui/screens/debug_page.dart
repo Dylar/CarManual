@@ -1,8 +1,6 @@
 import 'package:carmanual/core/app_theme.dart';
 import 'package:carmanual/core/environment_config.dart';
 import 'package:carmanual/core/navigation/navi.dart';
-import 'package:carmanual/core/network/app_client.dart';
-import 'package:carmanual/service/services.dart';
 import 'package:flutter/material.dart';
 
 class DebugPage extends StatefulWidget {
@@ -20,7 +18,7 @@ class DebugPage extends StatefulWidget {
 class _DebugPageState extends State<DebugPage> {
   @override
   Widget build(BuildContext context) {
-    final appClient = Services.of(context)!.appClient;
+    // final appClient = Services.of(context)!.appClient;
     return Scaffold(
       appBar: AppBar(title: Text("DEBUG")),
       body: Column(
@@ -46,16 +44,16 @@ class _DebugPageState extends State<DebugPage> {
   Widget wrapWidget(Widget child) => Flexible(
       child: Padding(padding: const EdgeInsets.all(4.0), child: child));
 
-  Column _buildDir(DirData dir) {
-    return Column(children: [
-      _DebugInfoText("Dir:", dir.path),
-      if (dir.files.isNotEmpty)
-        ...dir.files.map<Widget>(
-            (element) => wrapWidget(_DebugInfoText("File:", "${element}"))),
-      if (dir.dirs.isNotEmpty)
-        ...dir.dirs.map<Widget>((element) => _buildDir(element))
-    ]);
-  }
+  // Column _buildDir(DirData dir) {
+  //   return Column(children: [
+  //     _DebugInfoText("Dir:", dir.path),
+  //     if (dir.files.isNotEmpty)
+  //       ...dir.files.map<Widget>(
+  //           (element) => wrapWidget(_DebugInfoText("File:", "${element}"))),
+  //     if (dir.dirs.isNotEmpty)
+  //       ...dir.dirs.map<Widget>((element) => _buildDir(element))
+  //   ]);
+  // }
 }
 
 class _DebugInfoText extends StatelessWidget {
@@ -82,21 +80,21 @@ class _DebugInfoText extends StatelessWidget {
   }
 }
 
-class _DebugButton extends StatelessWidget {
-  _DebugButton(this.name, this.callback);
-
-  final String name;
-  final VoidCallback callback;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 48,
-      padding: const EdgeInsets.all(4.0),
-      child: ElevatedButton(
-        onPressed: callback,
-        child: Text(name),
-      ),
-    );
-  }
-}
+// class _DebugButton extends StatelessWidget {
+//   _DebugButton(this.name, this.callback);
+//
+//   final String name;
+//   final VoidCallback callback;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       height: 48,
+//       padding: const EdgeInsets.all(4.0),
+//       child: ElevatedButton(
+//         onPressed: callback,
+//         child: Text(name),
+//       ),
+//     );
+//   }
+// }

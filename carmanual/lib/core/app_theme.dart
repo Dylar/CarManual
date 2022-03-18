@@ -46,7 +46,7 @@ const TextTheme accentTextColors = TextTheme(
 
 final ThemeData appTheme = ThemeData(
   fontFamily: 'RobotoCondensed',
-  brightness: Brightness.light,
+  brightness: Brightness.dark,
   primaryColor: BaseColors.primary,
   // ignore: deprecated_member_use
   accentColor: BaseColors.accent,
@@ -74,5 +74,6 @@ final ThemeData appTheme = ThemeData(
   inputDecorationTheme: const InputDecorationTheme(
     labelStyle: TextStyle(color: BaseColors.primary),
     floatingLabelBehavior: FloatingLabelBehavior.always,
+    border: InputBorder.none,
   ),
 );

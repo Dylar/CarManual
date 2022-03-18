@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:carmanual/core/datasource/CarInfoDataSource.dart';
 import 'package:carmanual/core/datasource/SettingsDataSource.dart';
 import 'package:carmanual/core/datasource/VideoInfoDataSource.dart';
@@ -11,6 +13,9 @@ import 'package:mockito/mockito.dart';
 
 import '../builder/entity_builder.dart';
 import '../ui/screens/intro_test.mocks.dart';
+import 'http_client_mock.dart';
+
+HttpOverrides mockHttpOverrides() => MockHttpOverrides();
 
 AppClient mockAppClient() {
   final client = MockAppClient();

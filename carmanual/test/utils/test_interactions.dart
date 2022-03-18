@@ -5,6 +5,7 @@
 
 import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 Future<void> scanOnIntroPage(WidgetTester tester, String scan,
@@ -28,4 +29,16 @@ Future<void> tapNaviIcon(WidgetTester tester, String route) async {
     matching: find.byIcon(data.lastOrThrow),
   ));
   await tester.pumpAndSettle();
+}
+
+Future<void> tapOnSearch(WidgetTester tester) async {
+  await tester.tap(find.byIcon(Icons.search));
+  await tester.pumpAndSettle();
+}
+
+Future<void> performSearch(WidgetTester tester, String query) async {
+  final searchField = find.byType(TextField);
+  await tester.enterText(searchField, query);
+  await tester.testTextInput.receiveAction(TextInputAction.done);
+  await tester.pumpAndSettle(const Duration(milliseconds: 10));
 }

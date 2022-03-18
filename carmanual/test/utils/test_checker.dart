@@ -1,10 +1,13 @@
 import 'package:carmanual/core/navigation/app_navigation.dart';
+import 'package:carmanual/ui/screens/dir/dir_page.dart';
 import 'package:carmanual/ui/screens/home/home_page.dart';
 import 'package:carmanual/ui/screens/intro/intro_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
 import 'package:carmanual/ui/widgets/qr_camera_view.dart';
 import 'package:carmanual/ui/widgets/video_widget.dart';
 import 'package:flutter_test/flutter_test.dart';
+
+import 'test_l10n.dart';
 
 void checkIntroPage() {
   expect(find.byType(IntroPage), findsOneWidget);
@@ -19,6 +22,21 @@ void checkHomePage() {
 void checkQRScanPage() {
   expect(find.byType(QrScanPage), findsOneWidget);
   expect(find.byType(QRCameraView), findsOneWidget);
+}
+
+void checkDirPage() {
+  expect(find.byType(DirPage), findsOneWidget);
+}
+
+void checkSearchPage(TestAppLocalization l10n) {
+  expect(find.text(l10n.searchStartText), findsOneWidget);
+}
+
+void checkEmptySearch(TestAppLocalization l10n, {bool isEmpty = true}) {
+  expect(
+    find.text(l10n.searchEmptyText),
+    isEmpty ? findsOneWidget : findsNothing,
+  );
 }
 
 void checkNavigationBar(String thisPage) {

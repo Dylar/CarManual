@@ -1,3 +1,4 @@
+import 'package:carmanual/core/navigation/app_bar.dart';
 import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
@@ -31,7 +32,7 @@ class _DirPageState extends ViewState<DirPage, DirViewModel> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(viewModel.title)),
+      appBar: SearchAppBar(viewModel.title),
       body: _buildBody(context),
       bottomNavigationBar: AppNavigation(DirPage.routeName),
     );

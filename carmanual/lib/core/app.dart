@@ -131,7 +131,7 @@ class _AppState extends State<App> {
               child: MaterialApp(
                 title: env + EnvironmentConfig.APP_NAME,
                 theme: appTheme,
-                // darkTheme: darkAppTheme,
+                darkTheme: appTheme,
                 initialRoute: firstRoute,
                 onGenerateInitialRoutes: AppRouter.generateInitRoute,
                 onGenerateRoute: AppRouter.generateRoute,

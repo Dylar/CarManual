@@ -11,7 +11,12 @@ class TestAppLocalization {
 
   final Map<String, dynamic> _values;
 
+  //------INTRO
   String get introPageMessage => _values["introPageMessage"];
   String get introPageMessageError => _values["introPageMessageError"];
   String get introPageMessageScanning => _values["introPageMessageScanning"];
+
+  //------SEARCH
+  String get searchStartText => _values["searchStartText"];
+  String get searchEmptyText => _values["searchEmptyText"];
 }

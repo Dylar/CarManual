@@ -1,4 +1,5 @@
 import 'package:carmanual/core/app.dart';
+import 'package:carmanual/ui/screens/dir/dir_page.dart';
 import 'package:carmanual/ui/screens/qr_scan/qr_scan_page.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -6,7 +7,6 @@ import '../builder/app_builder.dart';
 import '../builder/entity_builder.dart';
 import 'test_checker.dart';
 import 'test_interactions.dart';
-import 'test_utils.dart';
 
 Future<void> loadApp(WidgetTester tester, {AppInfrastructure? infra}) async {
   // Build our app and trigger a frame.
@@ -25,7 +25,7 @@ Future<void> initNavigateToIntro(WidgetTester tester,
 
 Future<void> initNavigateToHome(WidgetTester tester,
     {AppInfrastructure? infra}) async {
-  infra ??= TestUtils.defaultTestInfra();
+  infra ??= defaultTestInfra();
 
   final carsLoaded = await infra.carInfoService.hasCars();
   if (!carsLoaded) {
@@ -41,4 +41,11 @@ Future<void> initNavigateToQRScan(WidgetTester tester,
   await initNavigateToHome(tester, infra: infra);
   await tapNaviIcon(tester, QrScanPage.routeName);
   checkQRScanPage();
+}
+
+Future<void> initNavigateToDir(WidgetTester tester,
+    {AppInfrastructure? infra}) async {
+  await initNavigateToHome(tester, infra: infra);
+  await tapNaviIcon(tester, DirPage.routeName);
+  checkDirPage();
 }

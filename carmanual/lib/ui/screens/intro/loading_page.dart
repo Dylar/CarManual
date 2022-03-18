@@ -83,8 +83,8 @@ class AppLoadingIndicator extends StatelessWidget {
         final progress = tuple.secondOrThrow;
         final value = progress == 0 ? 0.0 : progress / max;
         return LinearProgressIndicator(
-          color: BaseColors.zergPurple,
-          backgroundColor: BaseColors.babyBlue,
+          color: BaseColors.babyBlue,
+          backgroundColor: BaseColors.zergPurple,
           value: value,
         );
       },

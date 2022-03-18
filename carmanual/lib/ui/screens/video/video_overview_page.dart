@@ -1,3 +1,4 @@
+import 'package:carmanual/core/navigation/app_bar.dart';
 import 'package:carmanual/core/navigation/app_navigation.dart';
 import 'package:carmanual/core/navigation/app_viewmodel.dart';
 import 'package:carmanual/core/navigation/navi.dart';
@@ -5,7 +6,6 @@ import 'package:carmanual/models/car_info.dart';
 import 'package:carmanual/models/category_info.dart';
 import 'package:carmanual/models/video_info.dart';
 import 'package:carmanual/ui/screens/video/video_list_item.dart';
-import 'package:carmanual/ui/screens/video/video_page.dart';
 import 'package:carmanual/ui/viewmodels/video_overview_vm.dart';
 import 'package:carmanual/ui/widgets/error_widget.dart';
 import 'package:carmanual/ui/widgets/scroll_list_view.dart';
@@ -42,7 +42,7 @@ class _VideoOverviewPageState
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     return Scaffold(
-      appBar: AppBar(title: Text(viewModel.selectedDir.name)),
+      appBar: SearchAppBar(viewModel.selectedDir.name),
       body: _buildBody(context, l10n),
       bottomNavigationBar: AppNavigation(VideoOverviewPage.routeName),
     );
@@ -64,11 +64,5 @@ class _VideoOverviewPageState
         });
   }
 
-  Widget buildItemWidget(int index, VideoInfo item) => GestureDetector(
-        child: VideoInfoListItem(item),
-        onTap: () => Navigate.to(
-          context,
-          VideoPage.pushIt(video: item),
-        ),
-      );
+  Widget buildItemWidget(int index, VideoInfo item) => VideoInfoListItem(item);
 }

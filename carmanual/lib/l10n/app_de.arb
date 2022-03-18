@@ -10,17 +10,15 @@
   "introPageMessageError": "Ungültiger QR-Code, bitte neu scannen.",
   "introPageMessageScanning": "Daten werden geladen...",
 
+  "@_QR_SCAN_PAGE": {},
+  "qrScanPageTitle": "Bitte scannen",
+
   "@_CAR_OVERVIEW_PAGE": {},
   "carOverViewPageTitle": "Übersicht",
 
-  "@_CATEGORY_PAGE": {},
-  "sicherheit": "Erfahre in diesen Rubriken alles über die Sicherheit deines Fahrzeugs.",
-  "multimedia": "Hier findest du alles zum Thema Multimedia.",
-  "komfort": "Alles zum Thema Komfort in deinem Auto findest du hier",
-  "transport": "Umklappen, schieben, Halterungen, hier findest du alles was deinen Transport vereinfacht.",
-
-  "@_QR_SCAN_PAGE": {},
-  "qrScanPageTitle": "Bitte scannen",
+  "@_SEARCH": {},
+  "searchStartText": "Sie können hier nach Videos suchen",
+  "searchEmptyText": "Leider wurde kein Ergebnisse gefunden",
 
   "@_SETTINGS_PAGE": {},
   "settingsPageTitle": "Einstellungen"
